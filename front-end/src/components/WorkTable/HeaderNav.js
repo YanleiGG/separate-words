@@ -1,0 +1,37 @@
+import * as React from "react";
+import { Menu, Icon } from "antd";
+import { Link } from "react-router-dom";
+
+class Navigation extends React.Component {
+  render() {
+    return (
+      <Menu
+        defaultSelectedKeys={['1']}
+        defaultOpenKeys={['sub1']}
+        mode="horizontal"
+        theme="dark"
+        style={{ lineHeight: '64px' }}
+      >
+          <Menu.Item key="1">
+            <Link to='/WorkTable/separate-words'>
+              <Icon type="pie-chart" />
+              <span>分词</span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to='/WorkTable/mark-entity'>
+              <Icon type="pie-chart" />
+              <span>标注实体</span>
+            </Link>
+          </Menu.Item><Menu.Item key="3">
+            <Link to='/WorkTable/separate-words-property'>
+              <Icon type="pie-chart" />
+              <span>划分词性</span>
+            </Link>
+          </Menu.Item>
+      </Menu>
+    )
+  }
+}
+
+export default Navigation
