@@ -33,7 +33,6 @@ export class ArticleController {
   
   @Get()
   find(@Req() req: IGet) {
-    console.log(req)
     return this.ArticleService.find(req.query.offset, req.query.pageSize);
   }
 

@@ -31,7 +31,7 @@ export class ArticleService {
   async create ( title: string, data: string) {
     let article = new Article()
     article.title = title
-    article.data = data
+    article.data = JSON.stringify(data).toString()
     await this.ArticleRepository.save(article)
     return {
       code: 0,

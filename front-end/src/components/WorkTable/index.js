@@ -8,6 +8,7 @@ import util from '../../util'
 import Main_UI from './Main'
 import SiderNav_UI from './SiderNav'
 import FooterBtn_UI from './FooterBtn'
+import axios from 'axios'
 
 const { Header, Content } = Layout;
 
@@ -19,24 +20,32 @@ let mapAllStateToProps = state => {
 let mapStateToSeparateWordsProperty = state => {
   return {
     ...state,
-    articlesContent: state.showArticle.separateWordsPropertyData.articlesContent,
-    article: state.showArticle.separateWordsPropertyData.data
+    article: state.showArticle.data.separateWordsPropertyData
   }
 }
 let mapStateToSeparateWords = state => {
   return {
     ...state,
-    articlesContent: state.showArticle.separateWordsData.articlesContent,
-    article: state.showArticle.separateWordsData.data
+    article: state.showArticle.data.separateWordsData
   }
 }
 let mapStateToMarkEntity  = state => {
   return {
     ...state,
-    articlesContent: state.showArticle.markEntityData.articlesContent,
-    article: state.showArticle.markEntityData.data
+    article: state.showArticle.data.markEntityData
   }
 }
+// 初始化 & 更新
+let mapDispatchToApp = dispatch => {
+  return {
+    refresh: async () => {
+      let state = store.getState()
+      let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
+      console.log(res)
+    }
+  }
+}
+
 // 将 Main 组件公有的方法抽取出来
 let mapDispathToMain = dispatch => {
   return {
@@ -58,7 +67,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
     handleOk: () => {
       let start = store.getState().selection.start
       let end = store.getState().selection.end
-      let data = store.getState().showArticle.separateWordsPropertyData.data
+      let data = store.getState().showArticle.data.separateWordsPropertyData
       let type = store.getState().radioValue
       let groupIndex = 0
       if (data[start-1]) groupIndex = data[start-1].type == type ? data[start-1].groupIndex + 1 : 0 
@@ -73,7 +82,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.separateWordsPropertyData.data
+        let data = store.getState().showArticle.data.separateWordsPropertyData
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -100,7 +109,7 @@ let mapDispathToSeparateWords = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.separateWordsData.data
+        let data = store.getState().showArticle.data.separateWordsData
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -131,7 +140,7 @@ let mapDispathToMarkEntity = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.markEntityData.data
+        let data = store.getState().showArticle.data.markEntityData
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -154,17 +163,26 @@ let mapDispathToMarkEntity = dispatch => {
 };
 let mapDispathToFooterBtn = dispatch => {
   return {
-    save: () => {
-      message.loading('Saving...', 2.5)
-      .then(() => message.success('Save Successed!', 2.5))
-    }
+     save: async () => {
+      let tips = message.loading('Saving...')
+      let state = store.getState()
+      let article = state.showArticle
+      console.log(util.unformatWithoutProperty(article.content, util.formatWithoutProperty(article.data.separateWordsData), state.typeArr))
+      // let res = await axios.put('http://localhost:3000/api/article', article)
+      // message.destroy(tips)
+      // if (res.data.code == 0) {
+      //   message.success('Save Successed!', 1.5)
+      // } else {
+      //   message.error('Save defeat!', 1.5)
+      // }
+  }
   }
 }
 let mapDispatchToSiderNav = dispatch => {
   return {
     handleClick: id => {
       let state = store.getState()
-      let showArticle = state.articles.find(item => item.id == id).data
+      let showArticle = state.articles.find(item => item.id == id)
       dispatch({ type: "SET_SHOWARTICLE", showArticle })
     }
   }
@@ -177,6 +195,10 @@ let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
 let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
 
 class App extends React.Component {
+  componentWillMount () {
+    let { refresh } = this.props
+    refresh()
+  }
   render() {
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -203,4 +225,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect(null, mapDispatchToApp)(App) 

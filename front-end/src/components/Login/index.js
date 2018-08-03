@@ -13,14 +13,14 @@ class Login extends React.Component {
         <Header>
           <div style={{ color: 'white', fontSize: '20px' }}>XX 系统</div>
         </Header>
-        <Content style={{ padding: '15% 25%' }}>
+        <Content style={{ padding: '15% 30%' }}>
           <Input
             style={{marginBottom: '20px'}}
             placeholder="账号 / admin"
             prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)' }} />}
           />
           <Input
-            style={{marginBottom: '20px', textAlign: 'center'}}
+            style={{marginBottom: '20px'}}
             placeholder="密码 / 123456"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type='password'
@@ -39,7 +39,6 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     login: () => {
-      // console.log(window.history.pushState(null, null, '/WorkTable'))
     }
   }
 }

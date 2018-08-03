@@ -1,12 +1,57 @@
-function arrToCode (data) {
+function formatWithoutProperty (data) {
+  if (data.length == 1) return 'S'
   let res = ''
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].type == 0) {
-      res += 'B'
+  data.forEach((item, index) => {
+    if (item.type == 0) {
+      res += 'S'
     } else {
-      if (data[i]) {}
+      if (index == 0) {
+        if (item.type == data[index+1].type) {
+          res += 'B'
+        } else {
+          res += 'S'
+        }
+      } else if (index == data.length - 1) {
+        if (item.type == data[index-1].type) {
+          res += 'E'
+        } else {
+          res += 'S'
+        }
+      } else {
+        if (item.type == data[index-1].type && item.type == data[index+1].type) {
+          res += 'I'
+        } else if (item.type == data[index-1].type && item.type !== data[index+1].type) {
+          res += 'E'
+        } else if (item.type !== data[index-1].type && item.type == data[index+1].type) {
+          res += 'B'
+        } else {
+          res += 'S'
+        }
+      }    
+    }
+  });
+  return res
+}
+
+// 此方法与 getType 方法耦合，待优化
+function unformatWithoutProperty (content, formatedStr, typeArr) {
+  let start, end
+  let arr = formatedStr.split('').map((item, index) => {
+    return { id: index, content: content[index], type: 0 }
+  })
+  for (let i = 0; i < arr.length; i++) {
+    if (formatedStr[i] == 'B') {
+      start = i
+    }
+    if (formatedStr[i] == 'E') {
+      end = i
+      let type = getType(arr, typeArr, start, end)
+      for (let j = start; j <= end; j++) {
+        arr[j].type = type
+      }
     }
   }
+  return arr
 }
 
 // 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
@@ -29,4 +74,4 @@ function getType (data, typeArr, start, end) {
     return typeArr[index]
 }
 
-export default { arrToCode, getType }
+export default { formatWithoutProperty, unformatWithoutProperty, getType }
