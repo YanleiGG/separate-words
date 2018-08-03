@@ -20,19 +20,19 @@ let mapAllStateToProps = state => {
 let mapStateToSeparateWordsProperty = state => {
   return {
     ...state,
-    article: state.showArticle.data.separateWordsPropertyData
+    article: state.showArticle.separateWordsProperty
   }
 }
 let mapStateToSeparateWords = state => {
   return {
     ...state,
-    article: state.showArticle.data.separateWordsData
+    article: state.showArticle.separateWords
   }
 }
 let mapStateToMarkEntity  = state => {
   return {
     ...state,
-    article: state.showArticle.data.markEntityData
+    article: state.showArticle.markEntity
   }
 }
 // 初始化 & 更新
@@ -67,7 +67,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
     handleOk: () => {
       let start = store.getState().selection.start
       let end = store.getState().selection.end
-      let data = store.getState().showArticle.data.separateWordsPropertyData
+      let data = store.getState().showArticle.separateWordsProperty
       let type = store.getState().radioValue
       let groupIndex = 0
       if (data[start-1]) groupIndex = data[start-1].type == type ? data[start-1].groupIndex + 1 : 0 
@@ -82,7 +82,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.data.separateWordsPropertyData
+        let data = store.getState().showArticle.separateWordsProperty
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -109,7 +109,7 @@ let mapDispathToSeparateWords = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.data.separateWordsData
+        let data = store.getState().showArticle.separateWords
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -140,7 +140,7 @@ let mapDispathToMarkEntity = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let selectedContent = ''
-        let data = store.getState().showArticle.data.markEntityData
+        let data = store.getState().showArticle.markEntity
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
@@ -166,15 +166,18 @@ let mapDispathToFooterBtn = dispatch => {
      save: async () => {
       let tips = message.loading('Saving...')
       let state = store.getState()
-      let article = state.showArticle
-      console.log(util.unformatWithoutProperty(article.content, util.formatWithoutProperty(article.data.separateWordsData), state.typeArr))
-      // let res = await axios.put('http://localhost:3000/api/article', article)
-      // message.destroy(tips)
-      // if (res.data.code == 0) {
-      //   message.success('Save Successed!', 1.5)
-      // } else {
-      //   message.error('Save defeat!', 1.5)
-      // }
+      let article = JSON.parse(JSON.stringify(state.showArticle))
+      article.separateWords = util.formatWithoutProperty(article.separateWords)
+      article.separateWordsProperty = util.formatWithoutProperty(article.separateWordsProperty)
+      article.markEntity = util.formatWithoutProperty(article.markEntity)
+      console.log(article)
+      let res = await axios.post('http://localhost:3000/api/article', article)
+      message.destroy(tips)
+      if (res.data.code == 0) {
+        message.success('Save Successed!', 1.5)
+      } else {
+        message.error('Save defeat!', 1.5)
+      }
   }
   }
 }

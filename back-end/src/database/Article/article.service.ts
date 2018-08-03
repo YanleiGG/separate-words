@@ -28,10 +28,12 @@ export class ArticleService {
     }
   }
 
-  async create ( title: string, data: string) {
+  async create ( title: string, separateWords: string, separateWordsProperty: string, markEntity: string) {
     let article = new Article()
     article.title = title
-    article.data = JSON.stringify(data).toString()
+    article.separateWords = separateWords
+    article.separateWordsProperty = separateWordsProperty
+    article.markEntity = markEntity
     await this.ArticleRepository.save(article)
     return {
       code: 0,
@@ -40,10 +42,12 @@ export class ArticleService {
     }
   }
 
-  async update (id: number, title: string, data: string) {
+  async update (id: number, title: string, separateWords: string, separateWordsProperty: string, markEntity: string) {
     let article = await this.ArticleRepository.findOne({ id })
     article.title = title
-    article.data = data
+    article.separateWords = separateWords
+    article.separateWordsProperty = separateWordsProperty
+    article.markEntity = markEntity
     await this.ArticleRepository.save(article)
     return {
       code: 0,

@@ -9,5 +9,11 @@ export class Article {
     title: string;
 
     @Column()
-    data: string;
+    separateWords: string;
+
+    @Column()
+    separateWordsProperty: string;
+
+    @Column()
+    markEntity: string;
 }

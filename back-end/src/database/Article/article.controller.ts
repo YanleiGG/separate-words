@@ -14,13 +14,17 @@ class IGetByID {
 
 class IPost {
   title: string
-  data: string
+  separateWords: string
+  separateWordsProperty: string
+  markEntity: string
 }
 
 class IPut {
   id: number
   title: string
-  data: string
+  separateWords: string
+  separateWordsProperty: string
+  markEntity: string
 }
 
 class IDelete {
@@ -43,12 +47,12 @@ export class ArticleController {
 
   @Post()
   create(@Body() body: IPost){
-    return this.ArticleService.create(body.title, body.data);
+    return this.ArticleService.create(body.title, body.separateWords, body.separateWordsProperty, body.markEntity);
   }
 
   @Put()
   update (@Body() body: IPut){
-    return this.ArticleService.update(body.id, body.title, body.data);
+    return this.ArticleService.update(body.id, body.title, body.separateWords, body.separateWordsProperty, body.markEntity);
   }
 
   @Delete()

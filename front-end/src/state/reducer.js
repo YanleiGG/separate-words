@@ -4,11 +4,9 @@ const initialState = {
   showArticle: { 
     id: null,
     title: '',
-    data: {
-      separateWordsData: [],
-      separateWordsPropertyData: [],
-      markEntityData: []
-    }
+    separateWords: [],
+    separateWordsProperty: [],
+    markEntity: []
   },
   visible: false,
   selection: {
@@ -27,59 +25,55 @@ const initialState = {
       id: 5,
       title: 'ccccc',
       content: 'cccccccccaaaaaaaaaa',
-      data: {
-        separateWordsData: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-          return {
-            id: index,
-            content: i,
-            type: 0,
-          }
-        }),
-        separateWordsPropertyData: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-          return {
-            id: index,
-            content: i,
-            type: 0,
-            groupIndex: 0
-          }
-        }),
-        markEntityData: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-          return {
-            id: index,
-            content: i,
-            type: 0,
-            groupIndex: 0
-          }
-        })
-      }
+      separateWords: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
+        return {
+          id: index,
+          content: i,
+          type: 0,
+        }
+      }),
+      separateWordsProperty: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
+        return {
+          id: index,
+          content: i,
+          type: 0,
+          groupIndex: 0
+        }
+      }),
+      markEntity: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
+        return {
+          id: index,
+          content: i,
+          type: 0,
+          groupIndex: 0
+        }
+      })
     }, 
     { 
      id: 6 ,
      title: 'eeeee',
      content: articleContent,
-     data: {
-      separateWordsData: articleContent.split('').map((i, index) => {
+      separateWords: articleContent.split('').map((i, index) => {
         return {
           id: index,
           content: i,
           type: 0,
         }
       }),
-      separateWordsPropertyData: articleContent.split('').map((i, index) => {
+      separateWordsProperty: articleContent.split('').map((i, index) => {
         return {
           id: index,
           content: i,
           type: 0,
         }
       }),
-      markEntityData: articleContent.split('').map((i, index) => {
+      markEntity: articleContent.split('').map((i, index) => {
         return {
           id: index,
           content: i,
           type: 0,
         }
       })
-    } 
     }
   ]
 };
