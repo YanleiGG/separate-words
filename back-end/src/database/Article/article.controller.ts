@@ -1,13 +1,59 @@
-import { Get, Controller } from '@nestjs/common';
+import { Get, Req, Post, Put, Delete, Body, Controller, Param } from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { Article } from './article.entity';
 
-@Controller('user')
+class IGet {
+  query: {
+    offset: number
+    pageSize: number
+  }
+}
+
+class IGetByID {
+  id: number
+}
+
+class IPost {
+  title: string
+  data: string
+}
+
+class IPut {
+  id: number
+  title: string
+  data: string
+}
+
+class IDelete {
+  id: number
+}
+
+@Controller('api/article')
 export class ArticleController {
   constructor(private readonly ArticleService: ArticleService) {}
   
   @Get()
-  findAll():  Promise<Article[]> {
-    return this.ArticleService.findAll();
+  find(@Req() req: IGet) {
+    console.log(req)
+    return this.ArticleService.find(req.query.offset, req.query.pageSize);
+  }
+
+  @Get(":id")
+  findOne (@Param() param: IGetByID) {
+    return this.ArticleService.findOne(param.id);
+  }
+
+  @Post()
+  create(@Body() body: IPost){
+    return this.ArticleService.create(body.title, body.data);
+  }
+
+  @Put()
+  update (@Body() body: IPut){
+    return this.ArticleService.update(body.id, body.title, body.data);
+  }
+
+  @Delete()
+  delete (@Body() body: IDelete) {
+    return this.ArticleService.delete(body.id);
   }
 }
