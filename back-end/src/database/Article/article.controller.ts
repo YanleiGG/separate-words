@@ -17,6 +17,7 @@ class IPost {
   separateWords: string
   separateWordsProperty: string
   markEntity: string
+  content: string
 }
 
 class IPut {
@@ -25,6 +26,7 @@ class IPut {
   separateWords: string
   separateWordsProperty: string
   markEntity: string
+  content: string
 }
 
 class IDelete {
@@ -47,12 +49,12 @@ export class ArticleController {
 
   @Post()
   create(@Body() body: IPost){
-    return this.ArticleService.create(body.title, body.separateWords, body.separateWordsProperty, body.markEntity);
+    return this.ArticleService.create(body);
   }
 
   @Put()
   update (@Body() body: IPut){
-    return this.ArticleService.update(body.id, body.title, body.separateWords, body.separateWordsProperty, body.markEntity);
+    return this.ArticleService.update(body);
   }
 
   @Delete()

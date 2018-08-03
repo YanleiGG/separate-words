@@ -9,6 +9,9 @@ export class Article {
     title: string;
 
     @Column()
+    content: string;
+
+    @Column()
     separateWords: string;
 
     @Column()

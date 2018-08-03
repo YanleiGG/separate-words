@@ -1,9 +1,8 @@
-let articleContent = `关于 React 应用加载的优化，其实网上类似的文章已经有太多太多了，随便一搜就是一堆，已经成为了一个老生常谈的问题。但随着 React 16 和 Webpack 4.0的发布，很多过去的优化手段其实都或多或少有些“过时”了，而正好最近一段时间，公司的新项目迁移到了React 16 和 Webpack4.0，做了很多这方面的优化，所以就写一篇文章来总结一下。`
-
 const initialState = {
   showArticle: { 
     id: null,
     title: '',
+    content: '',
     separateWords: [],
     separateWordsProperty: [],
     markEntity: []
@@ -22,58 +21,12 @@ const initialState = {
   path: 'http://localhost:3000',
   articles: [
     { 
-      id: 5,
-      title: 'ccccc',
-      content: 'cccccccccaaaaaaaaaa',
-      separateWords: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-        }
-      }),
-      separateWordsProperty: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-          groupIndex: 0
-        }
-      }),
-      markEntity: 'cccccccccaaaaaaaaaa'.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-          groupIndex: 0
-        }
-      })
-    }, 
-    { 
-     id: 6 ,
-     title: 'eeeee',
-     content: articleContent,
-      separateWords: articleContent.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-        }
-      }),
-      separateWordsProperty: articleContent.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-        }
-      }),
-      markEntity: articleContent.split('').map((i, index) => {
-        return {
-          id: index,
-          content: i,
-          type: 0,
-        }
-      })
+      id: null,
+      title: '',
+      content: '',
+      separateWords: [],
+      separateWordsProperty: [],
+      markEntity: []
     }
   ]
 };
@@ -105,6 +58,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         showArticle: action.showArticle
       })
+    }
+    case "SET_ARTICLES": {
+      return Object.assign({}, state, {
+        ...state,
+        articles: action.articles
+      })      
     }
     default:
       return state;

@@ -35,13 +35,25 @@ let mapStateToMarkEntity  = state => {
     article: state.showArticle.markEntity
   }
 }
+
 // 初始化 & 更新
 let mapDispatchToApp = dispatch => {
   return {
     refresh: async () => {
       let state = store.getState()
       let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
-      console.log(res)
+      let articles = res.data.articles.map(item => {
+        return {
+          ...item,
+          separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+          separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
+          markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
+        }
+      })
+      dispatch({
+        type: "SET_ARTICLES",
+        articles
+      })
     }
   }
 }
@@ -171,7 +183,7 @@ let mapDispathToFooterBtn = dispatch => {
       article.separateWordsProperty = util.formatWithoutProperty(article.separateWordsProperty)
       article.markEntity = util.formatWithoutProperty(article.markEntity)
       console.log(article)
-      let res = await axios.post('http://localhost:3000/api/article', article)
+      let res = await axios.put('http://localhost:3000/api/article', article)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('Save Successed!', 1.5)
