@@ -10,7 +10,7 @@ class Navigation extends React.Component {
         defaultOpenKeys={['sub1']}
         mode="horizontal"
         theme="dark"
-        style={{ lineHeight: '64px' }}
+        style={{ lineHeight: '64px', marginLeft: '150px' }}
       >
           <Menu.Item key="1">
             <Link to='/WorkTable/separate-words'>

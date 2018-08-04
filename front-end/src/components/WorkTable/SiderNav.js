@@ -1,5 +1,6 @@
 import React from 'react'
 import { Layout, Menu } from 'antd';
+import { Pagination } from 'antd';
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -15,17 +16,17 @@ class SiderNav extends React.Component {
   }
 
   render () {
-    let { articles } = this.props
+    let { articles, selectedKeys, pageChange, totalCount } = this.props
     return (
       <Sider width={200} style={{ background: '#fff' }}>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          style={{ height: '100%' }}
+          style={{ height: '80%' }}
+          selectedKeys = { selectedKeys }
         >
           {this.getArticles(articles)}
         </Menu>
+        <Pagination onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
       </Sider>
     )    
   }

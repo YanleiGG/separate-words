@@ -12,6 +12,24 @@ import axios from 'axios'
 
 const { Header, Content } = Layout;
 
+// 初始化 & 更新数据
+let refresh = async dispatch => {
+  let state = store.getState()
+  let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
+  let articles = res.data.articles.map(item => {
+    return {
+      ...item,
+      separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+      separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
+      markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
+    }
+  })
+  dispatch({ type: "SET_ARTICLES", articles })
+  dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
+  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] })
+  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [articles[0].id.toString()]})
+}
+
 // 组件的状态传递还没有优化好
 let mapAllStateToProps = state => {
   return state
@@ -36,25 +54,9 @@ let mapStateToMarkEntity  = state => {
   }
 }
 
-// 初始化 & 更新
 let mapDispatchToApp = dispatch => {
   return {
-    refresh: async () => {
-      let state = store.getState()
-      let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
-      let articles = res.data.articles.map(item => {
-        return {
-          ...item,
-          separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
-          separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
-          markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
-        }
-      })
-      dispatch({
-        type: "SET_ARTICLES",
-        articles
-      })
-    }
+    refresh: () => refresh(dispatch)
   }
 }
 
@@ -175,22 +177,39 @@ let mapDispathToMarkEntity = dispatch => {
 };
 let mapDispathToFooterBtn = dispatch => {
   return {
-     save: async () => {
+    save: async () => {
       let tips = message.loading('Saving...')
       let state = store.getState()
       let article = JSON.parse(JSON.stringify(state.showArticle))
       article.separateWords = util.formatWithoutProperty(article.separateWords)
       article.separateWordsProperty = util.formatWithoutProperty(article.separateWordsProperty)
       article.markEntity = util.formatWithoutProperty(article.markEntity)
-      console.log(article)
-      let res = await axios.put('http://localhost:3000/api/article', article)
+      let res = await axios.put(`${state.path}/api/article`, article)
+      console.log(res.data)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('Save Successed!', 1.5)
       } else {
         message.error('Save defeat!', 1.5)
       }
-  }
+    },
+    cancel: async () => {
+      let state = store.getState()
+      let res = await axios.get(`${state.path}/api/article/${state.showArticle.id}`)
+      let article = res.data.article
+      article = {
+        ...article,
+        separateWords: util.unformatWithoutProperty(article.content, article.separateWords, state.typeArr),
+        separateWordsProperty: util.unformatWithoutProperty(article.content, article.separateWordsProperty, state.typeArr),
+        markEntity: util.unformatWithoutProperty(article.content, article.markEntity, state.typeArr)
+      }
+      let articles = state.articles.map(item => {
+        if (item.id == article.id) return article
+        return item
+      })
+      dispatch({ type: "SET_ARTICLES", articles })
+      dispatch({ type: "SET_SHOWARTICLE", showArticle: article })
+    }
   }
 }
 let mapDispatchToSiderNav = dispatch => {
@@ -199,6 +218,11 @@ let mapDispatchToSiderNav = dispatch => {
       let state = store.getState()
       let showArticle = state.articles.find(item => item.id == id)
       dispatch({ type: "SET_SHOWARTICLE", showArticle })
+      dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [showArticle.id.toString()]})
+    },
+    pageChange: async (page) => {
+      dispatch({ type: "SET_PAGE", page })
+      refresh(dispatch)
     }
   }
 }

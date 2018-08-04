@@ -1,24 +1,13 @@
 const initialState = {
-  showArticle: { 
-    id: null,
-    title: '',
-    content: '',
-    separateWords: [],
-    separateWordsProperty: [],
-    markEntity: []
-  },
   visible: false,
-  selection: {
-    content: '',
-    start: 0,
-    end: 0
-  },
   radioValue: -1,
   wordsType: ['无', '名词', '动词', '形容词'],
   color: ['black', 'red', 'green', 'blue'],
   typeArr: [0, 1, 2, 3],
   page: 1,
+  totalCount: 0,
   path: 'http://localhost:3000',
+  selectedKeys: [],
   articles: [
     { 
       id: null,
@@ -28,7 +17,20 @@ const initialState = {
       separateWordsProperty: [],
       markEntity: []
     }
-  ]
+  ],
+  selection: {
+    content: '',
+    start: 0,
+    end: 0
+  },
+  showArticle: { 
+    id: null,
+    title: '',
+    content: '',
+    separateWords: [],
+    separateWordsProperty: [],
+    markEntity: []
+  }
 };
 
 const reducer = (state = initialState, action) => {
@@ -64,6 +66,24 @@ const reducer = (state = initialState, action) => {
         ...state,
         articles: action.articles
       })      
+    }
+    case "SET_SELECTED_KEYS": {
+      return Object.assign({}, state, {
+        ...state,
+        selectedKeys: action.selectedKeys
+      })      
+    }
+    case "SET_TOTAL_COUNT": {
+      return Object.assign({}, state, {
+        ...state,
+        totalCount: action.totalCount
+      })      
+    }
+    case "SET_PAGE": {
+      return Object.assign({}, state, {
+        ...state,
+        page: action.page
+      })  
     }
     default:
       return state;
