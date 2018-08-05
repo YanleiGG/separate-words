@@ -19,7 +19,7 @@ let refresh = async dispatch => {
   let articles = res.data.articles.map(item => {
     return {
       ...item,
-      separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+      separateWords: util.separate(util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr)),
       separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
       markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
     }
@@ -30,7 +30,7 @@ let refresh = async dispatch => {
   dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [articles[0].id.toString()]})
 }
 
-// 组件的状态传递还没有优化好
+// 状态管理
 let mapAllStateToProps = state => {
   return state
 };
@@ -185,7 +185,6 @@ let mapDispathToFooterBtn = dispatch => {
       article.separateWordsProperty = util.formatWithoutProperty(article.separateWordsProperty)
       article.markEntity = util.formatWithoutProperty(article.markEntity)
       let res = await axios.put(`${state.path}/api/article`, article)
-      console.log(res.data)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('Save Successed!', 1.5)

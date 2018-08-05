@@ -6,8 +6,6 @@ class Navigation extends React.Component {
   render() {
     return (
       <Menu
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
         mode="horizontal"
         theme="dark"
         style={{ lineHeight: '64px', marginLeft: '150px' }}
@@ -23,7 +21,8 @@ class Navigation extends React.Component {
               <Icon type="pie-chart" />
               <span>标注实体</span>
             </Link>
-          </Menu.Item><Menu.Item key="3">
+          </Menu.Item>
+          <Menu.Item key="3">
             <Link to='/WorkTable/separate-words-property'>
               <Icon type="pie-chart" />
               <span>划分词性</span>
