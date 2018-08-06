@@ -7,7 +7,6 @@ import { Route, Switch } from "react-router-dom";
 import util from '../../util'
 import Main_UI from './Main'
 import SiderNav_UI from './SiderNav'
-import FooterBtn_UI from './FooterBtn'
 import CreateArticle_UI from './CreateArticle'
 import axios from 'axios'
 
@@ -54,7 +53,6 @@ let mapStateToMarkEntity  = state => {
     article: state.showArticle.markEntity
   }
 }
-
 let mapDispatchToApp = dispatch => {
   return {
     refresh: () => refresh(dispatch)
@@ -206,42 +204,6 @@ let mapDispathToMarkEntity = dispatch => {
     }
   };
 };
-let mapDispathToFooterBtn = dispatch => {
-  return {
-    save: async () => {
-      let tips = message.loading('Saving...')
-      let state = store.getState()
-      let article = JSON.parse(JSON.stringify(state.showArticle))
-      article.separateWords = util.formatWithoutProperty(article.separateWords)
-      article.separateWordsProperty = util.formatWithProperty(article.separateWordsProperty)
-      article.markEntity = util.formatWithoutProperty(article.markEntity)
-      let res = await axios.put(`${state.path}/api/article`, article)
-      message.destroy(tips)
-      if (res.data.code == 0) {
-        message.success('Save Successed!', 1.5)
-      } else {
-        message.error('Save defeat!', 1.5)
-      }
-    },
-    cancel: async () => {
-      let state = store.getState()
-      let res = await axios.get(`${state.path}/api/article/${state.showArticle.id}`)
-      let article = res.data.article
-      article = {
-        ...article,
-        separateWords: util.unformatWithoutProperty(article.content, article.separateWords, state.typeArr),
-        separateWordsProperty: util.unformatWithoutProperty(article.content, article.separateWordsProperty, state.typeArr),
-        markEntity: util.unformatWithoutProperty(article.content, article.markEntity, state.typeArr)
-      }
-      let articles = state.articles.map(item => {
-        if (item.id == article.id) return article
-        return item
-      })
-      dispatch({ type: "SET_ARTICLES", articles })
-      dispatch({ type: "SET_SHOWARTICLE", showArticle: article })
-    }
-  }
-}
 let mapDispatchToSiderNav = dispatch => {
   return {
     handleClick: id => {
@@ -259,6 +221,7 @@ let mapDispatchToSiderNav = dispatch => {
 let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
+      let tips = message.loading('Saving...')
       let state = store.getState()
       let content = state.createArticle.replace(' ', '')
       let separateWords = '', separateWordsProperty = '', markEntity = ''
@@ -274,9 +237,15 @@ let mapDispathToCreateArticle = dispatch => {
         markEntity,
         separateWordsProperty
       }
-      console.log(article)
       let res = await axios.post(`${state.path}/api/article`, article)
-      console.log(res)
+      message.destroy(tips)
+      if (res.data.code == 0) {
+        dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
+        dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: '' })
+        message.success('Save Successed!', 1.5)
+      } else {
+        message.error('Save defeat!', 1.5)
+      }
     },
     cancel: () => {
       dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
@@ -295,7 +264,6 @@ let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathT
 let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Main_UI)
 let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Main_UI)
 let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
-let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
 let CreateArticle = connect(mapAllStateToProps, mapDispathToCreateArticle)(CreateArticle_UI)
 
 class App extends React.Component {
@@ -313,15 +281,12 @@ class App extends React.Component {
           <Layout style={{ minHeight: '90vh' }}>
             <SiderNav></SiderNav>
             <Layout style={{ padding: '15px' }}>
-              <Content>
-                <Switch>
-                  <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
-                  <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
-                  <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
-                  <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
-                </Switch>
-              </Content>
-              <FooterBtn></FooterBtn>
+              <Switch>
+                <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
+                <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
+                <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
+                <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
+              </Switch>
             </Layout>
           </Layout>
         </Content>
