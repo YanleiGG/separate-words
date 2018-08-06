@@ -34,9 +34,53 @@ function unformatWithoutProperty (content, formatedStr, typeArr) {
       arr.splice(end+1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
     }
   }
-  arr.splice(arr.length-1,1)  // 删掉最后一个 '/'
   return arr
 }
+
+function formatWithProperty (data) {
+  let str = '', res = '', typeArr = []
+  data.forEach((item, index) => {
+    if (item.content == '/') typeArr.push(data[index-1].type)
+    str += item.content
+  })
+  str.split('/').forEach((item, index) => {
+    if (item.length == 1) res += "S" + typeArr[index]
+    if (item.length > 1) {
+      res += "B" + typeArr[index]
+      for (let i = 0; i < item.length-2; i++) {
+        res += "I" + typeArr[index]
+      }
+      res += "E" + typeArr[index]
+    }
+  })
+  return res
+} 
+
+function unformatWithProperty (content, formatedStr) {
+  let typeArr = [], count = 0, start = 0, end = 0
+  let arr = formatedStr.split('')
+  for (let i = 1;i < arr.length;i+=2) {
+    typeArr.push(arr[i])
+  }
+  let str = arr.filter((item, index) => {
+    return index % 2 == 0
+  }).join('')
+  let res = arr.filter((item, index) => {
+    return index % 2 == 0
+  }).map((item, index) => {
+    return { id: index, content: content[index], type: typeArr[index] }
+  })
+  for (let i = 0; i < res.length; i++) {
+    if (str[i] == 'S') res.splice(i + count + 1, 0, { id: i + res.length + count++, content: '/', type: 0 })
+    if (str[i] == 'B') start = i + count
+    if (str[i] == 'E') {
+      end = i + count
+      res.splice(end+1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
+    }
+  }
+  return res
+}
+
 
 // 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
 function getType (data, typeArr, start, end) {
@@ -58,4 +102,4 @@ function getType (data, typeArr, start, end) {
     return typeArr[index]
 }
 
-export default { formatWithoutProperty, unformatWithoutProperty, getType }
+export default { formatWithoutProperty, unformatWithoutProperty, getType, formatWithProperty, unformatWithProperty }

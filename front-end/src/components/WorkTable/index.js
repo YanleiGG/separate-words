@@ -20,7 +20,7 @@ let refresh = async dispatch => {
     return {
       ...item,
       separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
-      separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
+      separateWordsProperty: util.unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
       markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
     }
   })
@@ -212,7 +212,7 @@ let mapDispathToFooterBtn = dispatch => {
       let state = store.getState()
       let article = JSON.parse(JSON.stringify(state.showArticle))
       article.separateWords = util.formatWithoutProperty(article.separateWords)
-      article.separateWordsProperty = util.formatWithoutProperty(article.separateWordsProperty)
+      article.separateWordsProperty = util.formatWithProperty(article.separateWordsProperty)
       article.markEntity = util.formatWithoutProperty(article.markEntity)
       let res = await axios.put(`${state.path}/api/article`, article)
       message.destroy(tips)
