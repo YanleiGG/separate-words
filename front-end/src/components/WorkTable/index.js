@@ -8,6 +8,7 @@ import util from '../../util'
 import Main_UI from './Main'
 import SiderNav_UI from './SiderNav'
 import FooterBtn_UI from './FooterBtn'
+import CreateArticle_UI from './CreateArticle'
 import axios from 'axios'
 
 const { Header, Content } = Layout;
@@ -255,12 +256,47 @@ let mapDispatchToSiderNav = dispatch => {
     }
   }
 }
+let mapDispathToCreateArticle = dispatch => {
+  return {
+    create: async () => {
+      let state = store.getState()
+      let content = state.createArticle.replace(' ', '')
+      let separateWords = '', separateWordsProperty = '', markEntity = ''
+      for (let i = 0;i < content.length;i++) {
+        separateWords += 'S'
+        markEntity += 'S'
+        separateWordsProperty += 'S0'
+      }
+      let article = {
+        title: state.createArticleTitle,
+        content,
+        separateWords,
+        markEntity,
+        separateWordsProperty
+      }
+      console.log(article)
+      let res = await axios.post(`${state.path}/api/article`, article)
+      console.log(res)
+    },
+    cancel: () => {
+      dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
+      dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: '' })
+    },
+    contentChange: e => {
+      dispatch({ type: "SET_CREATE_ARTICLE", createArticle: e.target.value })
+    },
+    titleChange: e => {
+      dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: e.target.value })
+    }
+  }
+}
 
 let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathToSeparateWordsProperty)(Main_UI)
 let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Main_UI)
 let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Main_UI)
 let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
 let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
+let CreateArticle = connect(mapAllStateToProps, mapDispathToCreateArticle)(CreateArticle_UI)
 
 class App extends React.Component {
   componentWillMount () {
@@ -269,26 +305,27 @@ class App extends React.Component {
   }
   render() {
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-          <Header>
-            <HeaderNav></HeaderNav>
-          </Header>
-          <Content>
-            <Layout style={{ minHeight: '90vh' }}>
-              <SiderNav></SiderNav>
-              <Layout style={{ padding: '15px' }}>
-                <Content>
-                  <Switch>
-                    <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
-                    <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
-                    <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
-                  </Switch>
-                </Content>
-                <FooterBtn></FooterBtn>
-              </Layout>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header>
+          <HeaderNav></HeaderNav>
+        </Header>
+        <Content>
+          <Layout style={{ minHeight: '90vh' }}>
+            <SiderNav></SiderNav>
+            <Layout style={{ padding: '15px' }}>
+              <Content>
+                <Switch>
+                  <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
+                  <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
+                  <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
+                  <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
+                </Switch>
+              </Content>
+              <FooterBtn></FooterBtn>
             </Layout>
-          </Content>
-        </Layout>
+          </Layout>
+        </Content>
+      </Layout>
     );
   }
 }

@@ -30,7 +30,9 @@ const initialState = {
     separateWords: [],
     separateWordsProperty: [],
     markEntity: []
-  }
+  },
+  createArticle: '',
+  createArticleTitle: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -83,6 +85,18 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         page: action.page
+      })  
+    }
+    case "SET_CREATE_ARTICLE": {
+      return Object.assign({}, state, {
+        ...state,
+        createArticle: action.createArticle
+      })  
+    }
+    case "SET_CREATE_ARTICLE_TITLE": {
+      return Object.assign({}, state, {
+        ...state,
+        createArticleTitle: action.createArticleTitle
       })  
     }
     default:
