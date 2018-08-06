@@ -19,9 +19,9 @@ let refresh = async dispatch => {
   let articles = res.data.articles.map(item => {
     return {
       ...item,
-      separateWords: util.separate(util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr)),
-      separateWordsProperty: util.separate(util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr)),
-      markEntity: util.separate(util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr))
+      separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+      separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
+      markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
     }
   })
   dispatch({ type: "SET_ARTICLES", articles })

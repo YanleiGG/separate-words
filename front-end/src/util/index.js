@@ -1,57 +1,40 @@
 function formatWithoutProperty (data) {
-  if (data.length == 1) return 'S'
-  let res = ''
-  data.forEach((item, index) => {
-    if (item.content == '/') return
-    if (item.type == 0) {
-      res += 'S'
-    } else {
-      if (index == 0) {
-        if (item.type == data[index+1].type) {
-          res += 'B'
-        } else {
-          res += 'S'
-        }
-      } else if (index == data.length - 1) {
-        if (item.type == data[index-1].type) {
-          res += 'E'
-        } else {
-          res += 'S'
-        }
-      } else {
-        if (item.type == data[index-1].type && item.type == data[index+1].type) {
-          res += 'I'
-        } else if (item.type == data[index-1].type && item.type !== data[index+1].type) {
-          res += 'E'
-        } else if (item.type !== data[index-1].type && item.type == data[index+1].type) {
-          res += 'B'
-        } else {
-          res += 'S'
-        }
-      }    
+  let str = '', res = ''
+  data.forEach(item => {
+    str += item.content
+  })
+  str.split('/').forEach(item => {
+    if (item.length == 1) res += "S"
+    if (item.length > 1) {
+      res += "B"
+      for (let i = 0; i < item.length-2; i++) {
+        res += "I"
+      }
+      res += "E"
     }
-  });
+  })
   return res
-}
+} 
 
 // 此方法与 getType 方法耦合，待优化
 function unformatWithoutProperty (content, formatedStr, typeArr) {
-  let start, end
+  let start, end, count = 0
   let arr = formatedStr.split('').map((item, index) => {
     return { id: index, content: content[index], type: 0 }
   })
   for (let i = 0; i < arr.length; i++) {
-    if (formatedStr[i] == 'B') {
-      start = i
-    }
+    if (formatedStr[i] == 'S') arr.splice(i + count + 1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
+    if (formatedStr[i] == 'B') start = i + count
     if (formatedStr[i] == 'E') {
-      end = i
+      end = i + count
       let type = getType(arr, typeArr, start, end)
       for (let j = start; j <= end; j++) {
         arr[j].type = type
       }
+      arr.splice(end+1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
     }
   }
+  arr.splice(arr.length-1,1)  // 删掉最后一个 '/'
   return arr
 }
 
@@ -75,19 +58,4 @@ function getType (data, typeArr, start, end) {
     return typeArr[index]
 }
 
-// 用 '/' 分割不同属性的词
-function separate (data) {
-  let res = JSON.parse(JSON.stringify(data))
-  let p = 0, count = 0   // p 存储与 0 类型不同的词开始位置的指针, count 表示已加入的 '/' 数量
-  data.forEach((item, index) => {
-    if (index == data.length-1) return
-    if (item.type == 0) return res.splice(index + ++count, 0, { id: index + data.length, content: '/', type: '0' })
-    if (item.type != data[p].type &&  item.type != data[index+1].type) {
-      res.splice(index + ++count, 0, { id: index + data.length, content: '/', type: '0' })
-      p = index + 1
-    }
-  })
-  return res
-}
-
-export default { formatWithoutProperty, unformatWithoutProperty, getType, separate }
+export default { formatWithoutProperty, unformatWithoutProperty, getType }
