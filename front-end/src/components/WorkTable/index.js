@@ -20,8 +20,8 @@ let refresh = async dispatch => {
     return {
       ...item,
       separateWords: util.separate(util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr)),
-      separateWordsProperty: util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr),
-      markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
+      separateWordsProperty: util.separate(util.unformatWithoutProperty(item.content, item.separateWordsProperty, state.typeArr)),
+      markEntity: util.separate(util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr))
     }
   })
   dispatch({ type: "SET_ARTICLES", articles })
@@ -83,11 +83,19 @@ let mapDispathToSeparateWordsProperty = dispatch => {
       let end = store.getState().selection.end
       let data = store.getState().showArticle.separateWordsProperty
       let type = store.getState().radioValue
-      let groupIndex = 0
-      if (data[start-1]) groupIndex = data[start-1].type == type ? data[start-1].groupIndex + 1 : 0 
       for (let i = start;i < end;i++) {
         data[i].type = type
-        data[i].groupIndex = groupIndex
+      }
+      if (data[start-1] && data[start-1].content != '/') {
+        data.splice(start, 0, { id: null, content: '/', type: '0' })
+        start ++
+        end ++
+      }
+      if (data[end] && data[end].content != '/') {
+        data.splice(end, 0, { id: 1, content: '/', type: '0' })
+      }
+      for (let i = end-1;i >= start;i--) {
+        if (data[i] && data[i].content == '/') data.splice(i, 1)
       }
       dispatch({ type: 'CLOSE_MODAL' })
     },
@@ -140,6 +148,17 @@ let mapDispathToSeparateWords = dispatch => {
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type
         }
+        if (data[start-1] && data[start-1].content != '/') {
+          data.splice(start, 0, { id: null, content: '/', type: '0' })
+          start ++
+          end ++
+        }
+        if (data[end] && data[end].content != '/') {
+          data.splice(end, 0, { id: 1, content: '/', type: '0' })
+        }
+        for (let i = end-1;i >= start;i--) {
+          if (data[i] && data[i].content == '/') data.splice(i, 1)
+        }
       }
     }
   };
@@ -170,6 +189,17 @@ let mapDispathToMarkEntity = dispatch => {
         let selection = store.getState().selection
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type
+        }
+        if (data[start-1] && data[start-1].content != '/') {
+          data.splice(start, 0, { id: null, content: '/', type: '0' })
+          start ++
+          end ++
+        }
+        if (data[end] && data[end].content != '/') {
+          data.splice(end, 0, { id: 1, content: '/', type: '0' })
+        }
+        for (let i = end-1;i >= start;i--) {
+          if (data[i] && data[i].content == '/') data.splice(i, 1)
         }
       }
     }

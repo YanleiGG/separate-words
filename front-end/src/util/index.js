@@ -75,13 +75,14 @@ function getType (data, typeArr, start, end) {
     return typeArr[index]
 }
 
-// 添加 '/' 分割不同属性的词
+// 用 '/' 分割不同属性的词
 function separate (data) {
   let res = JSON.parse(JSON.stringify(data))
   let p = 0, count = 0   // p 存储与 0 类型不同的词开始位置的指针, count 表示已加入的 '/' 数量
   data.forEach((item, index) => {
+    if (index == data.length-1) return
     if (item.type == 0) return res.splice(index + ++count, 0, { id: index + data.length, content: '/', type: '0' })
-    if (item.type != data[p].type && data[index+1] && item.type != data[index+1].type) {
+    if (item.type != data[p].type &&  item.type != data[index+1].type) {
       res.splice(index + ++count, 0, { id: index + data.length, content: '/', type: '0' })
       p = index + 1
     }
