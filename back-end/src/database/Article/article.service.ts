@@ -12,7 +12,7 @@ export class ArticleService {
   async find(offset: number, pageSize: number) {
     let articles =  await this.ArticleRepository.find();
     let totalCount = articles.length
-    let data = articles.splice(offset, pageSize)
+    let data = articles.reverse().splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',
@@ -61,6 +61,7 @@ export class ArticleService {
   }
 
   async delete ( id: number ) {
+    console.log(id, typeof id)
     let article = await this.ArticleRepository.findOne({ id })
     await this.ArticleRepository.delete(article)
     return {

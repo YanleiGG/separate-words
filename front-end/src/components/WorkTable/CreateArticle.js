@@ -15,7 +15,7 @@ class CreateArticle extends React.Component {
           <TextArea onChange={ contentChange } value={ createArticle } autosize = {{ minRows: 15 }} style={{ width: '60%' }} placeholder = "输入文章内容..."/>
         </Content>
         <Footer style={{textAlign: 'center', marginTop: '3%'}}>
-          <Button type="primary" onClick={create}>创建</Button>
+          <Button type="primary" onClick={create}>确认</Button>
           <Button type="primary" style={{ marginLeft: '20px'}} onClick={cancel}>取消</Button>
         </Footer>
       </Content>

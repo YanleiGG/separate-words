@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import store from '../../state/store'
-import { Layout, message } from "antd";
+import { Layout, message, Modal } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
 import util from '../../util'
@@ -11,6 +11,7 @@ import CreateArticle_UI from './CreateArticle'
 import axios from 'axios'
 
 const { Header, Content } = Layout;
+const confirm = Modal.confirm;
 
 // 初始化 & 更新数据
 let refresh = async dispatch => {
@@ -26,8 +27,8 @@ let refresh = async dispatch => {
   })
   dispatch({ type: "SET_ARTICLES", articles })
   dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
-  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] })
-  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [articles[0].id.toString()]})
+  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || state.showArticle })
+  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
 }
 
 // 状态管理
@@ -215,6 +216,29 @@ let mapDispatchToSiderNav = dispatch => {
     pageChange: async (page) => {
       dispatch({ type: "SET_PAGE", page })
       refresh(dispatch)
+    },
+    deleteConfirm: async () => {
+      let state = store.getState()
+      confirm({
+        title: '确认删除吗?',
+        content: state.showArticle.title,
+        async onOk() {
+          let tips = message.loading('Deleting...')
+          let res = await axios({
+            method: 'delete',
+            url: `${state.path}/api/article`,
+            data: { id: state.showArticle.id }
+          });
+          message.destroy(tips)
+          if (res.data.code == 0) {
+            message.success('Delete Successed!', 1.5)
+            refresh(dispatch)
+          } else {
+            message.error('Delete defeat!', 1.5)
+          }
+        },
+        onCancel() {},
+      });
     }
   }
 }
@@ -222,7 +246,7 @@ let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
       let state = store.getState()
-      let content = state.createArticle.replace(' ', '')
+      let content = state.createArticle.replace('\n', '').replace(' ', '')
       let title = state.createArticleTitle
       if (content == '' || title == '') return message.error('标题和内容不能为空！')
       let tips = message.loading('Creating...')
@@ -244,7 +268,9 @@ let mapDispathToCreateArticle = dispatch => {
       if (res.data.code == 0) {
         dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
         dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: '' })
+        dispatch({ type: "SET_PAGE", page: 1 })
         message.success('Create Successed!', 1.5)
+        refresh(dispatch)
       } else {
         message.error('Create defeat!', 1.5)
       }

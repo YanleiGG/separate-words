@@ -8,15 +8,15 @@ export class Article {
     @Column()
     title: string;
 
-    @Column()
+    @Column("longtext")
     content: string;
 
-    @Column()
+    @Column("longtext")
     separateWords: string;
 
-    @Column()
+    @Column("longtext")
     separateWordsProperty: string;
 
-    @Column()
+    @Column("longtext")
     markEntity: string;
 }

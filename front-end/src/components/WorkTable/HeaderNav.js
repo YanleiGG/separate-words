@@ -31,7 +31,7 @@ class Navigation extends React.Component {
           <Menu.Item key="4" style={{marginLeft: '50%'}}>
             <Link to='/WorkTable/create-article'>
               <Icon type="plus-circle-o" />
-              <span>创建文章</span>
+              <span>添加文章</span>
             </Link>
           </Menu.Item>
       </Menu>
