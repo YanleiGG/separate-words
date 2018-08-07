@@ -221,9 +221,11 @@ let mapDispatchToSiderNav = dispatch => {
 let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
-      let tips = message.loading('Saving...')
       let state = store.getState()
       let content = state.createArticle.replace(' ', '')
+      let title = state.createArticleTitle
+      if (content == '' || title == '') return message.error('标题和内容不能为空！')
+      let tips = message.loading('Creating...')
       let separateWords = '', separateWordsProperty = '', markEntity = ''
       for (let i = 0;i < content.length;i++) {
         separateWords += 'S'
@@ -231,7 +233,7 @@ let mapDispathToCreateArticle = dispatch => {
         separateWordsProperty += 'S0'
       }
       let article = {
-        title: state.createArticleTitle,
+        title,
         content,
         separateWords,
         markEntity,
@@ -242,9 +244,9 @@ let mapDispathToCreateArticle = dispatch => {
       if (res.data.code == 0) {
         dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
         dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: '' })
-        message.success('Save Successed!', 1.5)
+        message.success('Create Successed!', 1.5)
       } else {
-        message.error('Save defeat!', 1.5)
+        message.error('Create defeat!', 1.5)
       }
     },
     cancel: () => {
