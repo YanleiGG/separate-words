@@ -86,16 +86,16 @@ let mapDispathToSeparateWordsProperty = dispatch => {
       for (let i = start;i < end;i++) {
         data[i].type = type
       }
-      if (data[start-1] && data[start-1].content != '/') {
-        data.splice(start, 0, { id: null, content: '/', type: '0' })
+      if (data[start-1] && data[start-1].content != '|') {
+        data.splice(start, 0, { id: null, content: '|', type: '0' })
         start ++
         end ++
       }
-      if (data[end] && data[end].content != '/') {
-        data.splice(end, 0, { id: 1, content: '/', type: '0' })
+      if (data[end] && data[end].content != '|') {
+        data.splice(end, 0, { id: 1, content: '|', type: '0' })
       }
       for (let i = end-1;i >= start;i--) {
-        if (data[i] && data[i].content == '/') data.splice(i, 1)
+        if (data[i] && data[i].content == '|') data.splice(i, 1)
       }
       dispatch({ type: 'CLOSE_MODAL' })
     },
@@ -148,16 +148,16 @@ let mapDispathToSeparateWords = dispatch => {
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type
         }
-        if (data[start-1] && data[start-1].content != '/') {
-          data.splice(start, 0, { id: null, content: '/', type: '0' })
+        if (data[start-1] && data[start-1].content != '|') {
+          data.splice(start, 0, { id: null, content: '|', type: '0' })
           start ++
           end ++
         }
-        if (data[end] && data[end].content != '/') {
-          data.splice(end, 0, { id: 1, content: '/', type: '0' })
+        if (data[end] && data[end].content != '|') {
+          data.splice(end, 0, { id: 1, content: '|', type: '0' })
         }
         for (let i = end-1;i >= start;i--) {
-          if (data[i] && data[i].content == '/') data.splice(i, 1)
+          if (data[i] && data[i].content == '|') data.splice(i, 1)
         }
       }
     }
@@ -190,16 +190,16 @@ let mapDispathToMarkEntity = dispatch => {
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type
         }
-        if (data[start-1] && data[start-1].content != '/') {
-          data.splice(start, 0, { id: null, content: '/', type: '0' })
+        if (data[start-1] && data[start-1].content != '|') {
+          data.splice(start, 0, { id: null, content: '|', type: '0' })
           start ++
           end ++
         }
-        if (data[end] && data[end].content != '/') {
-          data.splice(end, 0, { id: 1, content: '/', type: '0' })
+        if (data[end] && data[end].content != '|') {
+          data.splice(end, 0, { id: 1, content: '|', type: '0' })
         }
         for (let i = end-1;i >= start;i--) {
-          if (data[i] && data[i].content == '/') data.splice(i, 1)
+          if (data[i] && data[i].content == '|') data.splice(i, 1)
         }
       }
     }

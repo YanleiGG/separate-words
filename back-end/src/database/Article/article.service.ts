@@ -61,7 +61,6 @@ export class ArticleService {
   }
 
   async delete ( id: number ) {
-    console.log(id, typeof id)
     let article = await this.ArticleRepository.findOne({ id })
     await this.ArticleRepository.delete(article)
     return {

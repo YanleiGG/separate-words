@@ -3,7 +3,7 @@ function formatWithoutProperty (data) {
   data.forEach(item => {
     str += item.content
   })
-  str.split('/').forEach(item => {
+  str.split('|').forEach(item => {
     if (item.length == 1) res += "S"
     if (item.length > 1) {
       res += "B"
@@ -14,7 +14,7 @@ function formatWithoutProperty (data) {
     }
   })
   return res
-} 
+}
 
 // 此方法与 getType 方法耦合，待优化
 function unformatWithoutProperty (content, formatedStr, typeArr) {
@@ -23,7 +23,7 @@ function unformatWithoutProperty (content, formatedStr, typeArr) {
     return { id: index, content: content[index], type: 0 }
   })
   for (let i = 0; i < arr.length; i++) {
-    if (formatedStr[i] == 'S') arr.splice(i + count + 1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
+    if (formatedStr[i] == 'S') arr.splice(i + count + 1, 0, { id: i + arr.length + count++, content: '|', type: 0 })
     if (formatedStr[i] == 'B') start = i + count
     if (formatedStr[i] == 'E') {
       end = i + count
@@ -31,7 +31,7 @@ function unformatWithoutProperty (content, formatedStr, typeArr) {
       for (let j = start; j <= end; j++) {
         arr[j].type = type
       }
-      arr.splice(end+1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
+      arr.splice(end+1, 0, { id: i + arr.length + count++, content: '|', type: 0 })
     }
   }
   return arr
@@ -40,10 +40,10 @@ function unformatWithoutProperty (content, formatedStr, typeArr) {
 function formatWithProperty (data) {
   let str = '', res = '', typeArr = []
   data.forEach((item, index) => {
-    if (item.content == '/') typeArr.push(data[index-1].type)
+    if (item.content == '|') typeArr.push(data[index-1].type)
     str += item.content
   })
-  str.split('/').forEach((item, index) => {
+  str.split('|').forEach((item, index) => {
     if (item.length == 1) res += "S" + typeArr[index]
     if (item.length > 1) {
       res += "B" + typeArr[index]
@@ -71,11 +71,11 @@ function unformatWithProperty (content, formatedStr) {
     return { id: index, content: content[index], type: typeArr[index] }
   })
   for (let i = 0; i < res.length; i++) {
-    if (str[i] == 'S') res.splice(i + count + 1, 0, { id: i + res.length + count++, content: '/', type: 0 })
+    if (str[i] == 'S') res.splice(i + count + 1, 0, { id: i + res.length + count++, content: '|', type: 0 })
     if (str[i] == 'B') start = i + count
     if (str[i] == 'E') {
       end = i + count
-      res.splice(end+1, 0, { id: i + arr.length + count++, content: '/', type: 0 })
+      res.splice(end+1, 0, { id: i + arr.length + count++, content: '|', type: 0 })
     }
   }
   return res
@@ -85,7 +85,7 @@ function unformatWithProperty (content, formatedStr) {
 // 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
 function getType (data, typeArr, start, end) {
     // 利用递归，过滤黑名单内的字符
-    let blacklist = [' ', '/']
+    let blacklist = [' ', '|']
     if (blacklist.indexOf(data[start-1] ? data[start-1].content : null) != -1 || blacklist.indexOf(data[end+1] ? data[end+1].content : null) != -1) {
       if (blacklist.indexOf(data[end+1] ? data[end+1].content : null) != -1) {
         return getType(data, typeArr, start-1, end+1)  
