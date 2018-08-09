@@ -52,7 +52,6 @@ let mapAllStateToProps = state => {
 
 let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
 
-
 class Navigation extends React.Component {
   render() {
     let { article, color, selection, visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType } = this.props 

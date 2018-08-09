@@ -246,7 +246,7 @@ let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
       let state = store.getState()
-      let content = state.createArticle.replace('\n', '').replace(' ', '')
+      let content = state.createArticle.replace('\n', '').replace(/\s+/g, '')
       let title = state.createArticleTitle
       if (content == '' || title == '') return message.error('标题和内容不能为空！')
       let tips = message.loading('Creating...')
