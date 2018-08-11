@@ -108,6 +108,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
         for (let i = start;i < end;i++) {
           selectedContent += data[i].content
         }
+        if (selectedContent == '|') return
         dispatch({ 
           type: "SET_SELECTION", 
           selection: {
@@ -143,6 +144,7 @@ let mapDispathToSeparateWords = dispatch => {
              end
           }
         })
+        if (selectedContent == '|') return
         let type = util.getType(data, store.getState().typeArr, start, end-1)
         let selection = store.getState().selection
         for (let i = selection.start;i < selection.end;i++) {
@@ -185,6 +187,7 @@ let mapDispathToMarkEntity = dispatch => {
              end
           }
         })
+        if (selectedContent == '|') return
         let type = util.getType(data, store.getState().typeArr, start, end-1)
         let selection = store.getState().selection
         for (let i = selection.start;i < selection.end;i++) {

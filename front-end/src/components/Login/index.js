@@ -2,8 +2,9 @@ import React from 'react'
 import { Input, Icon, Layout, Button } from 'antd';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import store from '../../state/store'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content } = Layout;
 
 class Login extends React.Component {
   render () {
@@ -39,6 +40,8 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     login: () => {
+      dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
+      console.log(store.getState().isLogin)
     }
   }
 }

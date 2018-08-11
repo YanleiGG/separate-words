@@ -1,4 +1,5 @@
 const initialState = {
+  isLogin: false,
   visible: false,
   radioValue: -1,
   wordsType: ['无', '名词', '动词', '形容词'],
@@ -98,6 +99,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         createArticleTitle: action.createArticleTitle
       })  
+    }
+    case "SET_IS_LOGIN": {
+      return Object.assign({}, state, {
+        ...state,
+        isLogin: action.isLogin
+      }) 
     }
     default:
       return state;

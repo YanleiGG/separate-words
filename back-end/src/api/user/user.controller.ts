@@ -1,6 +1,12 @@
-import { Get, Post, Put, Body, Controller } from '@nestjs/common';
+import { Get, Req, Post, Put, Body, Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
+
+class IGet {
+  query: {
+    readonly username: string;
+    readonly password: string;
+  }
+}
 
 class IPost {
   readonly type: string;
@@ -16,6 +22,11 @@ class IPut {
 @Controller('api/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
+  @Get()
+  login(@Req() req: IGet) {
+    let { username, password } = req.query
+    return this.UserService.findOne(username, password)
+  }
 
   @Post()
   post(@Body() data: IPost) {
