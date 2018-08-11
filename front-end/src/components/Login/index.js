@@ -1,14 +1,15 @@
 import React from 'react'
-import { Input, Icon, Layout, Button } from 'antd';
+import { Input, Icon, Layout, Button, message } from 'antd';
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import store from '../../state/store'
+import axios from 'axios'
+import { Link } from "react-router-dom";
 
 const { Header, Content } = Layout;
 
 class Login extends React.Component {
   render () {
-    const {login} = this.props
+    const { login, username, password, usernameChange, passwordChange} = this.props
     return (
       <Layout style={{minHeight: '100vh'}}>
         <Header>
@@ -19,14 +20,19 @@ class Login extends React.Component {
             style={{marginBottom: '20px'}}
             placeholder="账号 / admin"
             prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)' }} />}
+            value={username}
+            onChange={usernameChange}
           />
           <Input
             style={{marginBottom: '20px'}}
             placeholder="密码 / 123456"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type='password'
+            value={password}
+            onChange={passwordChange}
           />
-          <Button type="primary" style={{width: '100%'}} onClick={login}><Link to='/WorkTable/separate-words'>登录</Link></Button>
+          <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
+          <Link to='/WorkTable' id="login"></Link>
         </Content>
       </Layout>
     )
@@ -34,15 +40,24 @@ class Login extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return {}
+  return state
 }
 
 let mapDispatchToProps = dispatch => {
   return {
-    login: () => {
+    login: async () => {
+      let state = store.getState()
+      let { username, password } = state
+      if (username == '' || password == '') return message.error('账号和密码不能为空！')
+      let tips = message.loading('登录中...')
+      let res = await axios.post(`${state.path}/api/login`, { username, password })
+      message.destroy(tips)
+      if (res.data.code != 0) return message.error('登录失败，账号或密码错误！')
       dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
-      console.log(store.getState().isLogin)
-    }
+      document.getElementById('login').click()
+    },
+    usernameChange: e => dispatch({ type: "SET_USERNAME", username: e.target.value }),
+    passwordChange: e => dispatch({ type: "SET_PASSWORD", password: e.target.value })
   }
 }
 

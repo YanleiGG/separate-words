@@ -33,7 +33,9 @@ const initialState = {
     markEntity: []
   },
   createArticle: '',
-  createArticleTitle: ''
+  createArticleTitle: '',
+  username: 'admin',
+  password: '123456'
 };
 
 const reducer = (state = initialState, action) => {
@@ -104,6 +106,18 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         isLogin: action.isLogin
+      }) 
+    }
+    case "SET_USERNAME": {
+      return Object.assign({}, state, {
+        ...state,
+        username: action.username
+      }) 
+    }
+    case "SET_PASSWORD": {
+      return Object.assign({}, state, {
+        ...state,
+        password: action.password
       }) 
     }
     default:

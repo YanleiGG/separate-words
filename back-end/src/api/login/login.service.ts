@@ -10,12 +10,15 @@ export class loginService {
   ) {}
 
   async login (username: string, password: string) {
-    let user = await this.UserRepository.findOne({ name: username })
-    if (user.password == password) {
+    let user = await this.UserRepository.findOne({ name: username, password })
+    if (user) {
       return {
         code: 0,
         msg: 'login successed!',
-        username
+        user: {
+          id: user.id,
+          name: username
+        }
       }
     } else {
       return {
@@ -25,5 +28,4 @@ export class loginService {
       }
     }
   }
-  
 }
