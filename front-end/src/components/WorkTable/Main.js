@@ -3,7 +3,8 @@ import { Modal, Radio } from "antd";
 import FooterBtn_UI from './FooterBtn'
 import { Layout, message  } from "antd";
 import { connect } from "react-redux";
-import util from '../../util'
+import { formatWithoutProperty, unformatWithoutProperty, formatWithProperty } from '../../util'
+
 import store from '../../state/store'
 import axios from 'axios'
 
@@ -16,9 +17,9 @@ let mapDispathToFooterBtn = dispatch => {
       let tips = message.loading('Saving...')
       let state = store.getState()
       let article = JSON.parse(JSON.stringify(state.showArticle))
-      article.separateWords = util.formatWithoutProperty(article.separateWords)
-      article.separateWordsProperty = util.formatWithProperty(article.separateWordsProperty)
-      article.markEntity = util.formatWithoutProperty(article.markEntity)
+      article.separateWords = formatWithoutProperty(article.separateWords)
+      article.separateWordsProperty = formatWithProperty(article.separateWordsProperty)
+      article.markEntity = formatWithoutProperty(article.markEntity)
       console.log(article)
       let res = await axios.put(`${state.path}/api/article`, article)
       message.destroy(tips)
@@ -34,9 +35,9 @@ let mapDispathToFooterBtn = dispatch => {
       let article = res.data.article
       article = {
         ...article,
-        separateWords: util.unformatWithoutProperty(article.content, article.separateWords, state.typeArr),
-        separateWordsProperty: util.unformatWithoutProperty(article.content, article.separateWordsProperty, state.typeArr),
-        markEntity: util.unformatWithoutProperty(article.content, article.markEntity, state.typeArr)
+        separateWords: unformatWithoutProperty(article.content, article.separateWords, state.typeArr),
+        separateWordsProperty: unformatWithoutProperty(article.content, article.separateWordsProperty, state.typeArr),
+        markEntity: unformatWithoutProperty(article.content, article.markEntity, state.typeArr)
       }
       let articles = state.articles.map(item => {
         if (item.id == article.id) return article

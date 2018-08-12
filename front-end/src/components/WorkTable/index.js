@@ -4,7 +4,7 @@ import store from '../../state/store'
 import { Layout, message, Modal } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
-import util from '../../util'
+import { unformatWithoutProperty, unformatWithProperty, getType } from '../../util'
 import Main_UI from './Main'
 import SiderNav_UI from './SiderNav'
 import CreateArticle_UI from './CreateArticle'
@@ -20,9 +20,9 @@ let refresh = async dispatch => {
   let articles = res.data.articles.map(item => {
     return {
       ...item,
-      separateWords: util.unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
-      separateWordsProperty: util.unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
-      markEntity: util.unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
+      separateWords: unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+      separateWordsProperty: unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
+      markEntity: unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
     }
   })
   dispatch({ type: "SET_ARTICLES", articles })
@@ -145,7 +145,7 @@ let mapDispathToSeparateWords = dispatch => {
           }
         })
         if (selectedContent == '|') return
-        let type = util.getType(data, store.getState().typeArr, start, end-1)
+        let type = getType(data, store.getState().typeArr, start, end-1)
         let selection = store.getState().selection
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type
@@ -188,7 +188,7 @@ let mapDispathToMarkEntity = dispatch => {
           }
         })
         if (selectedContent == '|') return
-        let type = util.getType(data, store.getState().typeArr, start, end-1)
+        let type = getType(data, store.getState().typeArr, start, end-1)
         let selection = store.getState().selection
         for (let i = selection.start;i < selection.end;i++) {
           data[i].type = type

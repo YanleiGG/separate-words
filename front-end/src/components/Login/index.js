@@ -32,7 +32,7 @@ class Login extends React.Component {
             onChange={passwordChange}
           />
           <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
-          <Link to='/WorkTable' id="login"></Link>
+          <Link to='/WorkTable/separate-words' id="login"></Link>
         </Content>
       </Layout>
     )

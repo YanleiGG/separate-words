@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
 import { UserProviders } from '../../database/User/user.providers';
 import { loginService } from './login.service';

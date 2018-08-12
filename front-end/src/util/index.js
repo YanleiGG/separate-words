@@ -1,4 +1,4 @@
-function formatWithoutProperty (data) {
+export function formatWithoutProperty (data) {
   let str = '', res = ''
   data.forEach(item => {
     str += item.content
@@ -17,7 +17,7 @@ function formatWithoutProperty (data) {
 }
 
 // 此方法与 getType 方法耦合，待优化
-function unformatWithoutProperty (content, formatedStr, typeArr) {
+export function unformatWithoutProperty (content, formatedStr, typeArr) {
   let start, end, count = 0
   let arr = formatedStr.split('').map((item, index) => {
     return { id: index, content: content[index], type: 0 }
@@ -37,7 +37,7 @@ function unformatWithoutProperty (content, formatedStr, typeArr) {
   return arr
 }
 
-function formatWithProperty (data) {
+export function formatWithProperty (data) {
   let str = '', res = '', typeArr = []
   data.forEach((item, index) => {
     if (item.content == '|') typeArr.push(data[index-1].type)
@@ -56,7 +56,7 @@ function formatWithProperty (data) {
   return res
 } 
 
-function unformatWithProperty (content, formatedStr) {
+export function unformatWithProperty (content, formatedStr) {
   let typeArr = [], count = 0, start = 0, end = 0
   let arr = formatedStr.split('')
   for (let i = 1;i < arr.length;i+=2) {
@@ -83,7 +83,7 @@ function unformatWithProperty (content, formatedStr) {
 
 
 // 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
-function getType (data, typeArr, start, end) {
+export function getType (data, typeArr, start, end) {
     // 利用递归，过滤黑名单内的字符
     let blacklist = [' ', '|']
     if (blacklist.indexOf(data[start-1] ? data[start-1].content : null) != -1 || blacklist.indexOf(data[end+1] ? data[end+1].content : null) != -1) {
@@ -101,5 +101,3 @@ function getType (data, typeArr, start, end) {
     }
     return typeArr[index]
 }
-
-export default { formatWithoutProperty, unformatWithoutProperty, getType, formatWithProperty, unformatWithProperty }

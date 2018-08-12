@@ -15,8 +15,7 @@ export class loginController {
   }
 
   @Post()
-  async post(@Body() body: IPost) {
-    let res = await this.loginService.login(body.username, body.password);
-    return res
+  post(@Body() body: IPost, @Session() session: any) {
+    return this.loginService.login(body.username, body.password);
   }
 }

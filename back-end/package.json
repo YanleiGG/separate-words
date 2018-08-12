@@ -17,6 +17,7 @@
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
+    "@nest-middlewares/helmet": "^5.0.0",
     "@nestjs/common": "^5.0.0",
     "@nestjs/core": "^5.0.0",
     "fastify-formbody": "^2.0.0",
