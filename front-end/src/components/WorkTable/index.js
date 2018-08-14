@@ -1,35 +1,15 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import store from '../../state/store'
-import { Layout, message, Modal } from "antd";
+import { Layout, message } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
-import { unformatWithoutProperty, unformatWithProperty, getType } from '../../util'
-import Main_UI from './Main'
-import SiderNav_UI from './SiderNav'
+import { refresh, getType } from '../../util' 
+import Table_UI from './Table'
 import CreateArticle_UI from './CreateArticle'
 import axios from 'axios'
 
 const { Header, Content } = Layout;
-const confirm = Modal.confirm;
-
-// 初始化 & 更新数据
-let refresh = async dispatch => {
-  let state = store.getState()
-  let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
-  let articles = res.data.articles.map(item => {
-    return {
-      ...item,
-      separateWords: unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
-      separateWordsProperty: unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
-      markEntity: unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
-    }
-  })
-  dispatch({ type: "SET_ARTICLES", articles })
-  dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
-  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || state.showArticle })
-  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
-}
 
 // 状态管理
 let mapAllStateToProps = state => {
@@ -60,8 +40,8 @@ let mapDispatchToApp = dispatch => {
   }
 }
 
-// 将 Main 组件公有的方法抽取出来
-let mapDispathToMain = dispatch => {
+// 将 Table 组件公有的方法抽取出来
+let mapDispathToTable = dispatch => {
   return {
     handleCancel: () => {
       dispatch({ type: 'CLOSE_MODAL' })
@@ -75,9 +55,9 @@ let mapDispathToMain = dispatch => {
   };
 };
 let mapDispathToSeparateWordsProperty = dispatch => {
-  let publicDispathToMain = mapDispathToMain(dispatch)
+  let publicDispathToTable = mapDispathToTable(dispatch)
   return {
-    ...publicDispathToMain,
+    ...publicDispathToTable,
     handleOk: () => {
       let start = store.getState().selection.start
       let end = store.getState().selection.end
@@ -123,9 +103,9 @@ let mapDispathToSeparateWordsProperty = dispatch => {
   };
 };
 let mapDispathToSeparateWords = dispatch => {
-  let publicDispathToMain = mapDispathToMain(dispatch)
+  let publicDispathToTable = mapDispathToTable(dispatch)
   return {
-    ...publicDispathToMain,
+    ...publicDispathToTable,
     handleOk: () => {},
     pickWords: () => {
       if (window.getSelection().toString()) {
@@ -166,9 +146,9 @@ let mapDispathToSeparateWords = dispatch => {
   };
 };
 let mapDispathToMarkEntity = dispatch => {
-  let publicDispathToMain = mapDispathToMain(dispatch)
+  let publicDispathToTable = mapDispathToTable(dispatch)
   return {
-    ...publicDispathToMain,
+    ...publicDispathToTable,
     handleOk: () => {},
     pickWords: () => {
       if (window.getSelection().toString()) {
@@ -208,43 +188,7 @@ let mapDispathToMarkEntity = dispatch => {
     }
   };
 };
-let mapDispatchToSiderNav = dispatch => {
-  return {
-    handleClick: id => {
-      let state = store.getState()
-      let showArticle = state.articles.find(item => item.id == id)
-      dispatch({ type: "SET_SHOWARTICLE", showArticle })
-      dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [showArticle.id.toString()]})
-    },
-    pageChange: async (page) => {
-      dispatch({ type: "SET_PAGE", page })
-      refresh(dispatch)
-    },
-    deleteConfirm: async () => {
-      let state = store.getState()
-      confirm({
-        title: '确认删除吗?',
-        content: state.showArticle.title,
-        async onOk() {
-          let tips = message.loading('Deleting...')
-          let res = await axios({
-            method: 'delete',
-            url: `${state.path}/api/article`,
-            data: { id: state.showArticle.id }
-          });
-          message.destroy(tips)
-          if (res.data.code == 0) {
-            message.success('Delete Successed!', 1.5)
-            refresh(dispatch)
-          } else {
-            message.error('Delete defeat!', 1.5)
-          }
-        },
-        onCancel() {},
-      });
-    }
-  }
-}
+
 let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
@@ -291,10 +235,9 @@ let mapDispathToCreateArticle = dispatch => {
   }
 }
 
-let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathToSeparateWordsProperty)(Main_UI)
-let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Main_UI)
-let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Main_UI)
-let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
+let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathToSeparateWordsProperty)(Table_UI)
+let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Table_UI)
+let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Table_UI)
 let CreateArticle = connect(mapAllStateToProps, mapDispathToCreateArticle)(CreateArticle_UI)
 
 class App extends React.Component {
@@ -310,8 +253,7 @@ class App extends React.Component {
         </Header>
         <Content>
           <Layout style={{ minHeight: '90vh' }}>
-            <SiderNav></SiderNav>
-            <Layout style={{ padding: '15px' }}>
+            <Layout>
               <Switch>
                 <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
                 <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>

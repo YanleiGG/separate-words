@@ -50,7 +50,12 @@ let mapDispatchToProps = dispatch => {
       let { username, password } = state
       if (username == '' || password == '') return message.error('账号和密码不能为空！')
       let tips = message.loading('登录中...')
-      let res = await axios.post(`${state.path}/api/login`, { username, password })
+      let res = await axios({
+        method: 'post',
+        url: `${state.path}/api/login`,
+        data: { username, password },
+        withCredentials: true
+      })
       message.destroy(tips)
       if (res.data.code != 0) return message.error('登录失败，账号或密码错误！')
       dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
@@ -60,6 +65,5 @@ let mapDispatchToProps = dispatch => {
     passwordChange: e => dispatch({ type: "SET_PASSWORD", password: e.target.value })
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

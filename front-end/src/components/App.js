@@ -9,10 +9,10 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path='/login' component={ Login }></Route>
-          <Route path='/WorkTable' render={props => {
+          <Route path='/login' exact component={ Login }></Route>
+          <Route path='/' render={props => {
             return store.getState().isLogin ? <WorkTable {...props}/> : <Redirect to="/login" />
-          }} />
+          }}/>
         </Switch>
       </BrowserRouter>
     )

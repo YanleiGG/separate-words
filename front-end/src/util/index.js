@@ -1,3 +1,6 @@
+import store from '../state/store'
+import axios from 'axios'
+
 export function formatWithoutProperty (data) {
   let str = '', res = ''
   data.forEach(item => {
@@ -100,4 +103,22 @@ export function getType (data, typeArr, start, end) {
       index = Math.ceil(Math.random()*(typeArr.length-1))
     }
     return typeArr[index]
+}
+
+// 初始化 & 更新数据
+export let refresh = async dispatch => {
+  let state = store.getState()
+  let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
+  let articles = res.data.articles.map(item => {
+    return {
+      ...item,
+      separateWords: unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
+      separateWordsProperty: unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
+      markEntity: unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
+    }
+  })
+  dispatch({ type: "SET_ARTICLES", articles })
+  dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
+  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || state.showArticle })
+  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
 }

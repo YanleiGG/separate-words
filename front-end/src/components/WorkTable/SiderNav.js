@@ -11,8 +11,7 @@ class SiderNav extends React.Component {
     if (articles[0] && articles[0].child) {
       return articles.map(i => {return <SubMenu key={ i.id } title={<span>{ i.title }</span>}>{ i.child ? ( i.child.child ? this.getArticles(articles) : i.child.map(item => { return <Menu.Item key={ item.id }>{item.title}</Menu.Item> })) : null }</SubMenu>})
     } else {
-      return articles.map(item => { return <Menu.Item key={ item.id } onClick={() => handleClick(item.id)}>{item.title}<Tooltip placement="top" title="删除"><Icon onClick={deleteConfirm} style={{float: 'right', marginTop: '8%'}} type="delete" /></Tooltip></Menu.Item>
-    })
+      return articles.map(item => { return <Menu.Item key={ item.id } onClick={() => handleClick(item.id)}>{item.title}<Tooltip placement="top" title="删除"><Icon onClick={deleteConfirm} style={{float: 'right', marginTop: '8%'}} type="delete" /></Tooltip></Menu.Item>})
     }
   }
 
@@ -22,12 +21,12 @@ class SiderNav extends React.Component {
       <Sider width={200} style={{ background: '#fff' }}>
         <Menu
           mode="inline"
-          style={{ height: '80%' }}
+          style={{ height: '100%' }}
           selectedKeys = { selectedKeys }
         >
           {this.getArticles(articles)}
         </Menu>
-        <Pagination onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+        <Pagination style={{marginTop: "-60px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
       </Sider>
     )    
   }
