@@ -28,7 +28,13 @@ class Navigation extends React.Component {
               <span>划分词性</span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="4" style={{marginLeft: '50%'}}>
+          <Menu.Item key="4">
+            <Link to='/WorkTable/class-list'>
+              <Icon type="plus-circle-o" />
+              <span>分类管理</span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="5">
             <Link to='/WorkTable/create-article'>
               <Icon type="plus-circle-o" />
               <span>添加文章</span>

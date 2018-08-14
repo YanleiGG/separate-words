@@ -35,7 +35,12 @@ const initialState = {
   createArticle: '',
   createArticleTitle: '',
   username: 'admin',
-  password: '123456'
+  password: '123456',
+  classData: [
+    { id: 1, title: '单一类别标注' }, 
+    { id: 2, title: '多类别标注' }, 
+    { id: 3, title: '层类别标注' }
+  ]
 };
 
 const reducer = (state = initialState, action) => {

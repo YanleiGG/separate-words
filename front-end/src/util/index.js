@@ -105,6 +105,15 @@ export function getType (data, typeArr, start, end) {
     return typeArr[index]
 }
 
+let emptyArticle = { 
+  id: null,
+  title: '',
+  content: '',
+  separateWords: [],
+  separateWordsProperty: [],
+  markEntity: []
+}
+
 // 初始化 & 更新数据
 export let refresh = async dispatch => {
   let state = store.getState()
@@ -119,6 +128,6 @@ export let refresh = async dispatch => {
   })
   dispatch({ type: "SET_ARTICLES", articles })
   dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
-  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || state.showArticle })
+  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || emptyArticle })
   dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
 }

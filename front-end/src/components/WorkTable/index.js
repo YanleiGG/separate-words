@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import { refresh, getType } from '../../util' 
 import Table_UI from './Table'
 import CreateArticle_UI from './CreateArticle'
+import ClassList_UI from './ClassList'
 import axios from 'axios'
 
 const { Header, Content } = Layout;
@@ -34,9 +35,10 @@ let mapStateToMarkEntity  = state => {
     article: state.showArticle.markEntity
   }
 }
-let mapDispatchToApp = dispatch => {
+
+let mapStateToClassList = state => {
   return {
-    refresh: () => refresh(dispatch)
+    ...state
   }
 }
 
@@ -51,6 +53,10 @@ let mapDispathToTable = dispatch => {
         type: 'SET_RADIO_VALUE',
         radioValue: e.target.value
       })
+    },
+    pageChange: async (page) => {
+      dispatch({ type: "SET_PAGE", page })
+      refresh(dispatch)
     }
   };
 };
@@ -234,11 +240,17 @@ let mapDispathToCreateArticle = dispatch => {
     }
   }
 }
+let mapDispatchToApp = dispatch => {
+  return {
+    refresh: () => refresh(dispatch)
+  }
+}
 
 let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathToSeparateWordsProperty)(Table_UI)
 let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Table_UI)
 let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Table_UI)
 let CreateArticle = connect(mapAllStateToProps, mapDispathToCreateArticle)(CreateArticle_UI)
+let ClassList = connect(mapStateToClassList)(ClassList_UI)
 
 class App extends React.Component {
   componentWillMount () {
@@ -258,6 +270,7 @@ class App extends React.Component {
                 <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
                 <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
                 <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
+                <Route path='/WorkTable/class-list' component={ ClassList }></Route>
                 <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
               </Switch>
             </Layout>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Modal, Radio } from "antd";
+import { Modal, Radio, Pagination } from "antd";
 import FooterBtn_UI from './FooterBtn'
 import { Layout, message  } from "antd";
 import { connect } from "react-redux";
@@ -10,7 +10,7 @@ import { unformatWithoutProperty, formatWithProperty, formatWithoutProperty, ref
 import store from '../../state/store'
 import axios from 'axios'
 
-const { Content, Footer } = Layout;
+const { Content, Footer, Sider } = Layout;
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
 
@@ -52,7 +52,10 @@ let mapDispathToFooterBtn = dispatch => {
   }
 }
 let mapAllStateToProps = state => {
-  return state
+  return {
+    ...state,
+    SiderNavData: state.articles
+  }
 };
 
 let mapDispatchToSiderNav = dispatch => {
@@ -61,12 +64,9 @@ let mapDispatchToSiderNav = dispatch => {
       let state = store.getState()
       let showArticle = state.articles.find(item => item.id == id)
       dispatch({ type: "SET_SHOWARTICLE", showArticle })
-      dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [showArticle.id.toString()]})
+      dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [id.toString()]})
     },
-    pageChange: async (page) => {
-      dispatch({ type: "SET_PAGE", page })
-      refresh(dispatch)
-    },
+
     deleteConfirm: async () => {
       let state = store.getState()
       confirm({
@@ -81,10 +81,10 @@ let mapDispatchToSiderNav = dispatch => {
           });
           message.destroy(tips)
           if (res.data.code == 0) {
-            message.success('Delete Successed!', 1.5)
+            message.success('删除成功！', 1.5)
             refresh(dispatch)
           } else {
-            message.error('Delete defeat!', 1.5)
+            message.error('删除失败，请重试!', 1.5)
           }
         },
         onCancel() {},
@@ -98,11 +98,14 @@ let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
 
 class Navigation extends React.Component {
   render() {
-    let { article, color, selection, visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType } = this.props 
+    let { article, color, selection, visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType, totalCount, pageChange } = this.props 
 
     return (
       <Layout>
-        <SiderNav></SiderNav>
+        <Sider width={200} style={{ background: '#fff' }}>
+          <SiderNav></SiderNav>
+          <Pagination style={{marginTop: "-60px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+        </Sider>
         <Layout>
           <Content style={{ padding: '15px' }}>
             <div onMouseUp={ pickWords } style={{ fontSize: 20 + 'px' } }>
