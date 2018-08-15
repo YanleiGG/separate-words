@@ -15,7 +15,6 @@ export class UserService {
   }
 
   async post( type: string ,username: string, password: string ) {
-    let user = await this.UserRepository.findOne({ name: username })
   }
 
   async update (username: string, password: string) {

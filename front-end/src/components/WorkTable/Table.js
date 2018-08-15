@@ -23,7 +23,6 @@ let mapDispathToFooterBtn = dispatch => {
       article.separateWords = formatWithoutProperty(article.separateWords)
       article.separateWordsProperty = formatWithProperty(article.separateWordsProperty)
       article.markEntity = formatWithoutProperty(article.markEntity)
-      console.log(article)
       let res = await axios.put(`${state.path}/api/article`, article)
       message.destroy(tips)
       if (res.data.code == 0) {
