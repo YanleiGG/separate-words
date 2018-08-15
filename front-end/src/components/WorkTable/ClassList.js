@@ -1,36 +1,34 @@
 import * as React from "react";
-import SiderNav_UI  from './SiderNav'
-import { connect } from "react-redux";
-import store from '../../state/store'
-import { Layout, message  } from "antd";
-const { Content, Footer, Sider } = Layout;
+import { Layout, message, Menu, Icon, Tooltip   } from "antd";
 
-let SiderNav
+const { Content } = Layout;
+const { SubMenu } = Menu;
 
 export default class ClassList extends React.Component {
-  componentWillMount () {
-    let mapStateToSiderNav = state => {
-      return {
-        ...state,
-        SiderNavData: this.props.classData
+  getData = (data) => {
+    const { deleteConfirm } = this.props
+    return data.map(i => {
+      if (i.child) {
+        return (<SubMenu key={i.id} title={<span>{ i.title }</span>}>
+          { this.getData(i.child) }
+        </SubMenu>)
+      } else {
+        return <Menu.Item key={i.id}>{ i.title }</Menu.Item>
       }
-    }
-    let mapDispatchToSiderNav = dispatch => {
-      return {
-        handleClick: id => {
-          let state = store.getState()
-          dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [id.toString()]})
-        }
-      }
-    }
-    SiderNav = connect(mapStateToSiderNav, mapDispatchToSiderNav)(SiderNav_UI)
+    })
   }
-  
+
   render () {
+    let { classData } = this.props
     return (
-      <Sider>
-       <SiderNav></SiderNav>
-      </Sider>
+      <Layout style={{ padding: "20px" }}>
+        <Menu
+          mode="inline"
+          style={{ height: '100%' }}
+        >
+          {this.getData(classData)}
+        </Menu>
+      </Layout>
     )
   }
 }

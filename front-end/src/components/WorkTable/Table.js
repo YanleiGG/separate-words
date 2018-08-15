@@ -4,7 +4,7 @@ import FooterBtn_UI from './FooterBtn'
 import { Layout, message  } from "antd";
 import { connect } from "react-redux";
 import SiderNav_UI from './SiderNav'
-import { unformatWithoutProperty, formatWithProperty, formatWithoutProperty, refresh } from '../../util' 
+import { unformatWithoutProperty, formatWithProperty, unformatWithProperty , formatWithoutProperty, refresh } from '../../util' 
 
 
 import store from '../../state/store'
@@ -39,7 +39,7 @@ let mapDispathToFooterBtn = dispatch => {
       article = {
         ...article,
         separateWords: unformatWithoutProperty(article.content, article.separateWords, state.typeArr),
-        separateWordsProperty: unformatWithoutProperty(article.content, article.separateWordsProperty, state.typeArr),
+        separateWordsProperty: unformatWithProperty(article.content, article.separateWordsProperty, state.typeArr),
         markEntity: unformatWithoutProperty(article.content, article.markEntity, state.typeArr)
       }
       let articles = state.articles.map(item => {

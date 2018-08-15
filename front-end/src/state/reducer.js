@@ -1,5 +1,5 @@
 const initialState = {
-  isLogin: false,
+  isLogin: true,
   visible: false,
   radioValue: -1,
   wordsType: ['无', '名词', '动词', '形容词'],
@@ -37,9 +37,14 @@ const initialState = {
   username: 'admin',
   password: '123456',
   classData: [
-    { id: 1, title: '单一类别标注' }, 
-    { id: 2, title: '多类别标注' }, 
-    { id: 3, title: '层类别标注' }
+    { id: 1, title: '单一类别标注', child: [{ id: 11, title: '11' }, { id: 12, title: '12' }] }, 
+    { id: 2, title: '多类别标注', 
+      child: [
+        {id: 21, title: '21', child: [{ id: 211, title: '211' }]}, 
+        {id: 22, title: '22', child: [{ id: 221, title: '221' }]}
+      ]
+    }, 
+    { id: 3, title: '层类别标注', child: [{id: 31, title: '31', child: [{ id: 311, title: '311' }]}, ] }
   ]
 };
 
