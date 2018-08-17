@@ -131,3 +131,31 @@ export let refresh = async dispatch => {
   dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || emptyArticle })
   dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
 }
+
+export function deleteClassData (id, arr) {
+  let tempArr = arr
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].id == id) {
+      tempArr.splice(i, 1)
+      return tempArr
+    }
+    if (arr[i].child instanceof Array) {
+      tempArr[i].child = deleteClassData(id, arr[i].child)
+    }
+  }
+  return tempArr
+}
+
+export function addClassData (id, title, added, arr) {
+  let tempArr = arr
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].id == id) {
+      tempArr.child.push({ id: id + i + title + Math.random()*10, title, added, deleted: true })
+      return tempArr
+    }
+    if (arr[i].child instanceof Array) {
+      tempArr[i].child = addClassData(id, arr[i].child)
+    }
+  }
+  return tempArr
+}

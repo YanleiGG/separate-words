@@ -8,7 +8,7 @@ export class ClassController {
 
   @Get()
   get (@Req() req) {
-    return this.ClassService.find(req.body.id)
+    return this.ClassService.find(req.query.id)
   }
 
   @Post()

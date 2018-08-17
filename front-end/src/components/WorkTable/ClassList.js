@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, message, Menu, Icon, Tooltip   } from "antd";
+import { Layout, message, Menu, Icon, Tooltip  } from "antd";
 import FooterBtn_UI from './FooterBtn'
 import store from '../../state/store'
 import { connect } from "react-redux";
@@ -8,6 +8,11 @@ import axios from 'axios'
 const { Footer } = Layout;
 const { SubMenu } = Menu;
 
+let mapAllStateToProps = state => {
+  return {
+    ...state
+  }
+};
 let mapDispathToFooterBtn = dispatch => {
   return {
     save: async () => {
@@ -28,28 +33,37 @@ let mapDispathToFooterBtn = dispatch => {
         message.error('保存失败，请重试!', 1.5)
       }
     },
-    cancel: async () => {
-    }
+    cancel: async () => {}
   }
 }
-let mapAllStateToProps = state => {
-  return {
-    ...state
-  }
-};
+
 
 let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
 
 export default class ClassList extends React.Component {
+  componentWillMount () {
+    const { refresh } = this.props
+    refresh()
+  }
+
   getData = (data) => {
-    const { deleteConfirm } = this.props
+    const { deleteConfirm, addConfirm } = this.props
     return data.map(i => {
       if (i.child) {
-        return (<SubMenu key={i.id} title={<span>{ i.title }</span>}>
-          { this.getData(i.child) }
-        </SubMenu>)
+        return <SubMenu key={i.id} title={<span>{ i.title }
+                <span style={{float: 'right'}}>
+                  { i.added ? <Tooltip placement="top" title="添加"><Icon type="plus" /></Tooltip> : null }
+                  { i.deleted ? <Tooltip placement="top" title="删除"><Icon onClick={ () => deleteConfirm(i.id, i.title) } type="delete" /></Tooltip> : null }
+                </span></span>}>
+                { this.getData(i.child) }
+               </SubMenu>
       } else {
-        return <Menu.Item key={i.id}>{ i.title }</Menu.Item>
+        return <Menu.Item key={i.id}>{ i.title }
+                <span style={{float: 'right'}}>
+                  { i.added ? <Tooltip placement="top" title="添加"><Icon onClick={ () => addConfirm(i.id, i.title) } type="plus" /></Tooltip> : null }
+                  { i.deleted ? <Tooltip placement="top" title="删除"><Icon onClick={ () => deleteConfirm(i.id, i.title) } type="delete" /></Tooltip> : null }
+                </span>
+              </Menu.Item>
       }
     })
   }
@@ -57,12 +71,13 @@ export default class ClassList extends React.Component {
   render () {
     let { classData } = this.props
     return (
-      <Layout style={{ padding: "20px" }}>
+      <Layout style={{ padding: "3% 20%" }}>
         <Menu
           mode="inline"
           style={{ height: '100%' }}
+          selectedKeys = { null }
         >
-          {this.getData(classData)}
+          { this.getData(classData) }
         </Menu>
         <Footer>
           <FooterBtn></FooterBtn>

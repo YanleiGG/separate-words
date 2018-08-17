@@ -82,6 +82,12 @@ const reducer = (state = initialState, action) => {
         password: action.password
       }) 
     }
+    case "SET_CLASS_DATA": {
+      return Object.assign({}, state, {
+        ...state,
+        classData: action.classData
+      }) 
+    }
     default:
       return state;
   }

@@ -1,16 +1,17 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import store from '../../state/store'
-import { Layout, message } from "antd";
+import { Layout, message, Modal } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
-import { refresh, getType } from '../../util' 
+import { refresh, getType, deleteClassData, addClassData } from '../../util' 
 import Table_UI from './Table'
 import CreateArticle_UI from './CreateArticle'
 import ClassList_UI from './ClassList'
 import axios from 'axios'
 
 const { Header, Content } = Layout;
+const confirm = Modal.confirm;
 
 // 状态管理
 let mapAllStateToProps = state => {
@@ -199,7 +200,8 @@ let mapDispathToCreateArticle = dispatch => {
   return {
     create: async () => {
       let state = store.getState()
-      let content = state.createArticle.replace('\n', '').replace(/\s+/g, '')
+      // let content = state.createArticle.replace('\n', '').replace(/\s+/g, '')
+      let content = state.createArticle.replace('\n', '')
       let title = state.createArticleTitle
       if (content == '' || title == '') return message.error('标题和内容不能为空！')
       let tips = message.loading('Creating...')
@@ -246,11 +248,52 @@ let mapDispatchToApp = dispatch => {
   }
 }
 
+let mapDispatchToClassList = dispatch => {
+  return {
+    refresh: async () => {
+      let state = store.getState()
+      let id = 1
+      let res = await axios.get(`${state.path}/api/class?id=${id}`)
+      let data =  res.data.data
+      let classData = [ JSON.parse(data.single), JSON.parse(data.double), JSON.parse(data.much) ]
+      dispatch({ type: "SET_CLASS_DATA", classData })
+    },
+    deleteConfirm: async (id, title) => {
+      let state = store.getState()
+      let classData = state.classData
+      confirm({
+        title: '确认删除吗?',
+        content: title,
+        async onOk() {
+          let data = JSON.parse(JSON.stringify(deleteClassData(id, classData)))
+          dispatch({ type: "SET_CLASS_DATA", classData: data})
+        },
+        onCancel() {}
+      });
+    },
+    addConfirm: async (id, title) => {
+      let state = store.getState()
+      let classData = state.classData
+      console.log(1)
+      confirm({
+        title: '确认添加吗?',
+        content: title,
+        async onOk() {
+          let tips = message.loading('Deleting...')
+          message.destroy(tips)
+          dispatch({ type: "SET_CLASS_DATA", classData: addClassData(id, title, false, classData)})
+        },
+        onCancel() {},
+      });
+    }
+  }
+}
+
 let SeparateWordsProperty = connect(mapStateToSeparateWordsProperty, mapDispathToSeparateWordsProperty)(Table_UI)
 let SeparateWords = connect(mapStateToSeparateWords, mapDispathToSeparateWords)(Table_UI)
 let MarkEntity = connect(mapStateToMarkEntity, mapDispathToMarkEntity)(Table_UI)
 let CreateArticle = connect(mapAllStateToProps, mapDispathToCreateArticle)(CreateArticle_UI)
-let ClassList = connect(mapStateToClassList)(ClassList_UI)
+let ClassList = connect(mapStateToClassList, mapDispatchToClassList)(ClassList_UI)
 
 class App extends React.Component {
   componentWillMount () {

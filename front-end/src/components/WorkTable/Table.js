@@ -66,17 +66,17 @@ let mapDispatchToSiderNav = dispatch => {
       dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [id.toString()]})
     },
 
-    deleteConfirm: async () => {
+    deleteConfirm: async (id, title) => {
       let state = store.getState()
       confirm({
         title: '确认删除吗?',
-        content: state.showArticle.title,
+        content: title,
         async onOk() {
           let tips = message.loading('Deleting...')
           let res = await axios({
             method: 'delete',
             url: `${state.path}/api/article`,
-            data: { id: state.showArticle.id }
+            data: { id }
           });
           message.destroy(tips)
           if (res.data.code == 0) {
