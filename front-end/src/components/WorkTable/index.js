@@ -275,7 +275,7 @@ let mapDispatchToClassList = dispatch => {
         onCancel() {}
       });
     },
-    openAddModal: id => {
+    openAddModal: (id) => {
       dispatch({ type: "SET_ADD_CLASS_ID", addClassId: id })
       dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: true })
     },

@@ -15,8 +15,8 @@ export default class ClassList extends React.Component {
       if (i.child.length > 0 || i.parentId === 0) {
         return <SubMenu key={i.id} title={<span>{ i.content }
                 <span style={{float: 'right'}}>
-                  { i.added ? <Tooltip placement="top" title="添加"><Icon type="plus" /></Tooltip> : null }
-                  { i.deleted ? <Tooltip placement="top" title="删除"><Icon onClick={ () => deleteConfirm(i.id, i.content) } type="delete" /></Tooltip> : null }
+                  { i.added ? <Tooltip placement="top" title="添加"><Icon onClick={ e => { e.stopPropagation(); return openAddModal(i.id) } } type="plus" /></Tooltip> : null }
+                  { i.deleted ? <Tooltip placement="top" title="删除"><Icon onClick={ e => { e.stopPropagation(); return deleteConfirm(i.id, i.content) } } type="delete" /></Tooltip> : null }
                 </span></span>}>
                 { this.getData(i.child) }
                </SubMenu>
