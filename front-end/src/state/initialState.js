@@ -36,5 +36,6 @@ export const initialState = {
   createArticleTitle: '',
   username: 'admin',
   password: '123456',
-  classData: []
+  classData: [],
+  ClassListAddInputValue: '' 
 };

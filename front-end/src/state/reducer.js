@@ -88,6 +88,12 @@ const reducer = (state = initialState, action) => {
         classData: action.classData
       }) 
     }
+    case "SET_CLASS_LIST_ADD_VALUE": {
+      return Object.assign({}, state, {
+        ...state,
+        ClassListAddInputValue: action.ClassListAddInputValue
+      }) 
+    }
     default:
       return state;
   }

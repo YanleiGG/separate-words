@@ -5,12 +5,10 @@ export class Class {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("longtext")
-    single: string;
+    @Column("varchar")
+    content: string;
 
-    @Column("longtext")
-    double: string;
+    @Column("integer")
+    parentId: number;
 
-    @Column("longtext")
-    much: string;
 }

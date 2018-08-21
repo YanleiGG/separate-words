@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import store from '../../state/store'
-import { Layout, message, Modal } from "antd";
+import { Layout, message, Modal, Input } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
 import { refresh, getType, deleteClassData, addClassData } from '../../util' 
@@ -252,10 +252,9 @@ let mapDispatchToClassList = dispatch => {
   return {
     refresh: async () => {
       let state = store.getState()
-      let id = 1
-      let res = await axios.get(`${state.path}/api/class?id=${id}`)
-      let data =  res.data.data
-      let classData = [ JSON.parse(data.single), JSON.parse(data.double), JSON.parse(data.much) ]
+      let res = await axios.get(`${state.path}/api/class`)
+      let classData =  res.data.data
+      console.log(classData)
       dispatch({ type: "SET_CLASS_DATA", classData })
     },
     deleteConfirm: async (id, title) => {
@@ -273,16 +272,16 @@ let mapDispatchToClassList = dispatch => {
     },
     addConfirm: async (id, title) => {
       let state = store.getState()
-      let classData = state.classData
+      let ClassListAddInputValue = state.ClassListAddInputValue
       console.log(1)
       confirm({
-        title: '确认添加吗?',
-        content: title,
-        async onOk() {
-          let tips = message.loading('Deleting...')
-          message.destroy(tips)
-          dispatch({ type: "SET_CLASS_DATA", classData: addClassData(id, title, false, classData)})
-        },
+        title: '添加分类',
+        content: <Input value={ ClassListAddInputValue } onChange = { e => {dispatch({ type: "SET_CLASS_LIST_ADD_VALUE", ClassListAddInputValue: e.target.value })}}></Input>,
+        // async onOk() {
+        //   let tips = message.loading('Deleting...')
+        //   message.destroy(tips)
+        //   dispatch({ type: "SET_CLASS_DATA", classData: addClassData(id, title, false, classData)})
+        // },
         onCancel() {},
       });
     }
@@ -313,7 +312,7 @@ class App extends React.Component {
                 <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
                 <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
                 <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
-                <Route path='/WorkTable/class-list' component={ ClassList }></Route>
+                {/* <Route path='/WorkTable/class-list' component={ ClassList }></Route> */}
                 <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
               </Switch>
             </Layout>
@@ -324,4 +323,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToApp)(App) 
+export default connect(mapAllStateToProps, mapDispatchToApp)(App) 
