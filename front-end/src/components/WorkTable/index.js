@@ -254,23 +254,27 @@ let mapDispatchToClassList = dispatch => {
       let state = store.getState()
       let res = await axios.get(`${state.path}/api/class`)
       let classData =  res.data.data
-      console.log(classData)
       dispatch({ type: "SET_CLASS_DATA", classData })
     },
-    deleteConfirm: async (id, title) => {
+    deleteConfirm: async (id, content) => {
       let state = store.getState()
-      let classData = state.classData
       confirm({
         title: '确认删除吗?',
-        content: title,
+        content,
         async onOk() {
-          let data = JSON.parse(JSON.stringify(deleteClassData(id, classData)))
-          dispatch({ type: "SET_CLASS_DATA", classData: data})
+        let res = await axios({
+          method: 'delete',
+          url: `${state.path}/api/class`,
+          data: { id }
+        })
+        res = await axios.get(`${state.path}/api/class`)
+        let classData =  res.data.data
+        dispatch({ type: "SET_CLASS_DATA", classData })
         },
         onCancel() {}
       });
     },
-    addConfirm: async (id, title) => {
+    addConfirm: async (id, content) => {
       let state = store.getState()
       let ClassListAddInputValue = state.ClassListAddInputValue
       console.log(1)
@@ -280,7 +284,7 @@ let mapDispatchToClassList = dispatch => {
         // async onOk() {
         //   let tips = message.loading('Deleting...')
         //   message.destroy(tips)
-        //   dispatch({ type: "SET_CLASS_DATA", classData: addClassData(id, title, false, classData)})
+        //   dispatch({ type: "SET_CLASS_DATA", classData })
         // },
         onCancel() {},
       });
@@ -312,7 +316,7 @@ class App extends React.Component {
                 <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
                 <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
                 <Route path='/WorkTable/separate-words-property' component={ SeparateWordsProperty }></Route>
-                {/* <Route path='/WorkTable/class-list' component={ ClassList }></Route> */}
+                <Route path='/WorkTable/class-list' component={ ClassList }></Route>
                 <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
               </Switch>
             </Layout>
