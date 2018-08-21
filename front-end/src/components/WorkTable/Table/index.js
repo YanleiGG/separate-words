@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Modal, Radio, Pagination } from "antd";
-import FooterBtn_UI from './FooterBtn'
+import FooterBtn_UI from '../FooterBtn'
 import { Layout, message  } from "antd";
 import { connect } from "react-redux";
 import SiderNav_UI from './SiderNav'
-import { unformatWithoutProperty, formatWithProperty, unformatWithProperty , formatWithoutProperty, refresh } from '../../util' 
+import { unformatWithoutProperty, formatWithProperty, unformatWithProperty , formatWithoutProperty, refresh } from '../../../util' 
 
 
-import store from '../../state/store'
+import store from '../../../state/store'
 import axios from 'axios'
 
 const { Content, Footer, Sider } = Layout;
@@ -95,9 +95,9 @@ let mapDispatchToSiderNav = dispatch => {
 let FooterBtn = connect(mapAllStateToProps, mapDispathToFooterBtn)(FooterBtn_UI)
 let SiderNav = connect(mapAllStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
 
-class Navigation extends React.Component {
+class Table extends React.Component {
   render() {
-    let { article, color, selection, visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType, totalCount, pageChange } = this.props 
+    let { article, color, selection, property_visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType, totalCount, pageChange } = this.props 
 
     return (
       <Layout>
@@ -116,7 +116,7 @@ class Navigation extends React.Component {
             </div>
             <Modal
               title={ selection.content }
-              visible={ visible }
+              visible={ property_visible }
               onOk={ handleOk }
               onCancel={ handleCancel }
             >
@@ -138,4 +138,4 @@ class Navigation extends React.Component {
   }
 }
 
-export default Navigation
+export default Table

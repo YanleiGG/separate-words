@@ -5,12 +5,12 @@ const reducer = (state = initialState, action) => {
     case "OPEN_MODAL": 
       return Object.assign({}, state, {
         ...state, 
-        visible: true    // 需要修改的值放在后面，覆写前面 state 中相同的值
+        property_visible: true    // 需要修改的值放在后面，覆写前面 state 中相同的值
       })
-    case "CLOSE_MODAL": 
+    case "CLOSE_PROPERTY_MODAL": 
       return Object.assign({}, state, {
         ...state,
-        visible: false
+        property_visible: false
       })
     case "SET_SELECTION":
       return Object.assign({}, state, {
@@ -93,6 +93,24 @@ const reducer = (state = initialState, action) => {
         ...state,
         ClassListAddInputValue: action.ClassListAddInputValue
       }) 
+    }
+    case "SET_ADD_CLASS_VISIBLE": {
+      return Object.assign({}, state, {
+        ...state,
+        addClassVisible: action.addClassVisible
+      })
+    }
+    case "SET_ADD_CLASS_INPUT_VALUE": {
+      return Object.assign({}, state, {
+        ...state,
+        addClassInputValue: action.addClassInputValue
+      })
+    }
+    case "SET_ADD_CLASS_ID": {
+      return Object.assign({}, state, {
+        ...state,
+        addClassId: action.addClassId
+      })
     }
     default:
       return state;

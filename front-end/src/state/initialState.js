@@ -37,5 +37,8 @@ export const initialState = {
   username: 'admin',
   password: '123456',
   classData: [],
-  ClassListAddInputValue: '' 
+  ClassListAddInputValue: '',
+  addClassVisible: false,
+  addClassInputValue: '',
+  addClassId: ''
 };

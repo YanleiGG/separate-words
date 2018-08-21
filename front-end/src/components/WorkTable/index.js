@@ -4,7 +4,7 @@ import store from '../../state/store'
 import { Layout, message, Modal, Input } from "antd";
 import HeaderNav from './HeaderNav'
 import { Route, Switch } from "react-router-dom";
-import { refresh, getType, deleteClassData, addClassData } from '../../util' 
+import { refresh, getType } from '../../util'
 import Table_UI from './Table'
 import CreateArticle_UI from './CreateArticle'
 import ClassList_UI from './ClassList'
@@ -47,7 +47,7 @@ let mapStateToClassList = state => {
 let mapDispathToTable = dispatch => {
   return {
     handleCancel: () => {
-      dispatch({ type: 'CLOSE_MODAL' })
+      dispatch({ type: 'CLOSE_PROPERTY_MODAL' })
     },
     radioOnChange: (e) => {
       dispatch({
@@ -84,7 +84,7 @@ let mapDispathToSeparateWordsProperty = dispatch => {
       for (let i = end-1;i >= start;i--) {
         if (data[i] && data[i].content == '|') data.splice(i, 1)
       }
-      dispatch({ type: 'CLOSE_MODAL' })
+      dispatch({ type: 'CLOSE_PROPERTY_MODAL' })
     },
     pickWords: () => {
       if (window.getSelection().toString()) {
@@ -262,33 +262,37 @@ let mapDispatchToClassList = dispatch => {
         title: '确认删除吗?',
         content,
         async onOk() {
-        let res = await axios({
-          method: 'delete',
-          url: `${state.path}/api/class`,
-          data: { id }
-        })
-        res = await axios.get(`${state.path}/api/class`)
-        let classData =  res.data.data
-        dispatch({ type: "SET_CLASS_DATA", classData })
+          let res = await axios({
+            method: 'delete',
+            url: `${state.path}/api/class`,
+            data: { id }
+          })
+          console.log(res)
+          res = await axios.get(`${state.path}/api/class`)
+          let classData =  res.data.data
+          dispatch({ type: "SET_CLASS_DATA", classData })
         },
         onCancel() {}
       });
     },
-    addConfirm: async (id, content) => {
+    openAddModal: id => {
+      dispatch({ type: "SET_ADD_CLASS_ID", addClassId: id })
+      dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: true })
+    },
+    handleOk: async () => {
       let state = store.getState()
-      let ClassListAddInputValue = state.ClassListAddInputValue
-      console.log(1)
-      confirm({
-        title: '添加分类',
-        content: <Input value={ ClassListAddInputValue } onChange = { e => {dispatch({ type: "SET_CLASS_LIST_ADD_VALUE", ClassListAddInputValue: e.target.value })}}></Input>,
-        // async onOk() {
-        //   let tips = message.loading('Deleting...')
-        //   message.destroy(tips)
-        //   dispatch({ type: "SET_CLASS_DATA", classData })
-        // },
-        onCancel() {},
-      });
-    }
+      let content = state.addClassInputValue
+      if (content == '') return
+      let parentId = state.addClassId
+      let res = await axios.post(`${state.path}/api/class`, { content, parentId })
+      dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: false })
+      res = await axios.get(`${state.path}/api/class`)
+      let classData =  res.data.data
+      dispatch({ type: "SET_CLASS_DATA", classData })
+      dispatch({ type: "SET_ADD_CLASS_INPUT_VALUE", addClassInputValue: ''})
+    },
+    handleCancel: () => dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: false }),
+    addClassInputOnChange: e => dispatch({ type: "SET_ADD_CLASS_INPUT_VALUE", addClassInputValue: e.target.value })
   }
 }
 
