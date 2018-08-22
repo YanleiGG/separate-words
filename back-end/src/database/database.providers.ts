@@ -1,5 +1,6 @@
 import { createConnection } from 'typeorm';
 
+
 export const databaseProviders = [
   {
     provide: 'DbConnectionToken',
@@ -14,6 +15,6 @@ export const databaseProviders = [
           __dirname + '/../**/*.entity{.ts,.js}',
       ],
       synchronize: true,
-    }),
+    })
   },  
 ];
