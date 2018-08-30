@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Article } from '../../database/Article/article.entity';
+import { Article } from '../../database/article/article.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(
-    @Inject('UserRepositoryToken')
+    @Inject('ArticleRepositoryToken')
     private readonly ArticleRepository: Repository<Article>,
   ) {}
 

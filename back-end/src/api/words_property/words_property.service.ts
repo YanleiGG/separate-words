@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { WordsProperty } from '../../database/Words_property/words_property.entity';
+import { WordsProperty } from '../../database/words_property/words_property.entity';
 import { appendChild } from '../../tools'
 
 @Injectable()
@@ -22,7 +22,7 @@ export class WordsPropertyService {
         res.push({ ...item, added: true, deleted: false, child: [] })
       } else {
         appendChild(res, { ...item, added: true, deleted: true, child: [] })
-      } 
+      }
     })
     return {
       code: 0,

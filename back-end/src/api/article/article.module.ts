@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
-import { ArticleProviders } from '../../database/Article/article.provider';
+import { ArticleProviders } from '../../database/article/article.provider';
 import { ArticleService } from '../../api/article/article.service';
 import { ArticleController } from '../../api/article/article.controller'
 
