@@ -1,21 +1,21 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Class } from '../../database/Class/class.entity';
+import { WordsProperty } from '../../database/Words_property/words_property.entity';
 import { appendChild } from '../../tools'
 
 @Injectable()
-export class ClassService {
+export class WordsPropertyService {
   constructor(
-    @Inject('ClassRepositoryToken')
-    private readonly ClassRepository: Repository<Class>
+    @Inject('WordsPropertyRepositoryToken')
+    private readonly WordsPropertyRepository: Repository<WordsProperty>
   ) {}
 
   async findOne (id: number) {
-    return this.ClassRepository.findOne({ id })
+    return this.WordsPropertyRepository.findOne({ id })
   }
 
   async findAll () {
-    let data = await this.ClassRepository.find()
+    let data = await this.WordsPropertyRepository.find()
     let res = []
     data.forEach(item => {
       if (item.parentId == 0) {
@@ -32,10 +32,10 @@ export class ClassService {
   }
   
   async create (content: string, parentId: number) {
-    let item = new Class()
+    let item = new WordsProperty()
     item.content = content
     item.parentId = parentId
-    let res = await this.ClassRepository.save(item)
+    let res = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,
       msg: 'successed!',
@@ -44,10 +44,10 @@ export class ClassService {
   }
 
   async update (id: number, content: string, parentId: number) {
-    let item = await this.ClassRepository.findOne({ id })
+    let item = await this.WordsPropertyRepository.findOne({ id })
     item.content = content
     item.parentId = parentId
-    let res = await this.ClassRepository.save(item)
+    let res = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,
       msg: 'successed!',
@@ -56,8 +56,8 @@ export class ClassService {
   }
 
   async delete (id: number) {
-    let item = await this.ClassRepository.findOne({ id })
-    let res = await this.ClassRepository.delete(item)
+    let item = await this.WordsPropertyRepository.findOne({ id })
+    let res = await this.WordsPropertyRepository.delete(item)
     return {
       code: 0,
       msg: 'successed!',

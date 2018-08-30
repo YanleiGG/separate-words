@@ -1,7 +1,7 @@
 import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
-export class Class {
+export class WordsProperty {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -10,5 +10,4 @@ export class Class {
 
     @Column("integer")
     parentId: number;
-
 }

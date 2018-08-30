@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { UserModule } from './api/User/user.module'
 import { ArticleModule } from './api/Article/article.module'
 import { loginModule } from './api/login/login.module'
-import { classModule } from './api/class/class.module'
+import { WordsPropertyModule } from './api/words_property/words_property.module'
 
 @Module({
-  imports: [UserModule, ArticleModule, loginModule, classModule],
+  imports: [UserModule, ArticleModule, loginModule, WordsPropertyModule],
   controllers: [AppController],
   providers: [AppService],
 })
