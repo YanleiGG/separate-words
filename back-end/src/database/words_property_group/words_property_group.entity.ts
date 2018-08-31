@@ -8,7 +8,7 @@ export class WordsPropertyGroup {
     id: number;
 
     @Column("varchar")
-    content: string;
+    name: string;
 
     @Column("integer")
     parentId: number;
