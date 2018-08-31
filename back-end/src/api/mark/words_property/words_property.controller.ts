@@ -5,7 +5,7 @@ class IGetByID {
   id: number
 }
 
-@Controller('api/wordsProperty')
+@Controller('api/words_property')
 export class WordsPropertyController {
   constructor(private readonly WordsPropertyService: WordsPropertyService) {}
 
@@ -21,12 +21,12 @@ export class WordsPropertyController {
 
   @Post()
   post (@Body() body) {
-    return this.WordsPropertyService.create(body.content, body.parentId)
+    return this.WordsPropertyService.create(body)
   }
 
   @Put()
   put (@Body() body) {
-    return this.WordsPropertyService.update(body.id, body.content, body.parentId)
+    return this.WordsPropertyService.update(body)
   }
 
   @Delete()

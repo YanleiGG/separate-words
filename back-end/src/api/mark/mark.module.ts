@@ -29,6 +29,9 @@ import { wordsPropertyGroupProviders } from '../../database/words_property_group
 import { WordsPropertyGroupService } from './words_property_group/words_property_group.service'
 import { WordsPropertyGroupController } from './words_property_group/words_property_group.controller'
 
+import { classifyProviders } from '../../database/classify/classify.provider'
+import { ClassifyService } from './classify/classify.service'
+import { ClassifyController } from './classify/classify.controller'
 
 @Module({
   imports: [DatabaseModule],
@@ -40,13 +43,15 @@ import { WordsPropertyGroupController } from './words_property_group/words_prope
     ...articleGroupEntitiesProviders,
     ...articleGroupWordsPropertyProviders,
     ...wordsPropertyGroupProviders,
+    ...classifyProviders,
     ArticleService,
     WordsPropertyService,
     ArticleEmotionService,
     ArticleGroupClassifyService,
     ArticleGroupEntitiesService,
     ArticleGroupWordsPropertyService,
-    WordsPropertyGroupService
+    WordsPropertyGroupService,
+    ClassifyService
   ],
   controllers: [
     ArticleController,
@@ -55,7 +60,8 @@ import { WordsPropertyGroupController } from './words_property_group/words_prope
     ArticleGroupClassifyController,
     ArticleGroupEntitiesController,
     ArticleGroupWordsPropertyController,
-    WordsPropertyGroupController
+    WordsPropertyGroupController,
+    ClassifyController
   ]
 })
 export class MarkModule {}

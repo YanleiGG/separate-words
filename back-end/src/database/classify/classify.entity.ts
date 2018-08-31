@@ -9,7 +9,9 @@ export class Classify {
     @Column()
     name: string;
 
-    @Column()
+    @Column({
+      nullable: true
+    })
     parentId: string;
 
     @ManyToOne(type => ClassifyGroup, classify_group => classify_group.classify)

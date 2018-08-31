@@ -31,10 +31,10 @@ export class WordsPropertyService {
     }
   }
   
-  async create (content: string, parentId: number) {
+  async create (args) {
     let item = new WordsProperty()
-    item.content = content
-    item.parentId = parentId
+    item.name = args.name
+    item.parentId = args.parentId || null
     let res = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,
@@ -43,10 +43,10 @@ export class WordsPropertyService {
     }
   }
 
-  async update (id: number, content: string, parentId: number) {
-    let item = await this.WordsPropertyRepository.findOne({ id })
-    item.content = content
-    item.parentId = parentId
+  async update (args) {
+    let item = await this.WordsPropertyRepository.findOne({ id: args.id })
+    item.name = args.name
+    item.parentId = args.parentId || null
     let res = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,
