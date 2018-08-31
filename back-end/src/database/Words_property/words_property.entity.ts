@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { WordsPropertyGroup } from '../words_property_group/words_property_group.entity'
 
 @Entity()
@@ -11,6 +11,12 @@ export class WordsProperty {
 
     @Column("integer")
     parentId: number;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @ManyToOne(type => WordsPropertyGroup, words_property_group => words_property_group.words_property)
     words_property_group: string;

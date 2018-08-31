@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { Article } from '../article/article.entity'
 
 @Entity()
@@ -17,6 +17,12 @@ export class ArticleEmotion {
 
     @Column()
     emotion: string;   // 喜、怒、哀、乐、惊、惧
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @OneToOne(type => Article, article => article.article_emotion)
     @JoinColumn()

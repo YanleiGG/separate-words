@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { ArticleGroupClassify } from '../article_group_classify/article_group_classify.entity'
 import { ArticleGroupEntities } from '../article_group_entities/article_group_entities.entity'
 import { ArticleGroupWordsProperty } from '../article_group_words_property/article_group_words_property.entity';
@@ -23,6 +23,12 @@ export class Article {
 
     @Column("longtext")
     markEntity: string;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @ManyToOne(type => ArticleGroupClassify, article_group_classify => article_group_classify.articles)
     article_group_classify: string;

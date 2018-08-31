@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { WordsProperty } from '../words_property/words_property.entity'
 import { ArticleGroupWordsProperty }  from '../article_group_words_property/article_group_words_property.entity'
 
@@ -12,6 +12,12 @@ export class WordsPropertyGroup {
 
     @Column("integer")
     parentId: number;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @OneToMany(type => WordsProperty, words_property => words_property.words_property_group)
     words_property: WordsProperty[];    

@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
 
 @Entity()
@@ -13,6 +13,12 @@ export class Entities {
       nullable: true
     })
     parentId: string;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @ManyToOne(type => EntitiesGroup, entities_group => entities_group.entities)
     entities_group: string;

@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { Classify } from '../classify/classify.entity'
 import { ArticleGroupClassify } from '../article_group_classify/article_group_classify.entity'
 
@@ -9,6 +9,12 @@ export class ClassifyGroup {
 
     @Column()
     name: string;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 
     @OneToMany(type => Classify, classify => classify.classify_group)
     classify: Classify[];
