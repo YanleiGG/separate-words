@@ -41,6 +41,11 @@ import { entitiesProviders } from '../../database/entities/entities.provider'
 import { EntitiesService } from './entities/entities.service'
 import { EntitiesController } from './entities/entities.controller'
 
+import { entitiesGroupProviders } from '../../database/entities_group/entities_group.provider'
+import { EntitiesGroupService } from './entities_group/entities_group.service'
+import { EntitiesGroupController } from './entities_group/entities_group.controller'
+
+
 @Module({
   imports: [DatabaseModule],
   providers: [
@@ -54,6 +59,7 @@ import { EntitiesController } from './entities/entities.controller'
     ...classifyProviders,
     ...classifyGroupProviders,
     ...entitiesProviders,
+    ...entitiesGroupProviders,
     ArticleService,
     WordsPropertyService,
     ArticleEmotionService,
@@ -63,7 +69,8 @@ import { EntitiesController } from './entities/entities.controller'
     WordsPropertyGroupService,
     ClassifyService,
     ClassifyGroupService,
-    EntitiesService
+    EntitiesService,
+    EntitiesGroupService
   ],
   controllers: [
     ArticleController,
@@ -75,7 +82,8 @@ import { EntitiesController } from './entities/entities.controller'
     WordsPropertyGroupController,
     ClassifyController,
     ClassifyGroupController,
-    EntitiesController
+    EntitiesController,
+    EntitiesGroupController
   ]
 })
 export class MarkModule {}

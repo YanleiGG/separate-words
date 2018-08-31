@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm';
 import { EntitiesGroup } from './entities_group.entity';
 
-export const EntitiesGroupProviders = [
+export const entitiesGroupProviders = [
   {
     provide: 'EntitiesGroupRepositoryToken',
     useFactory: (connection: Connection) => connection.getRepository(EntitiesGroup),
