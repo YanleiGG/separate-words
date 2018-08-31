@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from '../../database/user/user.entity';
+import { User } from '../../../database/user/user.entity';
 
 @Injectable()
-export class loginService {
+export class LoginService {
   constructor(
     @Inject('UserRepositoryToken')
     private readonly UserRepository: Repository<User>

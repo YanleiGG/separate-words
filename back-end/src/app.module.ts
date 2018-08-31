@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './api/User/user.module'
-import { ArticleModule } from './api/Article/article.module'
-import { loginModule } from './api/login/login.module'
-import { WordsPropertyModule } from './api/words_property/words_property.module'
+import { AuthModule } from './api/auth/auth.module'
+import { MarkModule } from './api/mark/mark.module'
 
 @Module({
-  imports: [UserModule, ArticleModule, loginModule, WordsPropertyModule],
+  imports: [AuthModule, MarkModule],
   controllers: [AppController],
   providers: [AppService],
 })

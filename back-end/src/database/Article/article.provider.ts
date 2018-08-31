@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm';
 import { Article } from './article.entity';
 
-export const ArticleProviders = [
+export const articleProviders = [
   {
     provide: 'ArticleRepositoryToken',
     useFactory: (connection: Connection) => connection.getRepository(Article),

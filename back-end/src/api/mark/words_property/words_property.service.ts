@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { WordsProperty } from '../../database/words_property/words_property.entity';
-import { appendChild } from '../../tools'
+import { WordsProperty } from '../../../database/words_property/words_property.entity';
+import { appendChild } from '../../../tools'
 
 @Injectable()
 export class WordsPropertyService {

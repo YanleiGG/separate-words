@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Article } from '../../database/article/article.entity';
+import { Article } from '../../../database/article/article.entity';
 
 @Injectable()
 export class ArticleService {
