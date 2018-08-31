@@ -15,5 +15,5 @@ export class ClassifyGroup {
 
     @OneToOne(type => ArticleGroupClassify, article_group_classify => article_group_classify.classify_group)
     @JoinColumn()
-    article_group_classify: ArticleGroupClassify; 
+    article_group_classify: ArticleGroupClassify;
 }
