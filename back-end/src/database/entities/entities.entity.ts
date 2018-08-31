@@ -9,7 +9,9 @@ export class Entities {
     @Column()
     name: string;
 
-    @Column()
+    @Column({
+      nullable: true
+    })
     parentId: string;
 
     @ManyToOne(type => EntitiesGroup, entities_group => entities_group.entities)
