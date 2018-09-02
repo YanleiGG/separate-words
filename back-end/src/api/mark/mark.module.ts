@@ -49,6 +49,10 @@ import { markEntityProviders } from "../../database/mark_entity/mark_entity.prov
 import { MarkEntityService } from './mark_entity/mark_entity.service'
 import { MarkEntityController } from './mark_entity/mark_entity.controller'
 
+import { sepWordsPropertyProviders } from '../../database/sep_words_property/sep_words_property.provider'
+import { SepWordsPropertyService } from './sep_words_property/sep_words_property.service'
+import { SepWordsPropertyController } from './sep_words_property/sep_words_property.controller'
+
 @Module({
   imports: [DatabaseModule],
   providers: [
@@ -64,6 +68,7 @@ import { MarkEntityController } from './mark_entity/mark_entity.controller'
     ...entitiesProviders,
     ...entitiesGroupProviders,
     ...markEntityProviders,
+    ...sepWordsPropertyProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,
@@ -75,7 +80,8 @@ import { MarkEntityController } from './mark_entity/mark_entity.controller'
     ClassifyGroupService,
     EntitiesService,
     EntitiesGroupService,
-    MarkEntityService
+    MarkEntityService,
+    SepWordsPropertyService
   ],
   controllers: [
     ArticleController,
@@ -89,7 +95,8 @@ import { MarkEntityController } from './mark_entity/mark_entity.controller'
     ClassifyGroupController,
     EntitiesController,
     EntitiesGroupController,
-    MarkEntityController
+    MarkEntityController,
+    SepWordsPropertyController
   ]
 })
 export class MarkModule {}
