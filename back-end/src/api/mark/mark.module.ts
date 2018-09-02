@@ -9,9 +9,9 @@ import { wordsPropertyProviders } from '../../database/words_property/words_prop
 import { WordsPropertyService } from './words_property/words_property.service'
 import { WordsPropertyController } from './words_property/words_property.controller'
 
-import { articleEmotionProviders } from '../../database/article_emotion/article_emotion.provider'
-import { ArticleEmotionService } from './article_emotion/article_emotion.service'
-import { ArticleEmotionController } from './article_emotion/article_emotion.controller'
+import { emotionProviders } from '../../database/emotion/emotion.provider'
+import { EmotionService } from './emotion/emotion.service'
+import { EmotionController } from './emotion/emotion.controller'
 
 import { articleGroupClassifyProviders } from '../../database/article_group_classify/article_group_classify.provider'
 import { ArticleGroupClassifyService } from './article_group_classify/article_group_classify.service'
@@ -51,7 +51,7 @@ import { EntitiesGroupController } from './entities_group/entities_group.control
   providers: [
     ...articleProviders,
     ...wordsPropertyProviders,
-    ...articleEmotionProviders,
+    ...emotionProviders,
     ...articleGroupClassifyProviders,
     ...articleGroupEntitiesProviders,
     ...articleGroupWordsPropertyProviders,
@@ -62,7 +62,7 @@ import { EntitiesGroupController } from './entities_group/entities_group.control
     ...entitiesGroupProviders,
     ArticleService,
     WordsPropertyService,
-    ArticleEmotionService,
+    EmotionService,
     ArticleGroupClassifyService,
     ArticleGroupEntitiesService,
     ArticleGroupWordsPropertyService,
@@ -75,7 +75,7 @@ import { EntitiesGroupController } from './entities_group/entities_group.control
   controllers: [
     ArticleController,
     WordsPropertyController,
-    ArticleEmotionController,
+    EmotionController,
     ArticleGroupClassifyController,
     ArticleGroupEntitiesController,
     ArticleGroupWordsPropertyController,

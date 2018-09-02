@@ -1,10 +1,10 @@
 import { Connection } from 'typeorm';
-import { ArticleEmotion } from './article_emotion.entity';
+import { MarkEntity } from './mark_entity.entity';
 
 export const articleEmotionProviders = [
   {
     provide: 'ArticleEmotionRepositoryToken',
-    useFactory: (connection: Connection) => connection.getRepository(ArticleEmotion),
+    useFactory: (connection: Connection) => connection.getRepository(MarkEntity),
     inject: ['DbConnectionToken'],
   },
 ];

@@ -2,7 +2,7 @@ import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDate
 import { Article } from '../article/article.entity'
 
 @Entity()
-export class ArticleEmotion {
+export class Emotion {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -24,7 +24,7 @@ export class ArticleEmotion {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToOne(type => Article, article => article.article_emotion)
+    @OneToOne(type => Article, article => article.emotion)
     @JoinColumn()
     article: Article;     
 }

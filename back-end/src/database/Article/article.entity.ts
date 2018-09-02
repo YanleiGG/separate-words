@@ -2,7 +2,9 @@ import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateC
 import { ArticleGroupClassify } from '../article_group_classify/article_group_classify.entity'
 import { ArticleGroupEntities } from '../article_group_entities/article_group_entities.entity'
 import { ArticleGroupWordsProperty } from '../article_group_words_property/article_group_words_property.entity';
-import { ArticleEmotion } from '../article_emotion/article_emotion.entity'
+import { Emotion } from '../emotion/emotion.entity'
+import { SepWordsProperty } from '../sep_words_property/sep_words_property.entity'
+import { MarkEntity } from '../mark_entity/mark_entity.entity'
 
 @Entity()
 export class Article {
@@ -14,12 +16,6 @@ export class Article {
 
     @Column("longtext")
     content: string;
-
-    @Column("longtext")
-    separateWords: string;
-
-    @Column("longtext")
-    markWordsProperty: string;
 
     @Column("longtext")
     markEntity: string;
@@ -39,6 +35,12 @@ export class Article {
     @ManyToOne(type => ArticleGroupWordsProperty, article_group_words_property => article_group_words_property.articles)
     article_group_words_property: string; 
 
-    @OneToOne(type => ArticleEmotion, article_emotion => article_emotion.article)
-    article_emotion: string;
+    @OneToOne(type => Emotion, emotion => emotion.article)
+    emotion: string;
+
+    @OneToOne(type => SepWordsProperty, sep_words_property => sep_words_property.article)
+    sep_words_property: string;
+
+    @OneToOne(type => MarkEntity, mark_entity => mark_entity.article)
+    mark_entity: string;
 }
