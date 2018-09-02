@@ -1,9 +1,13 @@
 import * as React from "react";
 import { Layout, Menu, Icon, Tooltip, Modal, Input  } from "antd";
+import axios from 'axios'
+import store from '../../state/store'
+import { connect } from "react-redux";
 
 const { SubMenu } = Menu;
+const confirm = Modal.confirm;
 
-export default class ClassList extends React.Component {
+class ClassList_UI extends React.Component {
   componentWillMount () {
     const { refresh } = this.props
     refresh()
@@ -56,3 +60,59 @@ export default class ClassList extends React.Component {
     )
   }
 }
+
+let mapStateToClassList = state => {
+  return state
+}
+
+let mapDispatchToClassList = dispatch => {
+  return {
+    refresh: async () => {
+      let state = store.getState()
+      let res = await axios.get(`${state.path}/api/class`)
+      let classData =  res.data.data
+      dispatch({ type: "SET_CLASS_DATA", classData })
+    },
+    deleteConfirm: async (id, content) => {
+      let state = store.getState()
+      confirm({
+        title: '确认删除吗?',
+        content,
+        async onOk() {
+          let res = await axios({
+            method: 'delete',
+            url: `${state.path}/api/class`,
+            data: { id }
+          })
+          console.log(res)
+          res = await axios.get(`${state.path}/api/class`)
+          let classData =  res.data.data
+          dispatch({ type: "SET_CLASS_DATA", classData })
+        },
+        onCancel() {}
+      });
+    },
+    openAddModal: (id) => {
+      dispatch({ type: "SET_ADD_CLASS_ID", addClassId: id })
+      dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: true })
+    },
+    handleOk: async () => {
+      let state = store.getState()
+      let content = state.addClassInputValue
+      if (content == '') return
+      let parentId = state.addClassId
+      let res = await axios.post(`${state.path}/api/class`, { content, parentId })
+      dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: false })
+      res = await axios.get(`${state.path}/api/class`)
+      let classData =  res.data.data
+      dispatch({ type: "SET_CLASS_DATA", classData })
+      dispatch({ type: "SET_ADD_CLASS_INPUT_VALUE", addClassInputValue: ''})
+    },
+    handleCancel: () => dispatch({ type: "SET_ADD_CLASS_VISIBLE", addClassVisible: false }),
+    addClassInputOnChange: e => dispatch({ type: "SET_ADD_CLASS_INPUT_VALUE", addClassInputValue: e.target.value })
+  }
+}
+
+let ClassList = connect(mapStateToClassList, mapDispatchToClassList)(ClassList_UI)
+
+export default ClassList

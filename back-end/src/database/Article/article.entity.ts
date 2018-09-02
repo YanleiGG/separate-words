@@ -19,7 +19,7 @@ export class Article {
     separateWords: string;
 
     @Column("longtext")
-    separateWordsProperty: string;
+    markWordsProperty: string;
 
     @Column("longtext")
     markEntity: string;

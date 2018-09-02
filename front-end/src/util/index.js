@@ -84,7 +84,6 @@ export function unformatWithProperty (content, formatedStr) {
   return res
 }
 
-
 // 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
 export function getType (data, typeArr, start, end) {
     // 利用递归，过滤黑名单内的字符

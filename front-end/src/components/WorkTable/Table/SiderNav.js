@@ -1,9 +1,14 @@
 import React from 'react'
-import { Menu, Icon, Tooltip } from 'antd';
+import { Menu, Icon, Tooltip, Modal, message } from 'antd';
+import { refresh } from '../../../util' 
+import store from '../../../state/store'
+import axios from 'axios'
+import { connect } from "react-redux";
 
 const { SubMenu } = Menu;
+const confirm = Modal.confirm;
 
-class SiderNav extends React.Component {
+class SiderNav_UI extends React.Component {
   getData = (data) => {
     const { handleClick, deleteConfirm } = this.props
     return data.map(i => {
@@ -29,4 +34,46 @@ class SiderNav extends React.Component {
   }
 }
 
-export default SiderNav
+let mapDispatchToSiderNav = dispatch => {
+  return {
+    handleClick: id => {
+      let state = store.getState()
+      let showArticle = state.articles.find(item => item.id == id)
+      dispatch({ type: "SET_SHOWARTICLE", showArticle })
+      dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [id.toString()]})
+    },
+
+    deleteConfirm: async (id, title) => {
+      let state = store.getState()
+      confirm({
+        title: '确认删除吗?',
+        content: title,
+        async onOk() {
+          let tips = message.loading('Deleting...')
+          let res = await axios({
+            method: 'delete',
+            url: `${state.path}/api/article`,
+            data: { id }
+          });
+          message.destroy(tips)
+          if (res.data.code == 0) {
+            message.success('删除成功！', 1.5)
+            refresh(dispatch)
+          } else {
+            message.error('删除失败，请重试!', 1.5)
+          }
+        },
+        onCancel() {},
+      });
+    }
+  }
+}
+
+let mapStateToProps = state => {
+  return {
+    ...state,
+    SiderNavData: state.articles
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
