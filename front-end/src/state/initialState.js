@@ -34,11 +34,20 @@ export const initialState = {
   },
   createArticle: '',
   createArticleTitle: '',
+  createArticleSelected: [],
   username: 'admin',
   password: '123456',
   classData: [],
   ClassListAddInputValue: '',
   addClassVisible: false,
   addClassInputValue: '',
-  addClassId: ''
+  addClassId: '',
+  emotion: {
+    emotionData: [],
+    siderNavData: [],
+    totalCount: 0,
+    page: 1,
+    showArticle: {},
+    selectedKeys: [],
+  }
 };

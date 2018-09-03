@@ -5,7 +5,7 @@ const reducer = (state = initialState, action) => {
     case "OPEN_MODAL": 
       return Object.assign({}, state, {
         ...state, 
-        property_visible: true    // 需要修改的值放在后面，覆写前面 state 中相同的值
+        property_visible: true
       })
     case "CLOSE_PROPERTY_MODAL": 
       return Object.assign({}, state, {
@@ -111,6 +111,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         addClassId: action.addClassId
       })
+    }
+    case "SET_CREATE_ARTICLE_SELECTED": {
+      return Object.assign({}, state, {
+        ...state,
+        createArticleSelected: action.createArticleSelected
+      })
+    }
+    case "SET_EMOTION": {
+      return Object.assign({}, state, {
+        ...state,
+        emotion: action.emotion
+      })      
     }
     default:
       return state;

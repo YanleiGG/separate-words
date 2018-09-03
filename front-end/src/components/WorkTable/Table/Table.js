@@ -7,8 +7,6 @@ import FooterBtn_Table from './FooterBtn_Table'
 const { Content, Footer, Sider } = Layout;
 const RadioGroup = Radio.Group;
 
-
-
 class Table extends React.Component {
   render() {
     let { article, color, selection, property_visible, handleOk, handleCancel, pickWords, radioOnChange, radioValue, wordsType, totalCount, pageChange } = this.props 

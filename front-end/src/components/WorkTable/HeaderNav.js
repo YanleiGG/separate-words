@@ -40,6 +40,12 @@ class Navigation extends React.Component {
               <span>添加文章</span>
             </Link>
           </Menu.Item>
+          <Menu.Item key="6">
+            <Link to='/emotion'>
+              <Icon type="plus-circle-o" />
+              <span>情感标注</span>
+            </Link>
+          </Menu.Item>
       </Menu>
     )
   }

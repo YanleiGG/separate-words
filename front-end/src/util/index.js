@@ -117,16 +117,18 @@ let emptyArticle = {
 export let refresh = async dispatch => {
   let state = store.getState()
   let res = await axios.get(`${state.path}/api/article?offset=${(state.page-1)*10}&pageSize=10`)
-  let articles = res.data.articles.map(item => {
-    return {
-      ...item,
-      separateWords: unformatWithoutProperty(item.content, item.separateWords, state.typeArr),
-      separateWordsProperty: unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr),
-      markEntity: unformatWithoutProperty(item.content, item.markEntity, state.typeArr)
-    }
-  })
-  dispatch({ type: "SET_ARTICLES", articles })
-  dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
-  dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || emptyArticle })
-  dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
+  if (res.data.articles) {
+    let articles = res.data.articles.map(item => {
+      return {
+        ...item,
+        separateWords: item.separateWords ? unformatWithoutProperty(item.content, item.separateWords, state.typeArr) : [],
+        separateWordsProperty: item.separateWordsProperty ? unformatWithProperty(item.content, item.separateWordsProperty, state.typeArr) : [],
+        markEntity: item.markEntity ? unformatWithoutProperty(item.content, item.markEntity, state.typeArr) : []
+      }
+    })
+    dispatch({ type: "SET_ARTICLES", articles })
+    dispatch({ type: "SET_TOTAL_COUNT", totalCount: res.data.totalCount })      
+    dispatch({ type: "SET_SHOWARTICLE", showArticle: articles[0] || emptyArticle })
+    dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: articles[0] ? [articles[0].id.toString()] : null })
+  }
 }
