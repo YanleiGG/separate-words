@@ -4,7 +4,7 @@ import HeaderNav from '../HeaderNav'
 
 let mapStateToProps = state => {
   return {
-    headerNavData: state.emotion.headerNavData
+    headerNavData: state.sepWordsPro.headerNavData
   }
 }
 

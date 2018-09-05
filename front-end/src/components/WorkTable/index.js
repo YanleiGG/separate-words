@@ -5,11 +5,8 @@ import { Route, Switch } from "react-router-dom";
 import { refresh } from '../../util'
 import HeaderNav from './HeaderNav'
 import CreateArticle from './CreateArticle'
-import ClassList from './ClassList'
-import SeparateWords from './Table/SeparateWords'
-import MarkWordsProperty from './Table/SeparateWordsProperty'
-import MarkEntity from './Table/MarkEntity'
 import Emotion from './Emotion'
+import SepWordsPro from './SepWordsPro'
 
 const { Header, Content } = Layout;
 
@@ -21,19 +18,13 @@ class App extends React.Component {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Header>
-          <HeaderNav></HeaderNav>
-        </Header>
         <Content>
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <Switch>
-                <Route path='/table/separate-words' component={ SeparateWords }></Route>
-                <Route path='/table/mark-entity' component={ MarkEntity }></Route>
-                <Route path='/table/separate-words-property' component={ MarkWordsProperty }></Route>
-                <Route path='/table/class-list' component={ ClassList }></Route>
                 <Route path='/table/create-article' component={ CreateArticle }></Route>
                 <Route path='/table/emotion' component={ Emotion }></Route>
+                <Route path='/table/sepWordsPro' component={ SepWordsPro }></Route>
               </Switch>
             </Layout>
           </Layout>

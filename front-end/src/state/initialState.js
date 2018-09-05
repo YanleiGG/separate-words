@@ -56,5 +56,20 @@ export const initialState = {
         { name: '情感实体抽取', path: '/table/emotion/entity', key: '情感实体抽取' }
       ]
     }
+  },
+  sepWordsPro: {
+    sepWordsPros: [],
+    SiderLeftData: [],
+    totalCount: 0,
+    page: 1,
+    selectedKeys: [],
+    showIndex: 0,
+    headerNavData: {
+      title: '分词及词性标注',
+      data: [
+        { name: '分词', path: '/table/sepWordsPro/sep', key: '分词' },
+        { name: '词性标注', path: '/table/sepWordsPro/wordsPro', key: '词性标注' }
+      ]
+    }
   }
 };
