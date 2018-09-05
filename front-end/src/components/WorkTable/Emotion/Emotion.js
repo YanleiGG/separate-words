@@ -1,39 +1,12 @@
 import React from 'react'
-import SiderNav_UI from './SiderNav'
+import SiderLeft from './SiderLeft'
+import SiderRight from './SiderRight'
 import axios from 'axios'
 import { connect } from "react-redux";
 import store from '../../../state/store'
-import { Layout, Pagination, Card } from "antd";
+import { Layout, Pagination } from "antd";
 
 const { Content, Footer, Sider } = Layout;
-
-let mapStateToSiderNav = state => {
-  return {
-    ...state,
-    siderNavData: state.emotion.siderNavData,
-    totalCount: state.emotion.totalCount,
-    selectedKeys: state.emotion.selectedKeys,
-  }
-}
-
-let mapDispatchToSiderNav = dispatch => {
-  return {
-    handleClick: id => {
-      let state = store.getState()
-      let data = state.emotion.emotionData
-      let showArticle = data.find(item => {
-        return item.article.id === id
-      }).article
-      dispatch({ type: "SET_EMOTION", emotion: {
-        ...state.emotion,
-        showArticle,
-        selectedKeys: [showArticle.id.toString()]
-      }})
-    }
-  }
-}
-
-let SiderNav = connect(mapStateToSiderNav, mapDispatchToSiderNav)(SiderNav_UI)
 
 class Emotion_UI extends React.Component {
   componentWillMount() {
@@ -41,20 +14,24 @@ class Emotion_UI extends React.Component {
   }
 
   render () {
-    const { pageChange, totalCount, showArticle } = this.props
+    const { pageChange, totalCount, showIndex, emotions } = this.props
     return (
       <Layout>
         <Sider width={200} style={{ background: '#fff' }}>
-          <SiderNav></SiderNav>
-          <Pagination style={{marginTop: "-60px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+          <SiderLeft/>
+          <Pagination 
+            style={{marginTop: "-60px"}} 
+            onChange={ pageChange } 
+            defaultCurrent={1} 
+            total={totalCount} 
+            simple
+          />
         </Sider>
         <Content style={{ padding: '15px', fontSize: '20px' }}>
-          { showArticle.content }
+          { emotions.length > 0 ? emotions[showIndex].article.content : null }
         </Content>
         <Sider width={400}>
-          <Card style={{ height: "100%" }}>
-
-          </Card>
+          <SiderRight/>
         </Sider>
       </Layout>
     )
@@ -64,9 +41,9 @@ class Emotion_UI extends React.Component {
 let refresh = async (dispatch) => {
   let state = store.getState()
   let res = await axios.get(`${state.path}/api/emotion?offset=${(state.emotion.page-1)*10}&pageSize=10`)
-  let emotionData = res.data.emotions
+  let emotions = res.data.emotions
   let totalCount = res.data.totalCount
-  let siderNavData = emotionData.map(item => {
+  let SiderLeftData = emotions.map(item => {
     return {
       id: item.article.id,
       title: item.article.title
@@ -74,11 +51,11 @@ let refresh = async (dispatch) => {
   })
   dispatch({ type: "SET_EMOTION", emotion: {
     ...state.emotion,
-    emotionData,
-    siderNavData,
+    emotions,
+    SiderLeftData,
     totalCount,
-    showArticle: emotionData[0].article,
-    selectedKeys: [emotionData[0].article.id.toString()]
+    showIndex: 0,
+    selectedKeys: [emotions[0].article.id.toString()]
   }})
 }
 
@@ -93,9 +70,9 @@ let mapDispatchToEmotion = dispatch => {
     created: async () => {
       let state = store.getState()
       refresh(dispatch)
-      dispatch({ type: "SET_EMOTION", emotion: {
-        ...state.emotion
-      }})
+      // dispatch({ type: "SET_EMOTION", emotion: {
+      //   ...state.emotion
+      // }})
     },
     pageChange: async (page) => {
       let state = store.getState()

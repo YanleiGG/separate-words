@@ -28,12 +28,12 @@ class App extends React.Component {
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <Switch>
-                <Route path='/WorkTable/separate-words' component={ SeparateWords }></Route>
-                <Route path='/WorkTable/mark-entity' component={ MarkEntity }></Route>
-                <Route path='/WorkTable/separate-words-property' component={ MarkWordsProperty }></Route>
-                <Route path='/WorkTable/class-list' component={ ClassList }></Route>
-                <Route path='/WorkTable/create-article' component={ CreateArticle }></Route>
-                <Route path='/emotion' component={ Emotion }></Route>
+                <Route path='/table/separate-words' component={ SeparateWords }></Route>
+                <Route path='/table/mark-entity' component={ MarkEntity }></Route>
+                <Route path='/table/separate-words-property' component={ MarkWordsProperty }></Route>
+                <Route path='/table/class-list' component={ ClassList }></Route>
+                <Route path='/table/create-article' component={ CreateArticle }></Route>
+                <Route path='/table/emotion' component={ Emotion }></Route>
               </Switch>
             </Layout>
           </Layout>

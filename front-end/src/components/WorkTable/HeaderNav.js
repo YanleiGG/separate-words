@@ -11,37 +11,37 @@ class Navigation extends React.Component {
         style={{ lineHeight: '64px', marginLeft: '150px' }}
       >
           <Menu.Item key="1">
-            <Link to='/WorkTable/separate-words'>
+            <Link to='/table/separate-words'>
               <Icon type="pie-chart" />
               <span>分词</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to='/WorkTable/mark-entity'>
+            <Link to='/table/mark-entity'>
               <Icon type="pie-chart" />
               <span>标注实体</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to='/WorkTable/separate-words-property'>
+            <Link to='/table/separate-words-property'>
               <Icon type="pie-chart" />
               <span>划分词性</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to='/WorkTable/class-list'>
+            <Link to='/table/class-list'>
               <Icon type="plus-circle-o" />
               <span>分类管理</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="5">
-            <Link to='/WorkTable/create-article'>
+            <Link to='/table/create-article'>
               <Icon type="plus-circle-o" />
               <span>添加文章</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="6">
-            <Link to='/emotion'>
+            <Link to='/table/emotion'>
               <Icon type="plus-circle-o" />
               <span>情感标注</span>
             </Link>

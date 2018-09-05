@@ -1,8 +1,10 @@
 import React from 'react'
-import WorkTable from './WorkTable'
-import Login from './Login'
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import store from '../state/store'
+
+import WorkTable from './WorkTable'
+import Login from './Login'
+import Entry from './Entry'
 
 class App extends React.Component {
   render () {
@@ -10,8 +12,11 @@ class App extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route path='/login' exact component={ Login }></Route>
-          <Route path='/' render={props => {
+          <Route path='/table' render={props => {
             return store.getState().isLogin ? <WorkTable {...props}/> : <Redirect to="/login" />
+          }}/>
+          <Route exact path='/entry' render={props => {
+            return store.getState().isLogin ? <Entry {...props}/> : <Redirect to="/login" />
           }}/>
         </Switch>
       </BrowserRouter>

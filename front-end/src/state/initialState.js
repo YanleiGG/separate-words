@@ -43,11 +43,11 @@ export const initialState = {
   addClassInputValue: '',
   addClassId: '',
   emotion: {
-    emotionData: [],
-    siderNavData: [],
+    emotions: [],
+    SiderLeftData: [],
     totalCount: 0,
     page: 1,
-    showArticle: {},
     selectedKeys: [],
+    showIndex: 0
   }
 };
