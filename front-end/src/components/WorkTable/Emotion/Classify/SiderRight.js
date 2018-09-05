@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Select, InputNumber, Slider, Row, Col, Button, message } from 'antd';
 import { connect } from "react-redux";
-import store from '../../../state/store'
+import store from '../../../../state/store'
 import axios from 'axios'
 
 const Option = Select.Option;

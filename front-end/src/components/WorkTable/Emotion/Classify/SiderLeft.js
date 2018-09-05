@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu, Icon, Tooltip } from 'antd';
 import { connect } from "react-redux";
-import store from '../../../state/store'
+import store from '../../../../state/store'
 
 class SiderLeft_UI extends React.Component {
   render () {

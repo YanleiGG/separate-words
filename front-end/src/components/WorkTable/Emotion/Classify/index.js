@@ -3,7 +3,7 @@ import SiderLeft from './SiderLeft'
 import SiderRight from './SiderRight'
 import axios from 'axios'
 import { connect } from "react-redux";
-import store from '../../../state/store'
+import store from '../../../../state/store'
 import { Layout, Pagination } from "antd";
 
 const { Content, Footer, Sider } = Layout;

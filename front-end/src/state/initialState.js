@@ -48,6 +48,13 @@ export const initialState = {
     totalCount: 0,
     page: 1,
     selectedKeys: [],
-    showIndex: 0
+    showIndex: 0,
+    headerNavData: {
+      title: '情感标注',
+      data: [
+        { name: '情感分类', path: '/table/emotion/classify', key: '情感分类' },
+        { name: '情感实体抽取', path: '/table/emotion/entity', key: '情感实体抽取' }
+      ]
+    }
   }
 };

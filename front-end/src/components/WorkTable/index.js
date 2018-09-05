@@ -9,7 +9,7 @@ import ClassList from './ClassList'
 import SeparateWords from './Table/SeparateWords'
 import MarkWordsProperty from './Table/SeparateWordsProperty'
 import MarkEntity from './Table/MarkEntity'
-import Emotion from './Emotion/Emotion'
+import Emotion from './Emotion'
 
 const { Header, Content } = Layout;
 
