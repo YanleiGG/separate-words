@@ -17,17 +17,13 @@ class SepWords extends React.Component {
     return (
       <Layout>
         <Layout>
-          <Content onMouseUp={pickWords} style={{ padding: '15px' }} id="content">
-            <div style={{ fontSize: 20 + 'px' }}>
-              {
-                showContent.map((i, index) => {
-                  return <span key={index} id={index}>{i.content}</span>
-                })
-              }
-            </div>
+          <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
+              {showContent.map((i, index) => {
+                return <span key={index} id={index}>{i.content}</span>
+              })}
           </Content>
           <Footer>
-            <FooterBtn />
+            <FooterBtn/>
           </Footer>
         </Layout>
       </Layout>

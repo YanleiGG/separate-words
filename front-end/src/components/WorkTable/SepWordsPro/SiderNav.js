@@ -41,19 +41,13 @@ let refresh = async dispatch => {
   let totalCount = res.data.totalCount
   let showContent = []
   let siderNavData = sep_words_propertys.map((item, index) => {
-    if (item.separateWords == null) {
-      sep_words_propertys[index].separateWords = ''
-      for (let i = 0; i < item.article.content.length; i++) {
-        sep_words_propertys[index].separateWords += 'S'
-        showContent.push({ content: item.article.content[i] })
-      }
-    }
-    if (!item.separateWords) {     //  这里后面可以根据业务逻辑考虑删除
+    if (!item.separateWords) {     // 这里后面可以根据业务逻辑考虑删除
       item.separateWords = ''
       for (let i = 0;i < item.article.content.length;i++) {
         item.separateWords += item.article.content[i] + 'S'
       }
-    } 
+    }
+    if (!item.separateWordsProperty) {}
     showContent = unformatWithoutProperty(item.separateWords)
     sep_words_propertys[index].showContent = showContent
     showContent = []

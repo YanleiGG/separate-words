@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import HeaderNav from '../HeaderNav'
+import HeaderNav_UI from '../HeaderNav_UI'
 
 let mapStateToProps = state => {
   return {
@@ -8,4 +8,4 @@ let mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(HeaderNav)
+export default connect(mapStateToProps)(HeaderNav_UI)

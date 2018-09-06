@@ -3,7 +3,6 @@ import { Layout, Button, message, Input, TreeSelect } from "antd";
 import axios from 'axios'
 import { connect } from "react-redux";
 import store from '../../state/store'
-import { refresh } from '../../util'
 
 const SHOW_PARENT = TreeSelect.SHOW_PARENT
 const { TextArea } = Input;

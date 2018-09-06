@@ -2,7 +2,7 @@ import * as React from "react";
 import { Menu, Icon } from "antd";
 import { Link } from "react-router-dom";
 
-class HeaderNav extends React.Component {
+class HeaderNav_UI extends React.Component {
   render() {
     let { headerNavData } = this.props
     if (!headerNavData) headerNavData = { data: [] }   // 这里后面重构好了得删掉
@@ -25,4 +25,4 @@ class HeaderNav extends React.Component {
   }
 }
 
-export default HeaderNav
+export default HeaderNav_UI
