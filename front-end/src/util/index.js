@@ -7,34 +7,36 @@ export function formatWithoutProperty (data) {
     str += item.content
   })
   str.split('|').forEach(item => {
-    if (item.length == 1) res += "S"
+    if (item.length == 1) res += item + "S"
     if (item.length > 1) {
-      res += "B"
+      res += item[0] + "B"
       for (let i = 0; i < item.length-2; i++) {
-        res += "I"
+        res += item[i+1] + "I"
       }
-      res += "E"
+      res += item[item.length-1] + "E"
     }
   })
   return res
 }
 
-// 此方法与 getType 方法耦合，待优化
-export function unformatWithoutProperty (content, formatedStr, typeArr) {
-  let start, end, count = 0
-  let arr = formatedStr.split('').map((item, index) => {
-    return { id: index, content: content[index], type: 0 }
+export function unformatWithoutProperty (formatedStr) {
+  let start, end, count = 0, content = '', format = ''
+  for (let i = 0;i <formatedStr.length;i++) {
+    if (i % 2 == 0) {
+      content += formatedStr[i]
+    } else {
+      format += formatedStr[i]
+    }
+  }
+  let arr = format.split('').map((item, index) => {
+    return { id: index, content: content[index] }
   })
   for (let i = 0; i < arr.length; i++) {
-    if (formatedStr[i] == 'S') arr.splice(i + count + 1, 0, { id: i + arr.length + count++, content: '|', type: 0 })
-    if (formatedStr[i] == 'B') start = i + count
-    if (formatedStr[i] == 'E') {
+    if (format[i] == 'S') arr.splice(i + count + 1, 0, { id: i + arr.length + count++, content: '|' })
+    if (format[i] == 'B') start = i + count
+    if (format[i] == 'E') {
       end = i + count
-      let type = getType(arr, typeArr, start, end)
-      for (let j = start; j <= end; j++) {
-        arr[j].type = type
-      }
-      arr.splice(end+1, 0, { id: i + arr.length + count++, content: '|', type: 0 })
+      arr.splice(end+1, 0, { id: i + arr.length + count++, content: '|' })
     }
   }
   return arr
@@ -82,26 +84,6 @@ export function unformatWithProperty (content, formatedStr) {
     }
   }
   return res
-}
-
-// 传入字符数组、类型数组、开始位置、终止位置，返回一个与前后都不相同的 type
-export function getType (data, typeArr, start, end) {
-    // 利用递归，过滤黑名单内的字符
-    let blacklist = [' ', '|']
-    if (blacklist.indexOf(data[start-1] ? data[start-1].content : null) != -1 || blacklist.indexOf(data[end+1] ? data[end+1].content : null) != -1) {
-      if (blacklist.indexOf(data[end+1] ? data[end+1].content : null) != -1) {
-        return getType(data, typeArr, start-1, end+1)  
-      } else {
-        return getType(data, typeArr, start-1, end)
-      }
-    }
-    let startIndex = data[start-1] ? typeArr.indexOf(data[start-1].type) : null
-    let endIndex = data[end+1] ? typeArr.indexOf(data[end+1].type) : null
-    let index = Math.ceil(Math.random()*(typeArr.length-1))
-    while (index == startIndex || index == endIndex || index == 0) {
-      index = Math.ceil(Math.random()*(typeArr.length-1))
-    }
-    return typeArr[index]
 }
 
 let emptyArticle = { 

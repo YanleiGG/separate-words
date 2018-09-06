@@ -5,25 +5,18 @@ import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
 
-const confirm = Modal.confirm;
-
 class SiderNav_UI extends React.Component {
-  getData = (data) => {
-    const { handleClick, deleteConfirm } = this.props
-    return data.map(i => {
-      return <Menu.Item  onClick={() => handleClick(i.id)} key={i.id} >{ i.title }<Tooltip placement="top" title="删除"><Icon onClick={ () => deleteConfirm(i.id, i.title)} style={{float: 'right', marginTop: '8%'}} type="delete" /></Tooltip></Menu.Item>
-    })
-  }
-
   render () {
-    let { SiderNavData, selectedKeys } = this.props
+    let { SiderNavData, selectedKeys, handleClick } = this.props
     return (
         <Menu
           mode="inline"
           style={{ height: '100%' }}
           selectedKeys = { selectedKeys }
         >
-          {this.getData(SiderNavData)}
+          {data.map(i => {
+            return <Menu.Item  onClick={() => handleClick(i.id)} key={i.id} >{ i.title }</Menu.Item>
+          })}
         </Menu>
     )
   }
@@ -37,30 +30,6 @@ let mapDispatchToSiderNav = dispatch => {
       dispatch({ type: "SET_SHOWARTICLE", showArticle })
       dispatch({ type: "SET_SELECTED_KEYS", selectedKeys: [id.toString()]})
     },
-
-    deleteConfirm: async (id, title) => {
-      let state = store.getState()
-      confirm({
-        title: '确认删除吗?',
-        content: title,
-        async onOk() {
-          let tips = message.loading('Deleting...')
-          let res = await axios({
-            method: 'delete',
-            url: `${state.path}/api/article`,
-            data: { id }
-          });
-          message.destroy(tips)
-          if (res.data.code == 0) {
-            message.success('删除成功！', 1.5)
-            refresh(dispatch)
-          } else {
-            message.error('删除失败，请重试!', 1.5)
-          }
-        },
-        onCancel() {},
-      });
-    }
   }
 }
 

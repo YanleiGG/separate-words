@@ -1,5 +1,5 @@
 import { unformatWithoutProperty, formatWithProperty, unformatWithProperty , formatWithoutProperty, refresh } from '../../../util' 
-import FooterBtn_UI from '../FooterBtn'
+import FooterBtn_UI from '../FooterBtn_UI'
 import { connect } from "react-redux";
 import { message } from 'antd'
 

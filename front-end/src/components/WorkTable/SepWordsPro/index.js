@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
 import HeaderNav from './HeaderNav'
+import SepWords from './SepWords'
 
 const { Header, Content } = Layout;
 
@@ -17,7 +18,7 @@ class SepWordsPro extends React.Component {
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <Switch>
-                {/* <Route path='/table/emotion/classify' component={ Classify }></Route> */}
+                <Route path='/table/sepWordsPro/sepWords' component={ SepWords }></Route>
               </Switch>
             </Layout>
           </Layout>

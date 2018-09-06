@@ -58,8 +58,8 @@ export const initialState = {
     }
   },
   sepWordsPro: {
-    sepWordsPros: [],
-    SiderLeftData: [],
+    sep_words_propertys: [],
+    SiderNavData: [],
     totalCount: 0,
     page: 1,
     selectedKeys: [],
@@ -67,8 +67,8 @@ export const initialState = {
     headerNavData: {
       title: '分词及词性标注',
       data: [
-        { name: '分词', path: '/table/sepWordsPro/sep', key: '分词' },
-        { name: '词性标注', path: '/table/sepWordsPro/wordsPro', key: '词性标注' }
+        { name: '分词', path: '/table/sepWordsPro/sepWords', key: '分词' },
+        { name: '词性标注', path: '/table/sepWordsPro/markWordsPro', key: '词性标注' }
       ]
     }
   }

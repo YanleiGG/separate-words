@@ -124,6 +124,12 @@ const reducer = (state = initialState, action) => {
         emotion: action.emotion
       })      
     }
+    case "SET_SEP_WORDS_PRO": {
+      return Object.assign({}, state, {
+        ...state,
+        sepWordsPro: action.sepWordsPro
+      }) 
+    }
     default:
       return state;
   }

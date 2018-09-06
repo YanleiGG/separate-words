@@ -143,7 +143,7 @@ let mapDispatchToProps = dispatch => {
         message.success('保存成功!', 1.5)
       } else {
         message.error('保存失败!', 1.5)
-      }      
+      }   
     },
     cancel: () => {
       let state = store.getState()
