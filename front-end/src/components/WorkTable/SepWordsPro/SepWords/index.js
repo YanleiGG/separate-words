@@ -101,7 +101,7 @@ let mapDispatchToProps = dispatch => {
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let showContent = sep_words_propertys[state.sepWordsPro.showIndex].showContent
-        if (showContent[start].content == '|') return
+        if (showContent[start].content == '|' && start == end-1) return
         if (showContent[start - 1] && showContent[start - 1].content != '|') {
           showContent.splice(start, 0, { id: null, content: '|' })
           start++
