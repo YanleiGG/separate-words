@@ -119,6 +119,5 @@ export const initialState = {
       { label: '语气词', value: 'y' },
       { label: '状态词', value: 'z' },
     ],
-    selectedProperty: ''
   }
 };

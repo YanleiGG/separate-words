@@ -7,10 +7,17 @@ const RadioGroup = Radio.Group
 
 class PopoverContent extends React.Component {
   render () {
-    let { options, selectedProperty, optionsChange } = this.props
+    let { propertys, index, optionsChange, sep_words_propertys, showIndex } = this.props
+    let showPro = sep_words_propertys[showIndex].showPro
     return (
       <Row style={{width: 400}}>
-        <RadioGroup options={options} onChange={optionsChange} value={selectedProperty} />
+        <RadioGroup name="radiogroup" defaultValue={showPro[index].type} onChange={optionsChange.bind(this, index)}>
+          {propertys.map(item => {
+            return <Radio key={item.value} value={item.value}>
+                      { item.label }
+                   </Radio>
+          })}
+        </RadioGroup>
       </Row>
     )
   }
@@ -18,18 +25,22 @@ class PopoverContent extends React.Component {
 
 let mapStateToProps = state => {
   return {
-    options: state.sepWordsPro.propertys,
-    selectedProperty: state.sepWordsPro.selectedProperty
+    ...state.sepWordsPro
   }
 }
 
 let mapDispatchToProps = dispatch => {
   let state = store.getState()
   return {
-    optionsChange: e => {
+    optionsChange: (index, e) => {
+      let state = store.getState()
+      let showIndex = state.sepWordsPro.showIndex
+      let sep_words_propertys = state.sepWordsPro.sep_words_propertys
+      sep_words_propertys[showIndex].showPro[index].type = e.target.value
+      console.log(sep_words_propertys[showIndex].showPro[index].type)
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
-        selectedProperty: e.target.value
+        sep_words_propertys
       }})
     }
   }

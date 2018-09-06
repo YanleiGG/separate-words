@@ -19,8 +19,8 @@ class MarkPro extends React.Component {
       <Layout>
         <Layout>
           <Content style={{ padding: '15px', fontSize: '20px' }}>
-            {showPro.map(item => {
-              return  <Popover placement='bottom' content={<PopoverContent/>} key={item.id} title={item.content}>
+            {showPro.map((item, index) => {
+              return  <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
                         <span key={item.id} style={{cursor:'pointer'}}>{ item.content + '|' }</span>
                       </Popover>
             })}
