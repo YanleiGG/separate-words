@@ -3,7 +3,7 @@ import { Menu, Icon, Tooltip, Modal, message, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
-import { unformatWithoutProperty } from '../../../util'
+import { unformatWithoutProperty, unformatWithProperty } from '../../../util'
 
 const { Sider } = Layout;
 
@@ -39,7 +39,6 @@ let refresh = async dispatch => {
   let res = await axios.get(`${state.path}/api/sep_words_property?offset=${(page - 1) * 10}&pageSize=10`)
   let sep_words_propertys = res.data.sep_words_propertys
   let totalCount = res.data.totalCount
-  let showContent = []
   let siderNavData = sep_words_propertys.map((item, index) => {
     if (!item.separateWords) {     // 这里后面可以根据业务逻辑考虑删除
       item.separateWords = ''
@@ -47,23 +46,20 @@ let refresh = async dispatch => {
         item.separateWords += item.article.content[i] + 'S'
       }
     }
-    if (!item.separateWordsProperty) {}
-    showContent = unformatWithoutProperty(item.separateWords)
-    sep_words_propertys[index].showContent = showContent
-    showContent = []
+    if (!item.separateWordsProperty) item.separateWordsProperty = '没有东西' // 这里后面可以根据业务逻辑考虑删除
+    sep_words_propertys[index].showContent = unformatWithoutProperty(item.separateWords)
+    sep_words_propertys[index].showPro = unformatWithProperty(item.separateWordsProperty)
     return {
       id: item.article.id,
       title: item.article.title
     }
   })
-  let selectedKeys = sep_words_propertys.length > 0 ? [sep_words_propertys[0].article.id.toString()] : []
   dispatch({
     type: "SET_SEP_WORDS_PRO",
     sepWordsPro: {
       ...state.sepWordsPro,
       sep_words_propertys,
       siderNavData,
-      selectedKeys,
       totalCount
     }
   })
@@ -81,8 +77,18 @@ let mapStateToProps = state => {
 
 let mapDispatchToSiderNav = dispatch => {
   return {
-    created: () => {
-      refresh(dispatch)
+    created: async () => {
+      await refresh(dispatch)
+      let state = store.getState()
+      let sep_words_propertys = state.sepWordsPro.sep_words_propertys
+      let selectedKeys = sep_words_propertys.length > 0 ? [sep_words_propertys[0].article.id.toString()] : []
+      dispatch({
+        type: "SET_SEP_WORDS_PRO",
+        sepWordsPro: {
+          ...state.sepWordsPro,
+          selectedKeys
+        }
+      })
     },
     handleClick: id => {
       let state = store.getState()
@@ -99,7 +105,7 @@ let mapDispatchToSiderNav = dispatch => {
     },
     pageChange: async (page) => {
       let state = store.getState()
-      dispatch({ type: "SET_SEP_WORDS_PRO", emotion: {
+      dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
         page
       }})

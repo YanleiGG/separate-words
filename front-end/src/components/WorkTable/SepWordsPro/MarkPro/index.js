@@ -1,24 +1,29 @@
 import * as React from "react";
 import { Modal, Radio, Pagination } from "antd";
-import { Layout } from "antd";
+import { Layout, Popover } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import axios from 'axios'
 import { unformatWithoutProperty } from '../../../../util'
 
 import FooterBtn from './FooterBtn'
+import PopoverContent from './PopoverContent'
 
 const { Content, Footer, Sider } = Layout;
 
 class MarkPro extends React.Component {
   render() {
-    let { pickWords, sep_words_propertys, showIndex } = this.props
+    let { sep_words_propertys, showIndex } = this.props
     let showPro = sep_words_propertys.length > 0 ? sep_words_propertys[showIndex].showPro : []
-
     return (
       <Layout>
         <Layout>
-          <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }}>
+          <Content style={{ padding: '15px', fontSize: '20px' }}>
+            {showPro.map(item => {
+              return  <Popover placement='bottom' content={<PopoverContent/>} key={item.id} title={item.content}>
+                        <span key={item.id} style={{cursor:'pointer'}}>{ item.content + '|' }</span>
+                      </Popover>
+            })}
           </Content>
           <Footer>
             <FooterBtn/>
@@ -36,8 +41,7 @@ let mapStateToProps = state => {
 }
 
 let mapDispatchToProps = dispatch => {
-  return {
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarkPro)

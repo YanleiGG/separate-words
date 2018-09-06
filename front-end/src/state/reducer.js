@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         selection: action.selection
-      })   
+      })
     case "SET_RADIO_VALUE":
       return Object.assign({}, state, {
         ...state,

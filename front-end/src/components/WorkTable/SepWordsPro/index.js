@@ -5,6 +5,7 @@ import { Route, Switch } from "react-router-dom";
 import HeaderNav from './HeaderNav'
 import SiderNav from './SiderNav'
 import SepWords from './SepWords'
+import MarkPro from './MarkPro'
 
 const { Header, Content } = Layout;
 
@@ -21,6 +22,7 @@ class SepWordsPro extends React.Component {
               <SiderNav/>
               <Switch>
                 <Route path='/table/sepWordsPro/sepWords' component={ SepWords }></Route>
+                <Route path='/table/sepWordsPro/markPro' component={ MarkPro }></Route>
               </Switch>
             </Layout>
           </Layout>
