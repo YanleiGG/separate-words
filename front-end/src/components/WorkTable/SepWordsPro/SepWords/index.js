@@ -23,7 +23,7 @@ class SepWords extends React.Component {
       <Layout>
         <SiderNav />
         <Layout>
-          <Content onMouseUp={pickWords} style={{ padding: '15px' }}>
+          <Content onMouseUp={pickWords} style={{ padding: '15px' }} id="content">
             <div style={{ fontSize: 20 + 'px' }}>
               {
                 showContent.map((i, index) => {
@@ -56,7 +56,7 @@ let refresh = async dispatch => {
         showContent.push({ content: item.article.content[i] })
       }
     }
-    if (item.separateWords == null) {     //  这里后面可以根据业务逻辑考虑删除
+    if (!item.separateWords) {     //  这里后面可以根据业务逻辑考虑删除
       item.separateWords = ''
       for (let i = 0;i < item.article.content.length;i++) {
         item.separateWords += item.article.content[i] + 'S'
@@ -121,6 +121,7 @@ let mapDispatchToProps = dispatch => {
             sep_words_propertys
           }
         })
+        window.getSelection().removeAllRanges()
       }
     }
   }
