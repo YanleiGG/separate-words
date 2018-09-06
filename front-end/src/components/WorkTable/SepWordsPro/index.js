@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
 import HeaderNav from './HeaderNav'
+import SiderNav from './SiderNav'
 import SepWords from './SepWords'
 
 const { Header, Content } = Layout;
@@ -12,11 +13,12 @@ class SepWordsPro extends React.Component {
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header>
-          <HeaderNav></HeaderNav>
+          <HeaderNav/>
         </Header>
         <Content>
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
+              <SiderNav/>
               <Switch>
                 <Route path='/table/sepWordsPro/sepWords' component={ SepWords }></Route>
               </Switch>
