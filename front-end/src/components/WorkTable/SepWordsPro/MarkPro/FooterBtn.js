@@ -1,7 +1,7 @@
 import FooterBtn_UI from '../../FooterBtn_UI'
 import store from '../../../../state/store'
 import { connect } from "react-redux";
-import { formatWithoutProperty } from '../../../../util'
+import { formatWithoutProperty, formatWithProperty } from '../../../../util'
 import axios from 'axios'
 import { message } from 'antd'
 
@@ -14,8 +14,8 @@ let mapDispatchToProps = dispatch => {
     save: async () => {
       let state = store.getState()
       let { showIndex, sep_words_propertys } = state.sepWordsPro
-      let showContent = sep_words_propertys[showIndex].showContent
-      sep_words_propertys[showIndex].separateWords = formatWithoutProperty(showContent)
+      let showPro = sep_words_propertys[showIndex].showPro
+      sep_words_propertys[showIndex].separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
       let res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_propertys[showIndex]})
       message.destroy(tips)
