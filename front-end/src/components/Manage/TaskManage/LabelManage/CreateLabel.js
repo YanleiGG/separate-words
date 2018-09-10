@@ -5,14 +5,14 @@ import store from '../../../../state/store'
 
 const Option = Select.Option;
 
-class CreateLabels extends React.Component {
+class CreateTask extends React.Component {
   render() {
-    let { labelsSelectChange, labels, nameChange, create, cancel, typeChange } = this.props
+    let { labels, nameChange, create, cancel, typeChange, symbolChange } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
-            <div style={{ marginBottom: '10px' }}>标签集合类型：</div>
+            <div style={{ marginBottom: '10px' }}>标签类型：</div>
             <Select style={{ width: '100%' }} onChange={typeChange}>
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
@@ -23,20 +23,14 @@ class CreateLabels extends React.Component {
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
-            <div style={{ marginBottom: '10px' }}>标签名称：</div>
+            <div style={{ marginBottom: '10px' }}>名称：</div>
             <Input onChange={nameChange}></Input>
           </Col>
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
-            <div style={{ marginBottom: '10px' }}>所含标签：</div>
-            <Select
-              mode="multiple"
-              style={{ width: '100%' }}
-              onChange={labelsSelectChange}
-            >
-            { labels.map(item => <Option key={item.label}>{item.label}</Option>) }
-            </Select>
+            <div style={{ marginBottom: '10px' }}>标签代号：</div>
+            <Input onChange={symbolChange}></Input>
           </Col>
         </Row>
         <Row style={{ marginTop: '20px', textAlign: 'center' }}>
@@ -52,56 +46,34 @@ class CreateLabels extends React.Component {
 
 let mapStateToProps = state => {
   return {
-    labels: state.createLabels.labels
   }
 }
 
 let mapDispatchToProps = dispatch => {
+  let {createLabel} = store.getState()
   return {
-    labelsSelectChange: value => {
-      console.log(value)
-      let {createLabels} = store.getState()
-      dispatch({
-        type: 'SET_CREATE_LABELS',
-        createLabels: {
-          ...createLabels,
-          labelsValue: value
-        }
-      })
-    },
     nameChange: e => {
-      let {createLabels} = store.getState()
       dispatch({
-        type: 'SET_CREATE_LABELS',
-        createLabels: {
-          ...createLabels,
-          labelsName: e.target.value
+        type: 'SET_CREATE_LABEL',
+        createLabel: {
+          ...createLabel,
+          name: e.target.value
         }
       })
     },
     typeChange: value => {
-      let {createLabels} = store.getState()
+      let {createLabel} = store.getState()
       dispatch({
-        type: 'SET_CREATE_LABELS',
-        createLabels: {
-          ...createLabels,
+        type: 'SET_CREATE_LABEL',
+        createLabel: {
+          ...createLabel,
           type: value
         }
       })
-    },
-    symbolChange: e => {
-      let {createLabels} = store.getState()
-      dispatch({
-        type: 'SET_CREATE_LABELS',
-        createLabels: {
-          ...createLabels,
-          symbol: e.target.value
-        }
-      })
-    },
+    },    
     create: () => {},
     cancel: () => {}
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateLabels)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTask)

@@ -138,6 +138,7 @@ export const initialState = {
     selectedLabelsId: null
   },
   createLabels: {
+    type: '',
     labels: [
       { id: 1, label: '形容词', value: 'a' },
       { id: 2, label: '副形词', value: 'ad' },
@@ -186,6 +187,12 @@ export const initialState = {
       { id: 45, label: '语气词', value: 'y' },
       { id: 46, label: '状态词', value: 'z' },
     ],
-    labelsValue: ''
+    labelsValue: '',
+    labelsName: ''
+  },
+  createLabel: {
+    type: '',
+    name: '',
+    symbol: ''
   }
 };

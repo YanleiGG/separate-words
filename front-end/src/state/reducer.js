@@ -136,10 +136,10 @@ const reducer = (state = initialState, action) => {
         createTask: action.createTask
       })
     }
-    case "SET_CREATE_LABEL": {
+    case "SET_CREATE_LABELS": {
       return Object.assign({}, state, {
         ...state,
-        createLabel: action.createLabel
+        createLabels: action.createLabel
       })
     }
     default:
