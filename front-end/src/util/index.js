@@ -45,9 +45,10 @@ export function unformatWithoutProperty (formatedStr) {
 export function formatWithProperty (data) {
   let res = ''
   data.map(item => {
-    res += item.content + '/' + item.type + ' '
+    let type = item.type || ''
+    res += item.content + '/' + type + ' '
   })
-  return res
+  return res.substr(0, res.length-1)
 } 
 
 export function unformatWithProperty (formatedStr) {

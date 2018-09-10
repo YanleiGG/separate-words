@@ -71,39 +71,17 @@ let mapDispathToCreateArticle = dispatch => {
         let res = await axios.post(`${state.path}/api/emotion`, { title, content })
         message.destroy(tips)
         if (res.data.code === 0) message.success('Create Successed!', 1.5)
-        return
       }
       if (selected.indexOf('0-0-1') != -1) {
         let res = await axios.post(`${state.path}/api/sep_words_property`, { title, content })
         message.destroy(tips)
         if (res.data.code === 0) message.success('Create Successed!', 1.5)
-        return
       }
-      // let separateWords = '', separateWordsProperty = '', markEntity = ''
-      // for (let i = 0;i < content.length;i++) {
-      //   separateWords += 'S'
-      //   markEntity += 'S'
-      //   separateWordsProperty += 'S0'
-      // }
-      // let article = {
-      //   title,
-      //   content,
-      //   separateWords,
-      //   markEntity,
-      //   separateWordsProperty
-      // }
-      // let res = await axios.post(`${state.path}/api/article`, article)
-
-      // message.destroy(tips)
-      // if (res.data.code == 0) {
-      //   dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })
-      //   dispatch({ type: "SET_CREATE_ARTICLE_TITLE", createArticleTitle: '' })
-      //   dispatch({ type: "SET_PAGE", page: 1 })
-      //   message.success('Create Successed!', 1.5)
-      //   refresh(dispatch)
-      // } else {
-      //   message.error('Create defeat!', 1.5)
-      // }
+      if (selected.indexOf('0-0-4') != -1) {
+        let res = await axios.post(`${state.path}/api/sep_words_property`, { title, content })
+        message.destroy(tips)
+        if (res.data.code === 0) message.success('Create Successed!', 1.5)
+      }
     },
     cancel: () => {
       dispatch({ type: "SET_CREATE_ARTICLE", createArticle: '' })

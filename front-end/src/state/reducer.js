@@ -130,6 +130,18 @@ const reducer = (state = initialState, action) => {
         sepWordsPro: action.sepWordsPro
       }) 
     }
+    case "SET_CREATE_TASK": {
+      return Object.assign({}, state, {
+        ...state,
+        createTask: action.createTask
+      })
+    }
+    case "SET_CREATE_LABEL": {
+      return Object.assign({}, state, {
+        ...state,
+        createLabel: action.createLabel
+      })
+    }
     default:
       return state;
   }

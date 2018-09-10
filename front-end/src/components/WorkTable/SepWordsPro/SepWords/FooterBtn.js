@@ -17,7 +17,7 @@ let mapDispatchToProps = dispatch => {
       let showContent = sep_words_propertys[showIndex].showContent
       sep_words_propertys[showIndex].separateWords = formatWithoutProperty(showContent)
       let tips = message.loading('保存中...')
-      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_propertys[showIndex]})
+      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_propertys[showIndex] })
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)

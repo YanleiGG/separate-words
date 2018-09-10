@@ -5,6 +5,7 @@ import store from '../state/store'
 import WorkTable from './WorkTable'
 import Login from './Login'
 import Entry from './Entry'
+import Manage from './Manage'
 
 class App extends React.Component {
   render () {
@@ -17,6 +18,9 @@ class App extends React.Component {
           }}/>
           <Route exact path='/entry' render={props => {
             return store.getState().isLogin ? <Entry {...props}/> : <Redirect to="/login" />
+          }}/>
+          <Route path='/manage' render={props => {
+            return store.getState().isLogin ? <Manage {...props}/> : <Redirect to="/login" />
           }}/>
         </Switch>
       </BrowserRouter>

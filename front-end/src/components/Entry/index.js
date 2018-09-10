@@ -7,7 +7,9 @@ class Entry extends React.Component {
     let toEmotion = () => document.getElementById('toEmotion').click()
     let toTextContent = () => document.getElementById('toTextContent').click()
     let toSepWordsPro = () => document.getElementById('toSepWordsPro').click()
-    let toEntity = () => document.getElementById('toEntity').click()
+    let toMarkEntity = () => document.getElementById('toMarkEntity').click()
+    let toTaskManage = () => document.getElementById('toTaskManage').click()
+    
     return (
       <Row  type="flex" justify="space-around" style={{ padding: '15% 5% 0 5%' }}>
         <Col span={4}>
@@ -42,12 +44,22 @@ class Entry extends React.Component {
         </Col>
         <Col span={4}>
           <Button 
-            onClick={toEntity} 
+            onClick={toMarkEntity} 
             type='primary' 
             style={{ width: "100%", height: "300px", backgroundColor: '#8D6E63', fontSize: '18px' }}
           >
-            <Link to='/table/entity' id='toEntity'></Link>
+            <Link to='/table/markEntity' id='toMarkEntity'></Link>
             实体标注
+          </Button>
+        </Col>
+        <Col span={4}>
+          <Button 
+            onClick={toTaskManage} 
+            type='primary' 
+            style={{ width: "100%", height: "300px", backgroundColor: '#8D6E63', fontSize: '18px' }}
+          >
+            <Link to='/manage' id='toTaskManage'></Link>
+            管理系统
           </Button>
         </Col>
       </Row>

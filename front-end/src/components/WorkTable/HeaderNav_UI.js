@@ -10,8 +10,9 @@ class HeaderNav_UI extends React.Component {
       <Menu
         mode="horizontal"
         theme="dark"
-        style={{ lineHeight: '64px', marginLeft: '150px' }}
+        style={{ lineHeight: '64px' }}
       >
+        {/* <span style={style.title}>{ headerNavData.title }</span> */}
         {headerNavData.data.map(item => {
           return  <Menu.Item key={item.key}>
             <Link to={ item.path }>
@@ -22,6 +23,15 @@ class HeaderNav_UI extends React.Component {
         })}
       </Menu>
     )
+  }
+}
+
+let style = {
+  title: { 
+    color: 'white',
+    float: 'left',
+    marginLeft: '-150px',
+    fontSize: '18px'
   }
 }
 
