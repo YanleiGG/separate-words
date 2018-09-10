@@ -16,37 +16,40 @@ export class WordsPropertyService {
 
   async findAll () {
     let data = await this.WordsPropertyRepository.find()
-    let res = []
-    data.forEach(item => {
-      if (item.parentId == 0) {
-        res.push({ ...item, added: true, deleted: false, child: [] })
-      } else {
-        appendChild(res, { ...item, added: true, deleted: true, child: [] })
-      }
-    })
     return {
       code: 0,
       msg: 'successed!',
-      data: res
+      data
     }
   }
   
   async create (args) {
+    let { name, symbol } = args
+    let sameName = await this.WordsPropertyRepository.find({ name })
+    let sameSymbol = await this.WordsPropertyRepository.find({ symbol })
+    if (sameName.length > 0 || sameSymbol.length > 0) {
+      return {
+        code: 10001,
+        msg: '标签名称或代号已存在!',
+        data: null        
+      }
+    }
+
     let item = new WordsProperty()
-    item.name = args.name
-    item.parentId = args.parentId || null
-    let res = await this.WordsPropertyRepository.save(item)
+    item.name = name
+    item.symbol = symbol
+    let wordsProperty = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,
       msg: 'successed!',
-      data: res
+      data: wordsProperty
     }
   }
 
   async update (args) {
     let item = await this.WordsPropertyRepository.findOne({ id: args.id })
     item.name = args.name
-    item.parentId = args.parentId || null
+    item.symbol = args.symbol
     let res = await this.WordsPropertyRepository.save(item)
     return {
       code: 0,

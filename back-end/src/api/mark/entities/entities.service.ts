@@ -31,8 +31,20 @@ export class EntitiesService {
   }
 
   async create (args) {
+    let { name, symbol } = args
+    let sameName = await this.EntitiesRepository.find({ name })
+    let sameSymbol = await this.EntitiesRepository.find({ symbol })
+    if (sameName.length > 0 || sameSymbol.length > 0) {
+      return {
+        code: 10001,
+        msg: '标签名称或代号已存在!',
+        data: null        
+      }
+    }
+
     let entities = new Entities()
     entities.name = args.name
+    entities.symbol = args.symbol
     await this.EntitiesRepository.save(entities)
     return {
       code: 0,
@@ -44,6 +56,7 @@ export class EntitiesService {
   async update (args) {
     let entities = await this.EntitiesRepository.findOne({ id: args.id })
     entities.name = args.name
+    entities.symbol = args.symbol
     await this.EntitiesRepository.save(entities)
     return {
       code: 0,

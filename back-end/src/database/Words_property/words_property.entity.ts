@@ -9,8 +9,8 @@ export class WordsProperty {
     @Column("varchar")
     name: string;
 
-    @Column("integer")
-    parentId: number;
+    @Column("varchar")
+    symbol: string;
 
     @CreateDateColumn()
     createdAt: Date

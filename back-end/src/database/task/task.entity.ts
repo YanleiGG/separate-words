@@ -17,4 +17,10 @@ export class Task {
 
     @Column()
     state: string;
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 }

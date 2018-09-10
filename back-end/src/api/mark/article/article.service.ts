@@ -34,9 +34,6 @@ export class ArticleService {
     let article = new Article()
     article.title = args.title
     article.content = args.content
-    article.separateWords = args.separateWords
-    article.separateWordsProperty = args.separateWordsProperty
-    article.markEntity = args.markEntity
     await this.ArticleRepository.save(article)
     return {
       code: 0,
@@ -49,9 +46,6 @@ export class ArticleService {
     let article = await this.ArticleRepository.findOne({ id: args.id })
     article.title = args.title
     article.content = args.content
-    article.separateWords = args.separateWords
-    article.separateWordsProperty = args.separateWordsProperty
-    article.markEntity = args.markEntity
     await this.ArticleRepository.save(article)
     return {
       code: 0,

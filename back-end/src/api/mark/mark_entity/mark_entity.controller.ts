@@ -1,7 +1,7 @@
 import { Get, Req, Post, Put, Delete, Body, Controller, Param } from '@nestjs/common';
 import { MarkEntityService } from './mark_entity.service';
 
-@Controller('api/article/:id/mark_entity')
+@Controller('api/mark_entity')
 export class MarkEntityController {
   constructor(private readonly EmotionService: MarkEntityService) {}
   

@@ -53,6 +53,10 @@ import { sepWordsPropertyProviders } from '../../database/sep_words_property/sep
 import { SepWordsPropertyService } from './sep_words_property/sep_words_property.service'
 import { SepWordsPropertyController } from './sep_words_property/sep_words_property.controller'
 
+import { taskProviders } from '../../database/task/task.provider'
+import { TaskService } from './task/task.service'
+import { TaskController } from './task/task.controller'
+
 @Module({
   imports: [DatabaseModule],
   providers: [
@@ -69,6 +73,7 @@ import { SepWordsPropertyController } from './sep_words_property/sep_words_prope
     ...entitiesGroupProviders,
     ...markEntityProviders,
     ...sepWordsPropertyProviders,
+    ...taskProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,
@@ -81,7 +86,8 @@ import { SepWordsPropertyController } from './sep_words_property/sep_words_prope
     EntitiesService,
     EntitiesGroupService,
     MarkEntityService,
-    SepWordsPropertyService
+    SepWordsPropertyService,
+    TaskService
   ],
   controllers: [
     ArticleController,
@@ -96,7 +102,8 @@ import { SepWordsPropertyController } from './sep_words_property/sep_words_prope
     EntitiesController,
     EntitiesGroupController,
     MarkEntityController,
-    SepWordsPropertyController
+    SepWordsPropertyController,
+    TaskController
   ]
 })
 export class MarkModule {}

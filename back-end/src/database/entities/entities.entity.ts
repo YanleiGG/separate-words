@@ -10,12 +10,7 @@ export class Entities {
     name: string;
 
     @Column()
-    value: string;
-
-    @Column({
-      nullable: true
-    })
-    parentId: string;
+    symbol: string;
 
     @CreateDateColumn()
     createdAt: Date
