@@ -17,9 +17,6 @@ export class Article {
     @Column("longtext")
     content: string;
 
-    @Column("longtext")
-    markEntity: string;
-
     @CreateDateColumn()
     createdAt: Date
 

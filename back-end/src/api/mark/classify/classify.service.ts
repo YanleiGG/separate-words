@@ -33,6 +33,7 @@ export class ClassifyService {
   async create (args) {
     let classify = new Classify()
     classify.name = args.name
+    classify.value = args.value
     await this.ClassifyRepository.save(classify)
     return {
       code: 0,
@@ -44,6 +45,7 @@ export class ClassifyService {
   async update (args) {
     let classify = await this.ClassifyRepository.findOne({ id: args.id })
     classify.name = args.name
+    classify.value = args.value
     await this.ClassifyRepository.save(classify)
     return {
       code: 0,

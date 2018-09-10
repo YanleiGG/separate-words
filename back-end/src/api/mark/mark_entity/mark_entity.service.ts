@@ -1,12 +1,15 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { MarkEntity } from '../../../database/mark_entity/mark_entity.entity';
+import { Article } from '../../../database/article/article.entity'
 
 @Injectable()
 export class MarkEntityService {
   constructor(
     @Inject('MarkEntityRepositoryToken')
     private readonly MarkEntityRepository: Repository<MarkEntity>,
+    @Inject('ArticleRepositoryToken')
+    private readonly ArticleRepository: Repository<Article>,
   ) {}
 
   async find(offset: number, pageSize: number) {
@@ -30,7 +33,12 @@ export class MarkEntityService {
 
   async create (args) {
     let mark_entity = new MarkEntity()
-    mark_entity.markEntity = args.markEntity
+    let article = new Article()
+    article.content = args.content
+    article.title = args.title
+    mark_entity.markEntity = args.markEntity || null
+    mark_entity.article = article
+    await this.ArticleRepository.save(article)
     await this.MarkEntityRepository.save(mark_entity)
     return {
       code: 0,

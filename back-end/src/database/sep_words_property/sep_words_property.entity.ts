@@ -6,10 +6,16 @@ export class SepWordsProperty {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("longtext")
+    @Column({
+        type: "longtext",
+        nullable: true
+    })
     separateWords: string;    // 分词
 
-    @Column("longtext")
+    @Column({
+        type: "longtext",
+        nullable: true
+    })
     separateWordsProperty: string;    // 划分词性
 
     @CreateDateColumn()

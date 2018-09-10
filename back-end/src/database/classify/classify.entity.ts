@@ -9,6 +9,9 @@ export class Classify {
     @Column()
     name: string;
 
+    @Column()
+    value: string;
+
     @Column({
       nullable: true
     })
@@ -19,7 +22,6 @@ export class Classify {
 
     @UpdateDateColumn()
     updatedAt: Date
-
 
     @ManyToOne(type => ClassifyGroup, classify_group => classify_group.classify)
     classify_group: string;

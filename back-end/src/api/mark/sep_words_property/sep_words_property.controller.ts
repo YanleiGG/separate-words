@@ -1,7 +1,7 @@
 import { Get, Req, Post, Put, Delete, Body, Controller, Param } from '@nestjs/common';
 import { SepWordsPropertyService } from './sep_words_property.service';
 
-@Controller('api/article/:id/sep_words_property')
+@Controller('api/sep_words_property')
 export class SepWordsPropertyController {
   constructor(private readonly SepWordsPropertyService: SepWordsPropertyService) {}
   

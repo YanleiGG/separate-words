@@ -1,7 +1,7 @@
 import { Get, Req, Post, Put, Delete, Body, Controller, Param } from '@nestjs/common';
 import { EmotionService } from './emotion.service';
 
-@Controller('api/article/:id/emotion')
+@Controller('api/emotion')
 export class EmotionController {
   constructor(private readonly EmotionService: EmotionService) {}
   

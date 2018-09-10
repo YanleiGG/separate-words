@@ -1,21 +1,26 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SepWordsProperty } from '../../../database/sep_words_property/sep_words_property.entity';
+import { Article } from '../../../database/article/article.entity'
 
 @Injectable()
 export class SepWordsPropertyService {
   constructor(
     @Inject('SepWordsPropertyRepositoryToken')
     private readonly SepWordsPropertyRepository: Repository<SepWordsProperty>,
+    @Inject('ArticleRepositoryToken')
+    private readonly ArticleRepository: Repository<Article>,
   ) {}
 
   async find(offset: number, pageSize: number) {
-    let sep_words_propertys =  await this.SepWordsPropertyRepository.find();
+    let sep_words_propertys =  await this.SepWordsPropertyRepository.find({relations: ['article']});
+    let totalCount = sep_words_propertys.length
     let data = sep_words_propertys.reverse().splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',
-      sep_words_propertys: data
+      sep_words_propertys: data,
+      totalCount
     }
   }
 
@@ -30,8 +35,13 @@ export class SepWordsPropertyService {
 
   async create (args) {
     let sep_words_property = new SepWordsProperty()
-    sep_words_property.separateWords = args.separateWords
-    sep_words_property.separateWordsProperty = args.separateWordsProperty
+    let article = new Article()
+    article.content = args.content
+    article.title = args.title
+    sep_words_property.separateWords = args.separateWords || null
+    sep_words_property.separateWordsProperty = args.separateWordsProperty || null
+    sep_words_property.article = article
+    await this.ArticleRepository.save(article)
     await this.SepWordsPropertyRepository.save(sep_words_property)
     return {
       code: 0,
@@ -42,8 +52,8 @@ export class SepWordsPropertyService {
 
   async update (args) {
     let sep_words_property = await this.SepWordsPropertyRepository.findOne({ id: args.id })
-    sep_words_property.separateWords = args.separateWords
-    sep_words_property.separateWordsProperty = args.separateWordsProperty
+    sep_words_property.separateWords = args.separateWords || null
+    sep_words_property.separateWordsProperty = args.separateWordsProperty || null
     await this.SepWordsPropertyRepository.save(sep_words_property)
     return {
       code: 0,

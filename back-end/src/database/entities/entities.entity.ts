@@ -9,6 +9,9 @@ export class Entities {
     @Column()
     name: string;
 
+    @Column()
+    value: string;
+
     @Column({
       nullable: true
     })
