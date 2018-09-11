@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, ManyToMany, JoinTable, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { Entities } from '../entities/entities.entity'
 import { ArticleGroupEntities } from '../article_group_entities/article_group_entities.entity'
 
@@ -16,7 +16,8 @@ export class EntitiesGroup {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(type => Entities, entities => entities.entities_group)
+    @ManyToMany(type => Entities, entities => entities.entities_groups)
+    @JoinTable()
     entities: Entities[];
 
     @OneToOne(type => ArticleGroupEntities, article_group_entities => article_group_entities.entities_group)

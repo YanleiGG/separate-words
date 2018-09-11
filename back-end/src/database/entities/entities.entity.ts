@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, ManyToMany, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
 
 @Entity()
@@ -18,6 +18,6 @@ export class Entities {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToOne(type => EntitiesGroup, entities_group => entities_group.entities)
-    entities_group: string;
+    @ManyToMany(type => EntitiesGroup, entities_group => entities_group.entities)
+    entities_groups: string;
 }
