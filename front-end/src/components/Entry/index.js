@@ -59,7 +59,7 @@ class Entry extends React.Component {
             style={{ width: "100%", height: "300px", backgroundColor: '#8D6E63', fontSize: '18px' }}
           >
             <Link to='/manage' id='toTaskManage'></Link>
-            管理系统
+            系统管理
           </Button>
         </Col>
       </Row>

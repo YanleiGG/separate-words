@@ -24,7 +24,7 @@ class CreateLabels extends React.Component {
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
-            <div style={{ marginBottom: '10px' }}>标签名称：</div>
+            <div style={{ marginBottom: '10px' }}>标签集合名称：</div>
             <Input onChange={nameChange}></Input>
           </Col>
         </Row>
@@ -106,12 +106,12 @@ let mapDispatchToProps = dispatch => {
     },
     create: async () => {
       let state = store.getState(), path = '', {createLabels} = state
-      let {type, labels, name} = createLabels
-      if (!type || !name || !labels) return message.info('请将所有内容填写完整!', 1.5)
+      let {type, labelsValue, name} = createLabels
+      if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
       if (type === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
       if (type === 'markEntity') path = `${state.path}/api/entities_group`
       let tips = message.loading('创建中...')
-      let res = await axios.post(path, { name, labels })
+      let res = await axios.post(path, { name, labels: labelsValue })
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('创建成功!', 1.5)

@@ -10,7 +10,7 @@ const TabPane = Tabs.TabPane;
 class LabelManage extends React.Component {
   render() {
     return (
-      <Tabs defaultActiveKey="3" style={{ textAlign: 'center' }}>
+      <Tabs defaultActiveKey="1" style={{ textAlign: 'center' }}>
         <TabPane tab="总览" key="1">
           <LabelAndLabels/>
         </TabPane>

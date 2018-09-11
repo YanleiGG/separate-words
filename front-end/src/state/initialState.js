@@ -140,7 +140,7 @@ export const initialState = {
   createLabels: {
     type: '',
     labels: [],
-    labelsValue: '',
+    labelsValue: [],
     name: ''
   },
   createLabel: {
@@ -151,11 +151,12 @@ export const initialState = {
   labelAndLabels: {
     label: {
       data: [],
-      type: 'words_property',
+      type: 'separateWordsProperty',
       page: 1
     },
     labels: {
       data: [],
+      type: 'separateWordsProperty',
       page: 1
     }
   }

@@ -24,7 +24,7 @@ class CreateTask extends React.Component {
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
-            <div style={{ marginBottom: '10px' }}>名称：</div>
+            <div style={{ marginBottom: '10px' }}>标签名称：</div>
             <Input onChange={nameChange}></Input>
           </Col>
         </Row>
