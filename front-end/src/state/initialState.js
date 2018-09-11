@@ -134,7 +134,7 @@ export const initialState = {
     instruction: '',
     type: '',
     state: '进行中',
-    labels: [{ id: 1, value: '分类标签一', content: '分类标签一'}],
+    labels: [],
     selectedLabelsId: null
   },
   createLabels: {

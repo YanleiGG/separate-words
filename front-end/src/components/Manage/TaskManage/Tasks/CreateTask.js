@@ -1,13 +1,14 @@
 import React from 'react'
-import { Row, Col, Input, Select } from 'antd'
+import { Row, Col, Input, Select, Button } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../../state/store'
+import axios from 'axios'
 
 const Option = Select.Option;
 
 class CreateTask extends React.Component {
   render() {
-    let { nameChange, instructionChange, typeChange, labels, labelChange } = this.props
+    let { nameChange, instructionChange, typeChange, labels, labelChange, create, cancel } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
@@ -38,8 +39,14 @@ class CreateTask extends React.Component {
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>标签集合：</div>
             <Select style={{ width: '100%' }} onChange={labelChange}>
-              {labels.map(item => <Option key={item.value} value={item.value}>{item.content}</Option>)}
+              {labels.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '20px', textAlign: 'center' }}>
+          <Col span={10} push={7}>
+            <Button onClick={ create } type="primary">创建</Button>
+            <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
           </Col>
         </Row>
       </div>
@@ -75,19 +82,29 @@ let mapDispatchToProps = dispatch => {
         }
       })
     },
-    typeChange: value => {
-      let createTask = store.getState().createTask
+    typeChange: async value => {
+      let state = store.getState(), path = ''
+      let createTask = state.createTask
+      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
+      if (value === 'markEntity') path = `${state.path}/api/entities_group`
+      let res = await axios.get(path), data = res.data.data
+      console.log(data)
       dispatch({ 
         type: 'SET_CREATE_TASK',
         createTask: {
           ...createTask,
-          type: value
+          type: value,
+          labels: data
         }
       })
     },
     labelChange: value => {
       console.log(value)
-    }
+    },
+    create: async () => {
+
+    },
+    cancel: () => {}
   }
 }
 
