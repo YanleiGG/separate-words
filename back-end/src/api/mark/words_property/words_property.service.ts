@@ -14,12 +14,17 @@ export class WordsPropertyService {
     return this.WordsPropertyRepository.findOne({ id })
   }
 
-  async findAll () {
+  async find (offset: number, pageSize: number) {
     let data = await this.WordsPropertyRepository.find()
+    let totalCount = data.length
+    if (offset != undefined) {
+      data = data.reverse().splice(offset, pageSize)
+    }
     return {
       code: 0,
       msg: 'successed!',
-      data
+      data,
+      totalCount
     }
   }
   

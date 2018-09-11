@@ -36,7 +36,7 @@ class CreateTask extends React.Component {
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
-            <div style={{ marginBottom: '10px' }}>分类标签：</div>
+            <div style={{ marginBottom: '10px' }}>标签集合：</div>
             <Select style={{ width: '100%' }} onChange={labelChange}>
               {labels.map(item => <Option key={item.value} value={item.value}>{item.content}</Option>)}
             </Select>

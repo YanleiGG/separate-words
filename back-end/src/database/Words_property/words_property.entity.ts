@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable} from "typeorm";
 import { WordsPropertyGroup } from '../words_property_group/words_property_group.entity'
 
 @Entity()
@@ -18,6 +18,6 @@ export class WordsProperty {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToOne(type => WordsPropertyGroup, words_property_group => words_property_group.words_property)
-    words_property_group: string;
+    @ManyToMany(type => WordsPropertyGroup, words_property_group => words_property_group.words_propertys)
+    words_property_groups: WordsPropertyGroup[];
 } 

@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity,JoinTable, Column, PrimaryGeneratedColumn, ManyToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { WordsProperty } from '../words_property/words_property.entity'
 import { ArticleGroupWordsProperty }  from '../article_group_words_property/article_group_words_property.entity'
 
@@ -10,17 +10,15 @@ export class WordsPropertyGroup {
     @Column("varchar")
     name: string;
 
-    @Column("integer")
-    parentId: number;
-
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(type => WordsProperty, words_property => words_property.words_property_group)
-    words_property: WordsProperty[];    
+    @ManyToMany(type => WordsProperty, words_property => words_property.words_property_groups)
+    @JoinTable()
+    words_propertys: WordsProperty[];
 
     @OneToOne(type => ArticleGroupWordsProperty, article_group_words_property => article_group_words_property.words_property_group)
     @JoinColumn()

@@ -10,8 +10,8 @@ export class WordsPropertyController {
   constructor(private readonly WordsPropertyService: WordsPropertyService) {}
 
   @Get()
-  get () {
-    return this.WordsPropertyService.findAll()
+  get (@Req() req) {
+    return this.WordsPropertyService.find(req.query.offset, req.query.pageSize)
   }
 
   @Get(":id")

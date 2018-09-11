@@ -1,7 +1,8 @@
 import React from 'react'
-import { Row, Col, Input, Select, Button } from 'antd'
+import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../../state/store'
+import axios from 'axios'
 
 const Option = Select.Option;
 
@@ -50,9 +51,9 @@ let mapStateToProps = state => {
 }
 
 let mapDispatchToProps = dispatch => {
-  let {createLabel} = store.getState()
   return {
     nameChange: e => {
+      let {createLabel} = store.getState()
       dispatch({
         type: 'SET_CREATE_LABEL',
         createLabel: {
@@ -70,9 +71,43 @@ let mapDispatchToProps = dispatch => {
           type: value
         }
       })
-    },    
-    create: () => {},
-    cancel: () => {}
+    },
+    symbolChange: e => {
+      let {createLabel} = store.getState()
+      dispatch({
+        type: 'SET_CREATE_LABEL',
+        createLabel: {
+          ...createLabel,
+          symbol: e.target.value
+        }
+      })
+    },
+    create: async () => {
+      let state = store.getState(), path = ''
+      let { createLabel } = store.getState()
+      let { type, symbol, name } = createLabel
+      if (!type || !symbol || !name) return message.info('请将所有内容填写完整!', 1.5)
+      if (type === 'separateWordsProperty') path = `${state.path}/api/words_property`
+      if (type === 'markEntity') path = `${state.path}/api/entities`
+      let tips = message.loading('创建中...')
+      let res = await axios.post(path, { symbol, name })
+      message.destroy(tips)
+      if (res.data.code == 0) {
+        message.success('创建成功!', 1.5)
+      } else {
+        message.error(res.data.msg, 1.5)
+      }
+    },
+    cancel: () => {
+      dispatch({
+        type: 'SET_CREATE_LABEL',
+        createLabel: {
+          type: '',
+          name: '',
+          symbol: ''
+        }
+      })
+    }
   }
 }
 

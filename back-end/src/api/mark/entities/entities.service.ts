@@ -12,12 +12,17 @@ export class EntitiesService {
   async find(offset: number, pageSize: number) {
     let entities =  await this.EntitiesRepository.find();
     let totalCount = entities.length
-    let data = entities.reverse().splice(offset, pageSize)
+    let data = []
+    if (offset != undefined) {
+      data = entities.reverse().splice(offset, pageSize)
+    } else {
+      data = entities
+    }
     return {
       code: 0,
       msg: 'find successed!',
       totalCount,
-      entities: data
+      data
     }
   }
 

@@ -1,7 +1,8 @@
 import React from 'react'
-import { Row, Col, Input, Select, Button } from 'antd'
+import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../../state/store'
+import axios from 'axios'
 
 const Option = Select.Option;
 
@@ -35,7 +36,7 @@ class CreateLabels extends React.Component {
               style={{ width: '100%' }}
               onChange={labelsSelectChange}
             >
-            { labels.map(item => <Option key={item.label}>{item.label}</Option>) }
+            { labels.map(item => <Option key={item.name}>{item.name}</Option>) }
             </Select>
           </Col>
         </Row>
@@ -75,17 +76,21 @@ let mapDispatchToProps = dispatch => {
         type: 'SET_CREATE_LABELS',
         createLabels: {
           ...createLabels,
-          labelsName: e.target.value
+          name: e.target.value
         }
       })
     },
-    typeChange: value => {
-      let {createLabels} = store.getState()
+    typeChange: async value => {
+      let state = store.getState(), path = '', {createLabels} = state
+      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property`
+      if (value === 'markEntity') path = `${state.path}/api/entities`
+      let res = await axios.get(path)
       dispatch({
         type: 'SET_CREATE_LABELS',
         createLabels: {
           ...createLabels,
-          type: value
+          type: value,
+          labels: res.data.data
         }
       })
     },
@@ -99,7 +104,21 @@ let mapDispatchToProps = dispatch => {
         }
       })
     },
-    create: () => {},
+    create: async () => {
+      let state = store.getState(), path = '', {createLabels} = state
+      let {type, labels, name} = createLabels
+      if (!type || !name || !labels) return message.info('请将所有内容填写完整!', 1.5)
+      if (type === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
+      if (type === 'markEntity') path = `${state.path}/api/entities_group`
+      let tips = message.loading('创建中...')
+      let res = await axios.post(path, { name, labels })
+      message.destroy(tips)
+      if (res.data.code == 0) {
+        message.success('创建成功!', 1.5)
+      } else {
+        message.error(res.data.msg, 1.5)
+      }
+    },
     cancel: () => {}
   }
 }
