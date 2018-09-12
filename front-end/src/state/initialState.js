@@ -133,7 +133,6 @@ export const initialState = {
     name: '',
     instruction: '',
     type: '',
-    state: '进行中',
     labels: [],
     selectedLabelsId: null,
     docs: []

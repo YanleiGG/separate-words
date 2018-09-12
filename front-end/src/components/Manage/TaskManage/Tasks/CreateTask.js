@@ -8,6 +8,7 @@ const Option = Select.Option
 
 const uploadProps = {
   name: 'file',
+  accept: '.xml',
   action: `//localhost:3000/api/upload/docs`,
   withCredentials: true,
   onChange(info) {
@@ -15,7 +16,7 @@ const uploadProps = {
       console.log(info.file)
     }
     if (info.file.status === 'done') {
-      message.success(`${info.file.name} 成功上传！`)
+      message.success(`${info.file.name} 上传成功！`)
       let state = store.getState(), {createTask} = state
       let docs = state.createTask.docs
       docs.push(info.file.response.data.fileName)
