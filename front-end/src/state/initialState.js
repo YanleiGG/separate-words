@@ -135,7 +135,8 @@ export const initialState = {
     type: '',
     state: '进行中',
     labels: [],
-    selectedLabelsId: null
+    selectedLabelsId: null,
+    docs: []
   },
   createLabels: {
     type: '',

@@ -4,6 +4,7 @@ import HeaderNav_UI from '../../WorkTable/HeaderNav_UI'
 let mapStateToProps = state => {
   return {
     headerNavData: {
+      name: 'file',
       title: '任务管理',
       data: [
         { name: '任务管理', path: '/manage/task/tasks', key: '任务总览' },
