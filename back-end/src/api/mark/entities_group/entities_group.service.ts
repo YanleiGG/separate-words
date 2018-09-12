@@ -13,14 +13,15 @@ export class EntitiesGroupService {
   ) {}
 
   async find(offset: number, pageSize: number) {
-    let entities_groups =  await this.EntitiesGroupRepository.find();
+    let entities_groups = await this.EntitiesGroupRepository.find({relations: ["entities"]});
     let totalCount = entities_groups.length
-    let data = entities_groups.reverse().splice(offset, pageSize)
+    let data = entities_groups.reverse()
+    if (offset != undefined && pageSize != undefined) data = data.splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',
       totalCount,
-      entities_groups: data
+      data
     }
   }
 
@@ -52,7 +53,7 @@ export class EntitiesGroupService {
       entitiesGroup.entities.push(await this.EntitiesRepository.findOne({ name: labels[i] }))
     }
     await this.EntitiesGroupRepository.save(entitiesGroup)
-    console.log(await this.EntitiesGroupRepository.find({ relations: ["entities"] }))
+    // console.log(await this.EntitiesGroupRepository.find({ relations: ["entities"] }))
     return {
       code: 0,
       msg: 'create successed!',

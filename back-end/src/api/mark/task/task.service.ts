@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Task } from '../../../database/task/task.entity';
+var fs = require('fs'),
+    xml2js = require('xml2js')
 
 @Injectable()
 export class TaskService {
@@ -31,6 +33,13 @@ export class TaskService {
   }
 
   async create (args) {
+    var parser = new xml2js.Parser()
+    fs.readFile(__dirname + '/foo.xml', function(err, data) {
+      parser.parseString(data, function (err, result) {
+        console.dir(result)
+        console.log('Done')
+      })
+    })
     let task = new Task()
     await this.TaskRepository.save(task)
     return {

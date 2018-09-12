@@ -17,7 +17,7 @@ export class WordsPropertyGroupService {
   }
 
   async findAll () {
-    let data = await this.WordsPropertyGroupRepository.find()
+    let data = await this.WordsPropertyGroupRepository.find({relations: ["words_propertys"]})
     return {
       code: 0,
       msg: 'successed!',

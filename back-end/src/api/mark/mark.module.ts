@@ -57,6 +57,9 @@ import { taskProviders } from '../../database/task/task.provider'
 import { TaskService } from './task/task.service'
 import { TaskController } from './task/task.controller'
 
+import { UploadService } from './upload/upload.service'
+import { UploadController } from './upload/upload.controller'
+
 @Module({
   imports: [DatabaseModule],
   providers: [
@@ -87,7 +90,8 @@ import { TaskController } from './task/task.controller'
     EntitiesGroupService,
     MarkEntityService,
     SepWordsPropertyService,
-    TaskService
+    TaskService,
+    UploadService
   ],
   controllers: [
     ArticleController,
@@ -103,7 +107,8 @@ import { TaskController } from './task/task.controller'
     EntitiesGroupController,
     MarkEntityController,
     SepWordsPropertyController,
-    TaskController
+    TaskController,
+    UploadController
   ]
 })
 export class MarkModule {}

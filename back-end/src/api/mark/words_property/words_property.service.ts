@@ -23,7 +23,7 @@ export class WordsPropertyService {
     return {
       code: 0,
       msg: 'successed!',
-      data,
+      data: data.reverse(),
       totalCount
     }
   }
