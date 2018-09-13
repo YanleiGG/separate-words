@@ -1,20 +1,21 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
-import { ArticleGroupClassify } from '../article_group_classify/article_group_classify.entity'
-import { ArticleGroupEntities } from '../article_group_entities/article_group_entities.entity'
-import { ArticleGroupWordsProperty } from '../article_group_words_property/article_group_words_property.entity';
 import { Emotion } from '../emotion/emotion.entity'
 import { SepWordsProperty } from '../sep_words_property/sep_words_property.entity'
 import { MarkEntity } from '../mark_entity/mark_entity.entity'
+import { Task } from '../task/task.entity'
 
 @Entity()
 export class Article {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({nullable: true})
     title: string;
 
-    @Column("longtext")
+    @Column({
+        nullable: true,
+        type: "longtext"
+    })
     content: string;
 
     @CreateDateColumn()
@@ -23,14 +24,8 @@ export class Article {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToOne(type => ArticleGroupClassify, article_group_classify => article_group_classify.articles)
-    article_group_classify: string;
-
-    @ManyToOne(type => ArticleGroupEntities, article_group_entities => article_group_entities.articles)
-    article_group_entities: string;    
-
-    @ManyToOne(type => ArticleGroupWordsProperty, article_group_words_property => article_group_words_property.articles)
-    article_group_words_property: string; 
+    @ManyToOne(type => Task, task => task.articles)
+    task: Task;
 
     @OneToOne(type => Emotion, emotion => emotion.article)
     emotion: string;

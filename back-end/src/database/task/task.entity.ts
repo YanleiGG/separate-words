@@ -1,5 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
-import { Role } from '../role/role.entity'
+import {OneToMany, Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable} from "typeorm";
+import { User } from '../user/user.entity'
+import { Article } from '../article/article.entity'
 
 @Entity()
 export class Task {
@@ -23,4 +24,11 @@ export class Task {
 
     @UpdateDateColumn()
     updatedAt: Date
+
+    @ManyToMany(type => User, user => user.tasks)
+    @JoinTable()
+    users: User[];
+
+    @OneToMany(type => Article, article => article.task)
+    articles: Article[];
 }

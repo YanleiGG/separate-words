@@ -1,5 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, ManyToMany} from "typeorm";
 import { Role } from '../role/role.entity'
+import { Task } from '../task/task.entity'
 
 @Entity()
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
     @ManyToOne(type => Role, role => role.users)
     role: string;
+
+    @ManyToMany(type => Task, task => task.users)
+    tasks: Task[];
 }

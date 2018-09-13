@@ -14,6 +14,15 @@ export class UserService {
     return user
   }
 
+  async findMarkUser () {
+    let users = await this.UserRepository.find()
+    return {
+      code: 0,
+      msg: 'success',
+      data: users
+    }
+  }
+
   async post( type: string ,username: string, password: string ) {
   }
 

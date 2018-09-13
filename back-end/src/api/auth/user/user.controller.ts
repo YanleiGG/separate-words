@@ -22,6 +22,12 @@ class IPut {
 @Controller('api/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
+
+  @Get('mark')
+  findMarkUser() {
+    return this.UserService.findMarkUser()
+  }
+
   @Post()
   post(@Body() data: IPost) {
     return this.UserService.post(data.type, data.username, data.password);

@@ -13,18 +13,6 @@ import { emotionProviders } from '../../database/emotion/emotion.provider'
 import { EmotionService } from './emotion/emotion.service'
 import { EmotionController } from './emotion/emotion.controller'
 
-import { articleGroupClassifyProviders } from '../../database/article_group_classify/article_group_classify.provider'
-import { ArticleGroupClassifyService } from './article_group_classify/article_group_classify.service'
-import { ArticleGroupClassifyController } from './article_group_classify/article_group_classify.controller'
-
-import { articleGroupEntitiesProviders } from '../../database/article_group_entities/article_group_entities.provider'
-import { ArticleGroupEntitiesService } from './article_group_entities/article_group_entities.service'
-import { ArticleGroupEntitiesController } from './article_group_entities/article_group_entities.controller'
-
-import { articleGroupWordsPropertyProviders } from '../../database/article_group_words_property/article_group_words_property.provider'
-import { ArticleGroupWordsPropertyService } from './article_group_words_property/article_group_words_property.service'
-import { ArticleGroupWordsPropertyController } from './article_group_words_property/article_group_words_property.controller'
-
 import { wordsPropertyGroupProviders } from '../../database/words_property_group/words_property_group.provider'
 import { WordsPropertyGroupService } from './words_property_group/words_property_group.service'
 import { WordsPropertyGroupController } from './words_property_group/words_property_group.controller'
@@ -66,9 +54,6 @@ import { UploadController } from './upload/upload.controller'
     ...articleProviders,
     ...wordsPropertyProviders,
     ...emotionProviders,
-    ...articleGroupClassifyProviders,
-    ...articleGroupEntitiesProviders,
-    ...articleGroupWordsPropertyProviders,
     ...wordsPropertyGroupProviders,
     ...classifyProviders,
     ...classifyGroupProviders,
@@ -80,9 +65,6 @@ import { UploadController } from './upload/upload.controller'
     ArticleService,
     WordsPropertyService,
     EmotionService,
-    ArticleGroupClassifyService,
-    ArticleGroupEntitiesService,
-    ArticleGroupWordsPropertyService,
     WordsPropertyGroupService,
     ClassifyService,
     ClassifyGroupService,
@@ -97,9 +79,6 @@ import { UploadController } from './upload/upload.controller'
     ArticleController,
     WordsPropertyController,
     EmotionController,
-    ArticleGroupClassifyController,
-    ArticleGroupEntitiesController,
-    ArticleGroupWordsPropertyController,
     WordsPropertyGroupController,
     ClassifyController,
     ClassifyGroupController,
