@@ -3,53 +3,16 @@ import { Row, Col, Input, Select, Button, Upload, Icon, message } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../../state/store'
 import axios from 'axios'
+import UploadDocs from './UploadDocs'
 
 const Option = Select.Option
 
-const uploadProps = {
-  name: 'file',
-  accept: '.xml',
-  action: `//localhost:3000/api/upload/docs`,
-  withCredentials: true,
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file)
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} 上传成功！`)
-      let state = store.getState(), {createTask} = state
-      let docs = state.createTask.docs
-      docs.push(info.file.response.data.fileName)
-      store.dispatch({ 
-        type: 'SET_CREATE_TASK',
-        createTask: {
-          ...createTask,
-          docs
-        }
-      })
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} 上传失败！`)
-    }
-  },
-  onRemove(file) {
-    let state = store.getState(), {createTask} = state
-    let docs = state.createTask.docs
-    let name = file.response.data.fileName
-    let index = docs.indexOf(name)
-    docs.splice(index, 1)
-    store.dispatch({
-      type: 'SET_CREATE_TASK',
-      createTask: {
-        ...createTask,
-        docs
-      }
-    })
-  }
-}
-
 class CreateTask extends React.Component {
+  componentWillMount() {
+    this.props.created()
+  }
   render() {
-    let { nameChange, instructionChange, typeChange, labels, labelChange, create, cancel } = this.props
+    let { userChange, nameChange, instructionChange, typeChange, labels, labelChange, create, cancel, markUsers, selectedUsers } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
@@ -68,7 +31,7 @@ class CreateTask extends React.Component {
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>任务类型：</div>
             <Select style={{ width: '100%' }} onChange={typeChange}>
-              <Option value="separateWords">分词</Option>
+              {/* <Option value="separateWords">分词</Option> */}
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
               <Option value="markEntity">实体标注</Option>
@@ -87,11 +50,16 @@ class CreateTask extends React.Component {
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>上传语料：</div>
-            <Upload {...uploadProps}>
-              <Button  style={{ width: '100%' }}>
-                <Icon type="upload" /> 点击上传
-              </Button>
-            </Upload>
+            <UploadDocs/>
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: '10px' }}>
+          <Col span={8} push={8}>
+            <div style={{ marginBottom: '10px' }}>任务分配至：</div>
+            <Select mode="multiple" style={{ width: '100%' }} value={selectedUsers} onChange={userChange}>
+              <Option value="all">全部标注成员</Option>
+              {markUsers.map(item => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+            </Select>
           </Col>
         </Row>
         <Row style={{ marginTop: '20px', textAlign: 'center' }}>
@@ -99,20 +67,31 @@ class CreateTask extends React.Component {
             <Button onClick={ create } type="primary">创建</Button>
             <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
           </Col>
-        </Row>
+        </Row>   
       </div>
     )
   }
 }
 
 let mapStateToProps = state => {
-  return {
-    labels: state.createTask.labels
-  }
+  return state.createTask
 }
 
 let mapDispatchToProps = dispatch => {
   return {
+    created: async () => {
+      let state = store.getState()
+      let res = await axios.get(`${state.path}/api/user/mark`)
+      console.log(res)
+      let createTask = state.createTask
+      dispatch({
+        type: 'SET_CREATE_TASK',
+        createTask: {
+          ...createTask,
+          markUsers: res.data.data
+        }
+      })
+    },
     nameChange: e => {
       let createTask = store.getState().createTask
       dispatch({ 
@@ -150,7 +129,26 @@ let mapDispatchToProps = dispatch => {
       })
     },
     labelChange: value => {
-      console.log(value)
+      let createTask = store.getState().createTask
+      dispatch({ 
+        type: 'SET_CREATE_TASK',
+        createTask: {
+          ...createTask,
+          selectedLabelsId: value
+        }
+      })
+    },
+    userChange: value => {
+      let createTask = store.getState().createTask
+      let {selectedUsers} = createTask
+      if (value.indexOf('all') != -1) value = ['all']
+      dispatch({
+        type: 'SET_CREATE_TASK',
+        createTask: {
+          ...createTask,
+          selectedUsers: value
+        }
+      })
     },
     create: async () => {
       let state = store.getState()
