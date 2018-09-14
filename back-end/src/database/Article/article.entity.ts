@@ -16,7 +16,7 @@ export class Article {
         nullable: true,
         type: "longtext"
     })
-    content: string;
+    text: string;
 
     @CreateDateColumn()
     createdAt: Date

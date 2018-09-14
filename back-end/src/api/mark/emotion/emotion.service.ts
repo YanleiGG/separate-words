@@ -36,7 +36,7 @@ export class EmotionService {
   async create (args) {
     let emotion = new Emotion()
     let article = new Article()
-    article.content = args.content
+    article.text = args.text
     article.title = args.title
     emotion.perspective = args.perspective || null
     emotion.attitude = args.attitude || null

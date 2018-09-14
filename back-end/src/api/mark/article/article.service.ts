@@ -33,7 +33,7 @@ export class ArticleService {
   async create (args) {
     let article = new Article()
     article.title = args.title
-    article.content = args.content
+    article.text = args.text
     await this.ArticleRepository.save(article)
     return {
       code: 0,
@@ -45,7 +45,7 @@ export class ArticleService {
   async update (args) {
     let article = await this.ArticleRepository.findOne({ id: args.id })
     article.title = args.title
-    article.content = args.content
+    article.text = args.text
     await this.ArticleRepository.save(article)
     return {
       code: 0,

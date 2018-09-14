@@ -10,13 +10,13 @@ export class SepWordsProperty {
         type: "longtext",
         nullable: true
     })
-    separateWords: string;    // 分词
+    separateWords: string; 
 
     @Column({
         type: "longtext",
         nullable: true
     })
-    separateWordsProperty: string;    // 划分词性
+    separateWordsProperty: string; 
 
     @CreateDateColumn()
     createdAt: Date

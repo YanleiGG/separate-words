@@ -1,6 +1,7 @@
 import {OneToMany, Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable} from "typeorm";
 import { User } from '../user/user.entity'
 import { Article } from '../article/article.entity'
+import { Type } from '../type/type.entity'
 
 @Entity()
 export class Task {
@@ -12,9 +13,6 @@ export class Task {
 
     @Column()
     instruction: string;
-
-    @Column()
-    type: string;    
 
     @Column()
     state: string;
@@ -31,4 +29,8 @@ export class Task {
 
     @OneToMany(type => Article, article => article.task)
     articles: Article[];
+
+    @ManyToMany(type => Type, type => type.tasks)
+    @JoinTable()
+    types: Type[];
 }

@@ -48,9 +48,14 @@ import { TaskController } from './task/task.controller'
 import { UploadService } from './upload/upload.service'
 import { UploadController } from './upload/upload.controller'
 
+import { typeProviders } from '../../database/type/type.provider'
+
+import { userProviders } from '../../database/user/user.provider'
+
 @Module({
   imports: [DatabaseModule],
   providers: [
+    ...taskProviders,
     ...articleProviders,
     ...wordsPropertyProviders,
     ...emotionProviders,
@@ -61,7 +66,8 @@ import { UploadController } from './upload/upload.controller'
     ...entitiesGroupProviders,
     ...markEntityProviders,
     ...sepWordsPropertyProviders,
-    ...taskProviders,
+    ...typeProviders,
+    ...userProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,

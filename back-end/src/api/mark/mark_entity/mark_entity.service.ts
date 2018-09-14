@@ -34,7 +34,7 @@ export class MarkEntityService {
   async create (args) {
     let mark_entity = new MarkEntity()
     let article = new Article()
-    article.content = args.content
+    article.text = args.text
     article.title = args.title
     mark_entity.markEntity = args.markEntity || null
     mark_entity.article = article

@@ -36,7 +36,7 @@ export class SepWordsPropertyService {
   async create (args) {
     let sep_words_property = new SepWordsProperty()
     let article = new Article()
-    article.content = args.content
+    article.text = args.text
     article.title = args.title
     sep_words_property.separateWords = args.separateWords || null
     sep_words_property.separateWordsProperty = args.separateWordsProperty || null
