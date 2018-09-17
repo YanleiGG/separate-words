@@ -19,7 +19,7 @@ class Emotion_UI extends React.Component {
       <Layout>
         <SiderLeft/>
         <Content style={{ padding: '15px', fontSize: '20px' }}>
-          { emotions.length > 0 ? emotions[showIndex].article.content : null }
+          { emotions.length > 0 ? emotions[showIndex].article.text : null }
         </Content>
         <Sider width={400}>
           <SiderRight/>

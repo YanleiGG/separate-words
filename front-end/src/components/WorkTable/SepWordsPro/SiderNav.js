@@ -42,8 +42,8 @@ let refresh = async dispatch => {
   let siderNavData = sep_words_propertys.map((item, index) => {
     if (!item.separateWords) {     // 这里后面可以根据业务逻辑考虑删除
       item.separateWords = ''
-      for (let i = 0;i < item.article.content.length;i++) {
-        item.separateWords += item.article.content[i] + 'S'
+      for (let i = 0;i < item.article.text.length;i++) {
+        item.separateWords += item.article.text[i] + 'S'
       }
     }
     if (!item.separateWordsProperty) item.separateWordsProperty = '没有东西' // 这里后面可以根据业务逻辑考虑删除

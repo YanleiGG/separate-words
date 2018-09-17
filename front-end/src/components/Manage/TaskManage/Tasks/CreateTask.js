@@ -12,7 +12,11 @@ class CreateTask extends React.Component {
     this.props.created()
   }
   render() {
-    let { userChange, nameChange, instructionChange, typeChange, labels, labelChange, create, cancel, markUsers, selectedUsers } = this.props
+    let { 
+      userChange, nameChange, instructionChange, 
+      typeChange, labels, labelChange, create, 
+      cancel, markUsers, selectedUsers, selectedLabelsId 
+    } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
@@ -42,7 +46,7 @@ class CreateTask extends React.Component {
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>标签集合：</div>
-            <Select style={{ width: '100%' }} onChange={labelChange}>
+            <Select style={{ width: '100%' }} onChange={labelChange} value={selectedLabelsId}>
               {labels.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Col>
@@ -57,7 +61,7 @@ class CreateTask extends React.Component {
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>任务分配至：</div>
             <Select mode="multiple" style={{ width: '100%' }} value={selectedUsers} onChange={userChange}>
-              <Option value="all">全部标注成员</Option>
+              {markUsers.length > 0 ? <Option value="all">全部标注成员</Option> : null}
               {markUsers.map(item => <Option value={item.id} key={item.id}>{item.name}</Option>)}
             </Select>
           </Col>
@@ -124,7 +128,8 @@ let mapDispatchToProps = dispatch => {
         createTask: {
           ...createTask,
           type: value,
-          labels: data
+          labels: data,
+          selectedLabelsId: null
         }
       })
     },
@@ -140,7 +145,6 @@ let mapDispatchToProps = dispatch => {
     },
     userChange: value => {
       let createTask = store.getState().createTask
-      let {selectedUsers} = createTask
       if (value.indexOf('all') != -1) value = ['all']
       dispatch({
         type: 'SET_CREATE_TASK',
@@ -153,7 +157,17 @@ let mapDispatchToProps = dispatch => {
     create: async () => {
       let state = store.getState()
       let {createTask} = state
+      let { name, instruction, type, selectedLabelsId, selectedUsers, docs } = createTask
       console.log(createTask)
+      if (!name || !instruction || !type || selectedLabelsId === null || selectedUsers.length == 0 || docs.length == 0) {
+        let tips = message.error('请将所有内容填写完整', 1.5)
+        return
+      }
+      let tips = message.loading('创建中...')
+      let res = await axios.post(`${state.path}/api/task`, createTask)
+      message.destroy(tips)
+      message.success('创建成功!', 1.5)
+      console.log(res)
     },
     cancel: () => {}
   }

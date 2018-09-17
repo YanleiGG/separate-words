@@ -28,18 +28,7 @@ const uploadProps = {
     }
   },
   onRemove(file) {
-    let state = store.getState(), {createTask} = state
-    let docs = state.createTask.docs
-    let name = file.response.data.fileName
-    let index = docs.indexOf(name)
-    docs.splice(index, 1)
-    store.dispatch({
-      type: 'SET_CREATE_TASK',
-      createTask: {
-        ...createTask,
-        docs
-      }
-    })
+    console.log(file)
   }
 }
 
