@@ -161,5 +161,8 @@ export const initialState = {
       type: 'separateWordsProperty',
       page: 1
     }
+  },
+  tasks: {
+    data: []
   }
 };

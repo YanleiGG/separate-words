@@ -72,7 +72,6 @@ let mapDispatchToProps = dispatch => {
   return {
     labelRefresh: async () => {
       let state = store.getState()
-      let {label} = state.labelAndLabels
       let res = await axios.get(`${state.path}/api/words_property`)
       res.data.data.forEach(item => {
         item.key = item.id

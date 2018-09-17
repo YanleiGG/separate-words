@@ -154,6 +154,12 @@ const reducer = (state = initialState, action) => {
         labelAndLabels: action.labelAndLabels
       })      
     }
+    case "SET_TASKS": {
+      return Object.assign({}, state, {
+        ...state,
+        tasks: action.tasks
+      })    
+    }
     default:
       return state;
   }

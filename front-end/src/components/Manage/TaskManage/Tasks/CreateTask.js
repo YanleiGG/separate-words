@@ -160,7 +160,7 @@ let mapDispatchToProps = dispatch => {
       let { name, instruction, type, selectedLabelsId, selectedUsers, docs } = createTask
       console.log(createTask)
       if (!name || !instruction || !type || selectedLabelsId === null || selectedUsers.length == 0 || docs.length == 0) {
-        let tips = message.error('请将所有内容填写完整', 1.5)
+        let tips = message.error('请将所有内容填写完整!', 1.5)
         return
       }
       let tips = message.loading('创建中...')
