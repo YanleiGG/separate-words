@@ -1,5 +1,9 @@
-import {Entity,JoinTable, Column, PrimaryGeneratedColumn, ManyToMany, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {
+    Entity,JoinTable, Column, PrimaryGeneratedColumn, 
+    ManyToMany, CreateDateColumn, UpdateDateColumn, OneToMany 
+} from "typeorm";
 import { WordsProperty } from '../words_property/words_property.entity'
+import { Task } from '../task/task.entity'
 
 @Entity()
 export class WordsPropertyGroup {
@@ -14,6 +18,9 @@ export class WordsPropertyGroup {
 
     @UpdateDateColumn()
     updatedAt: Date
+
+    @OneToMany(type => Task, task => task.wordsPropertyGroup)
+    tasks: Task[];
 
     @ManyToMany(type => WordsProperty, words_property => words_property.words_property_groups)
     @JoinTable()

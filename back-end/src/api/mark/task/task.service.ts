@@ -4,6 +4,8 @@ import { Task } from '../../../database/task/task.entity';
 import { Article } from '../../../database/article/article.entity'
 import { Type } from '../../../database/type/type.entity'
 import { User } from '../../../database/user/user.entity'
+import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity'
+import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity'
 var fs = require('fs')
 var xml2js = require('xml2js')
 
@@ -17,13 +19,18 @@ export class TaskService {
     @Inject('TypeRepositoryToken')
     private readonly TypeRepository: Repository<Type>,
     @Inject('UserRepositoryToken')
-    private readonly UserRepository: Repository<User>
+    private readonly UserRepository: Repository<User>,
+    @Inject('WordsPropertyGroupRepositoryToken')
+    private readonly WordsPropertyGroupRepository: Repository<WordsPropertyGroup>,
+    @Inject('EntitiesGroupRepositoryToken')
+    private readonly EntitiesGroupRepository: Repository<EntitiesGroup>,
   ) {}
 
   async find(offset: number, pageSize: number) {
-    let tasks =  await this.TaskRepository.find();
+    let tasks =  await this.TaskRepository.find({ relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] });
     let totalCount = tasks.length
-    let data = tasks.reverse().splice(offset, pageSize)
+    // let data = tasks.reverse().splice(offset, pageSize)
+    let data = tasks.reverse()
     return {
       code: 0,
       msg: 'find successed!',
@@ -42,7 +49,7 @@ export class TaskService {
   }
 
   async create (args) {
-    let {docs, selectedUsers, type} = args
+    let {docs, selectedUsers, type, selectedLabelsId} = args
     var parser = new xml2js.Parser()
     let task = new Task()
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
@@ -57,6 +64,17 @@ export class TaskService {
         users.push(user)
       })
       task.users = users
+    }
+    switch (type) {
+      case 'separateWordsProperty': {
+        let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })
+        task.wordsPropertyGroup = wordsPropertyGroup
+      }
+      case 'markEntity': {
+        let entitiesGroup = await this.EntitiesGroupRepository.findOne({ id: selectedLabelsId })
+        task.entitiesGroup = entitiesGroup
+      }
+      default: {}
     }
     task.name = args.name
     task.instruction = args.instruction

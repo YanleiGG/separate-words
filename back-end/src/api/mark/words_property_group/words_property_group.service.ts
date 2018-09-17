@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity';
 import { WordsProperty } from '../../../database/words_property/words_property.entity'
+import { Type } from '../../../database/type/type.entity'
 
 @Injectable()
 export class WordsPropertyGroupService {
@@ -9,7 +10,9 @@ export class WordsPropertyGroupService {
     @Inject('WordsPropertyGroupRepositoryToken')
     private readonly WordsPropertyGroupRepository: Repository<WordsPropertyGroup>,
     @Inject('WordsPropertyRepositoryToken')
-    private readonly WordsPropertyRepository: Repository<WordsProperty>
+    private readonly WordsPropertyRepository: Repository<WordsProperty>,
+    @Inject('TypeRepositoryToken')
+    private readonly TypeRepository: Repository<Type>,
   ) {}
 
   async findOne (id: number) {
@@ -38,6 +41,7 @@ export class WordsPropertyGroupService {
 
     let wordsPropertyGroup = new WordsPropertyGroup(), 
         {labels} = args
+    let type = await this.TypeRepository.findOne({ symbol: 'separateWordsProperty' })
     wordsPropertyGroup.name = name
     wordsPropertyGroup.words_propertys = []
     let res = await this.WordsPropertyGroupRepository.save(wordsPropertyGroup)
@@ -45,7 +49,6 @@ export class WordsPropertyGroupService {
       wordsPropertyGroup.words_propertys.push(await this.WordsPropertyRepository.findOne({ name: labels[i] }))
     }
     await this.WordsPropertyGroupRepository.save(wordsPropertyGroup)
-    // console.log(await this.WordsPropertyGroupRepository.find({ relations: ["words_propertys"] }))
     return {
       code: 0,
       msg: 'successed!',
