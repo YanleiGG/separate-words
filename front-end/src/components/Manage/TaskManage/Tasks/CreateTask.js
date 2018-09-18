@@ -167,7 +167,11 @@ let mapDispatchToProps = dispatch => {
       let tips = message.loading('创建中...')
       let res = await axios.post(`${path}/api/task`, createTask)
       message.destroy(tips)
-      message.success('创建成功!', 1.5)
+      if (res.data.code === 0) {
+        message.success('创建成功!', 1.5)
+      } else {
+        message.error(res.data.msg, 1.5)
+      }
       console.log(res)
     },
     cancel: () => {}
