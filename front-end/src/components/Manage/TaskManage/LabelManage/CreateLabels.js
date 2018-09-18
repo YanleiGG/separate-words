@@ -82,10 +82,10 @@ let mapDispatchToProps = dispatch => {
       })
     },
     typeChange: async value => {
-      let state = store.getState(), path = '', {createLabels} = state
-      if (value === 'separateWordsProperty') path = `${path}/api/words_property`
-      if (value === 'markEntity') path = `${path}/api/entities`
-      let res = await axios.get(path)
+      let state = store.getState(), url = '', {createLabels} = state
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property`
+      if (value === 'markEntity') url = `${path}/api/entities`
+      let res = await axios.get(url)
       dispatch({
         type: 'SET_CREATE_LABELS',
         createLabels: {
@@ -106,13 +106,13 @@ let mapDispatchToProps = dispatch => {
       })
     },
     create: async () => {
-      let state = store.getState(), path = '', {createLabels} = state
+      let state = store.getState(), url = '', {createLabels} = state
       let {type, labelsValue, name} = createLabels
       if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
-      if (type === 'separateWordsProperty') path = `${path}/api/words_property_group`
-      if (type === 'markEntity') path = `${path}/api/entities_group`
+      if (type === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      if (type === 'markEntity') url = `${path}/api/entities_group`
       let tips = message.loading('创建中...')
-      let res = await axios.post(path, { name, labels: labelsValue })
+      let res = await axios.post(url, { name, labels: labelsValue })
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('创建成功!', 1.5)

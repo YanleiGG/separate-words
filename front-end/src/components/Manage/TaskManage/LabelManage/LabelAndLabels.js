@@ -89,10 +89,10 @@ let mapDispatchToProps = dispatch => {
       })
     },
     labelTypeChange: async value => {
-      let state = store.getState(), path = ''
-      if (value === 'separateWordsProperty') path = `${path}/api/words_property`
-      if (value === 'markEntity') path = `${path}/api/entities`
-      let res = await axios.get(path), data = res.data.data
+      let state = store.getState(), url = ''
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property`
+      if (value === 'markEntity') url = `${path}/api/entities`
+      let res = await axios.get(url), data = res.data.data
       data.forEach(item => {
         item.key = item.id
       })
@@ -128,10 +128,10 @@ let mapDispatchToProps = dispatch => {
       })
     },
     labelsTypeChange: async value => {
-      let state = store.getState(), path = ''
-      if (value === 'separateWordsProperty') path = `${path}/api/words_property_group`
-      if (value === 'markEntity') path = `${path}/api/entities_group`
-      let res = await axios.get(path), data = res.data.data
+      let state = store.getState(), url = ''
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      if (value === 'markEntity') url = `${path}/api/entities_group`
+      let res = await axios.get(url), data = res.data.data
       console.log(res)
       data.forEach(item => {
         item.key = item.id

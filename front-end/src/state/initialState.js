@@ -128,7 +128,6 @@ export const initialState = {
       ]
     },
   },
-  tasks: {},
   createTask: {
     name: '',
     instruction: '',

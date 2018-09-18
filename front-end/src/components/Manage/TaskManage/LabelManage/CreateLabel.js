@@ -84,14 +84,14 @@ let mapDispatchToProps = dispatch => {
       })
     },
     create: async () => {
-      let state = store.getState(), path = ''
+      let state = store.getState(), url = ''
       let { createLabel } = store.getState()
       let { type, symbol, name } = createLabel
       if (!type || !symbol || !name) return message.info('请将所有内容填写完整!', 1.5)
-      if (type === 'separateWordsProperty') path = `${path}/api/words_property`
-      if (type === 'markEntity') path = `${path}/api/entities`
+      if (type === 'separateWordsProperty') url = `${path}/api/words_property`
+      if (type === 'markEntity') url = `${path}/api/entities`
       let tips = message.loading('创建中...')
-      let res = await axios.post(path, { symbol, name })
+      let res = await axios.post(url, { symbol, name })
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('创建成功!', 1.5)
