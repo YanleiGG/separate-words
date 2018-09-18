@@ -118,11 +118,11 @@ let mapDispatchToProps = dispatch => {
       })
     },
     typeChange: async value => {
-      let state = store.getState(), path = ''
-      let createTask = state.createTask
-      if (value === 'separateWordsProperty') path = `${path}/api/words_property_group`
-      if (value === 'markEntity') path = `${path}/api/entities_group`
-      let res = await axios.get(path), data = res.data.data
+      let state = store.getState()
+      let createTask = state.createTask, url = ''
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      if (value === 'markEntity') url = `${path}/api/entities_group`
+      let res = await axios.get(url), data = res.data.data
       console.log(data)
       dispatch({ 
         type: 'SET_CREATE_TASK',
