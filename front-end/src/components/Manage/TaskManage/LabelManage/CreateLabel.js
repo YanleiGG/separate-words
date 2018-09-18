@@ -1,4 +1,5 @@
 import React from 'react'
+import { path } from '../../../../config'
 import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../../state/store'
@@ -87,8 +88,8 @@ let mapDispatchToProps = dispatch => {
       let { createLabel } = store.getState()
       let { type, symbol, name } = createLabel
       if (!type || !symbol || !name) return message.info('请将所有内容填写完整!', 1.5)
-      if (type === 'separateWordsProperty') path = `${state.path}/api/words_property`
-      if (type === 'markEntity') path = `${state.path}/api/entities`
+      if (type === 'separateWordsProperty') path = `${path}/api/words_property`
+      if (type === 'markEntity') path = `${path}/api/entities`
       let tips = message.loading('创建中...')
       let res = await axios.post(path, { symbol, name })
       message.destroy(tips)

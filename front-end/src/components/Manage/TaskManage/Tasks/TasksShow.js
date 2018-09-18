@@ -1,4 +1,5 @@
 import React from 'react'
+import { path } from '../../../../config'
 import { Row, Col, Input, Select, message, Table } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../../state/store'
@@ -54,34 +55,9 @@ let mapDispatchToProps = dispatch => {
   return {
     created: async () => {
       let state = store.getState()
-      let res = await axios.get(`${state.path}/api/task`)
+      let res = await axios.get(`${path}/api/task`)
       if (res.data.code === 0) {
-        let data = res.data.tasks
-        data.forEach(item => {
-          let type = ''
-          let users = ''
-          let labels = ''
-          item.types.forEach((i, index) => {
-            type += index === item.types.length-1 ? i.name : i.name + '、'
-            switch (i.symbol) {
-              case "separateWordsProperty": {
-                labels += index === item.types.length-1 ? item.wordsPropertyGroup.name : item.wordsPropertyGroup.name + '、'
-                break;
-              }
-              case "markEntity": {
-                labels += index === item.types.length-1 ? item.markEntityGroup.name : item.markEntityGroup.name + '、'
-                break;
-              }
-              default: break;
-            }
-          })
-          item.users.forEach((i, index) => {
-            users += index === item.users.length-1 ? i.name : i.name + '、'
-          })
-          item.type = type
-          item.users = users
-          item.labels = labels
-        })
+        let data = format(res)
         dispatch({
           type: "SET_TASKS",
           tasks: {
@@ -89,15 +65,75 @@ let mapDispatchToProps = dispatch => {
             data
           }
         })
-        console.log(data)
       } else {
         message.error('获取任务信息失败！')
       }
     },
-    taskTypeChange: value => {
-      console.log(value)
+    taskTypeChange: async value => {
+      let state = store.getState()
+      if (value === 'all') {
+          let res = await axios.get(`${path}/api/task`)
+          if (res.data.code === 0) {
+            let data = format(res)
+            dispatch({
+              type: "SET_TASKS",
+              tasks: {
+                ...state.tasks,
+                data
+              }
+            })
+          } else {
+            message.error('获取任务信息失败！')
+          }
+        } else {
+          let res = await axios.get(`${path}/api/task/${value}`)
+          if (res.data.code === 0) {
+            let data = format(res)
+            dispatch({
+              type: "SET_TASKS",
+              tasks: {
+                ...state.tasks,
+                data
+              }
+            })
+          } else {
+            message.error('获取任务信息失败！')
+          }
+          console.log(res)
+        }
     }
   }
+}
+
+function format (res) {
+  let data = res.data.tasks
+  data.forEach(item => {
+    let type = ''
+    let users = ''
+    let labels = ''
+    item.types.forEach((i, index) => {
+      type += index === item.types.length-1 ? i.name : i.name + '、'
+      switch (i.symbol) {
+        case "separateWordsProperty": {
+          labels += index === item.types.length-1 ? item.wordsPropertyGroup.name : item.wordsPropertyGroup.name + '、'
+          break;
+        }
+        case "markEntity": {
+          labels += index === item.types.length-1 ? item.entitiesGroup.name : item.entitiesGroup.name + '、'
+          break;
+        }
+        default: break;
+      }
+    })
+    item.users.forEach((i, index) => {
+      users += index === item.users.length-1 ? i.name : i.name + '、'
+    })
+    item.type = type
+    item.users = users
+    item.labels = labels
+  })
+  console.log(data)
+  return data
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksShow)

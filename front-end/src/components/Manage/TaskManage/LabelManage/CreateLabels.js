@@ -1,4 +1,5 @@
 import React from 'react'
+import { path } from '../../../../config'
 import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../../state/store'
@@ -82,8 +83,8 @@ let mapDispatchToProps = dispatch => {
     },
     typeChange: async value => {
       let state = store.getState(), path = '', {createLabels} = state
-      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property`
-      if (value === 'markEntity') path = `${state.path}/api/entities`
+      if (value === 'separateWordsProperty') path = `${path}/api/words_property`
+      if (value === 'markEntity') path = `${path}/api/entities`
       let res = await axios.get(path)
       dispatch({
         type: 'SET_CREATE_LABELS',
@@ -108,8 +109,8 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState(), path = '', {createLabels} = state
       let {type, labelsValue, name} = createLabels
       if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
-      if (type === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
-      if (type === 'markEntity') path = `${state.path}/api/entities_group`
+      if (type === 'separateWordsProperty') path = `${path}/api/words_property_group`
+      if (type === 'markEntity') path = `${path}/api/entities_group`
       let tips = message.loading('创建中...')
       let res = await axios.post(path, { name, labels: labelsValue })
       message.destroy(tips)

@@ -1,4 +1,5 @@
 import React from 'react'
+import { path } from '../../../../config'
 import { connect } from "react-redux";
 import { Table, Row, Col, Select, Button, Tooltip } from 'antd'
 import axios from 'axios'
@@ -72,7 +73,7 @@ let mapDispatchToProps = dispatch => {
   return {
     labelRefresh: async () => {
       let state = store.getState()
-      let res = await axios.get(`${state.path}/api/words_property`)
+      let res = await axios.get(`${path}/api/words_property`)
       res.data.data.forEach(item => {
         item.key = item.id
       })
@@ -89,8 +90,8 @@ let mapDispatchToProps = dispatch => {
     },
     labelTypeChange: async value => {
       let state = store.getState(), path = ''
-      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property`
-      if (value === 'markEntity') path = `${state.path}/api/entities`
+      if (value === 'separateWordsProperty') path = `${path}/api/words_property`
+      if (value === 'markEntity') path = `${path}/api/entities`
       let res = await axios.get(path), data = res.data.data
       data.forEach(item => {
         item.key = item.id
@@ -109,7 +110,7 @@ let mapDispatchToProps = dispatch => {
     },
     labelsRefresh: async () => {
       let state = store.getState()
-      let res = await axios.get(`${state.path}/api/words_property_group`)
+      let res = await axios.get(`${path}/api/words_property_group`)
       console.log(res)
       let data = res.data.data
       data.forEach(item => {
@@ -128,8 +129,8 @@ let mapDispatchToProps = dispatch => {
     },
     labelsTypeChange: async value => {
       let state = store.getState(), path = ''
-      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
-      if (value === 'markEntity') path = `${state.path}/api/entities_group`
+      if (value === 'separateWordsProperty') path = `${path}/api/words_property_group`
+      if (value === 'markEntity') path = `${path}/api/entities_group`
       let res = await axios.get(path), data = res.data.data
       console.log(res)
       data.forEach(item => {

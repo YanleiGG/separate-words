@@ -1,4 +1,5 @@
 import React from 'react'
+import { path } from '../../../../config'
 import { Row, Col, Input, Select, Button, Upload, Icon, message } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../../state/store'
@@ -85,7 +86,7 @@ let mapDispatchToProps = dispatch => {
   return {
     created: async () => {
       let state = store.getState()
-      let res = await axios.get(`${state.path}/api/user/mark`)
+      let res = await axios.get(`${path}/api/user/mark`)
       console.log(res)
       let createTask = state.createTask
       dispatch({
@@ -119,8 +120,8 @@ let mapDispatchToProps = dispatch => {
     typeChange: async value => {
       let state = store.getState(), path = ''
       let createTask = state.createTask
-      if (value === 'separateWordsProperty') path = `${state.path}/api/words_property_group`
-      if (value === 'markEntity') path = `${state.path}/api/entities_group`
+      if (value === 'separateWordsProperty') path = `${path}/api/words_property_group`
+      if (value === 'markEntity') path = `${path}/api/entities_group`
       let res = await axios.get(path), data = res.data.data
       console.log(data)
       dispatch({ 
@@ -164,7 +165,7 @@ let mapDispatchToProps = dispatch => {
         return
       }
       let tips = message.loading('创建中...')
-      let res = await axios.post(`${state.path}/api/task`, createTask)
+      let res = await axios.post(`${path}/api/task`, createTask)
       message.destroy(tips)
       message.success('创建成功!', 1.5)
       console.log(res)
