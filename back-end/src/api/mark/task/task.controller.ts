@@ -15,6 +15,11 @@ export class TaskController {
     return this.TaskService.findByType(param.type);
   }
 
+  @Get(':id/articles/:type')
+  findATaskWithArticles(@Req() req, @Param() param){
+    return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type);
+  }
+
   // @Get(":id")
   // findOne (@Param() param) {
   //   return this.TaskService.findOne(param.id);
