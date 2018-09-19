@@ -14,9 +14,9 @@ class CreateTask extends React.Component {
   }
   render() {
     let { 
-      nameChange, instructionChange, 
+      nameChange, instructionChange, markUsers,
       typeChange, labels, labelChange, create, 
-      cancel, selectedLabelsId 
+      cancel, selectedLabelsId, selectedUsers, userChange
     } = this.props
     return (
       <div style={{textAlign: 'left'}}>
@@ -58,6 +58,15 @@ class CreateTask extends React.Component {
             <UploadDocs/>
           </Col>
         </Row>
+        <Row style={{ marginBottom: '10px' }}>
+          <Col span={8} push={8}>
+            <div style={{ marginBottom: '10px' }}>任务分配至：</div>
+            <Select mode="multiple" style={{ width: '100%' }} value={selectedUsers} onChange={userChange}>
+              {markUsers.length > 0 ? <Option value="all">全部标注成员</Option> : null}
+              {markUsers.map(item => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+            </Select>
+          </Col>
+        </Row>        
         <Row style={{ marginTop: '20px', textAlign: 'center' }}>
           <Col span={10} push={7}>
             <Button onClick={ create } type="primary">创建</Button>
@@ -135,12 +144,23 @@ let mapDispatchToProps = dispatch => {
         }
       })
     },
+    userChange: value => {
+      let createTask = store.getState().createTask
+      if (value.indexOf('all') != -1) value = ['all']
+      dispatch({
+        type: 'SET_CREATE_TASK',
+        createTask: {
+          ...createTask,
+          selectedUsers: value
+        }
+      })
+    },    
     create: async () => {
       let state = store.getState()
       let {createTask} = state
-      let { name, instruction, type, selectedLabelsId, docs } = createTask
+      let { name, instruction, type, selectedLabelsId, selectedUsers, docs } = createTask
       console.log(createTask)
-      if (!name || !instruction || !type || selectedLabelsId === null || docs.length == 0) {
+      if (!name || !instruction || !type || selectedLabelsId === null || docs.length == 0 || selectedUsers.length == 0) {
         message.error('请将所有内容填写完整!', 1.5)
         return
       }

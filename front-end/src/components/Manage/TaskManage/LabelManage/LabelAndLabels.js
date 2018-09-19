@@ -1,7 +1,7 @@
 import React from 'react'
 import { path } from '../../../../config'
 import { connect } from "react-redux";
-import { Table, Row, Col, Select, Button, Tooltip } from 'antd'
+import { Table, Row, Col, Select, Button, Tooltip, Icon } from 'antd'
 import axios from 'axios'
 import store from '../../../../state/store'
 
@@ -15,7 +15,7 @@ class LabelAndLabels extends React.Component {
   }
 
   render() {
-    let { labels, label, labelTypeChange, labelsTypeChange } = this.props
+    let { labels, label, labelTypeChange, labelsTypeChange, labelRefresh, labelsRefresh } = this.props
 
     return (
       <div>
@@ -27,6 +27,7 @@ class LabelAndLabels extends React.Component {
               <Option value="markEntity">实体标注</Option>
               <Option value="emotion">情感标注</Option>
             </Select>
+            <Button style={{float: 'right'}} onClick={labelRefresh}>刷新</Button>
           </Col>
           <Col span={10}>
             <Select style={{ width: '50%' }} onChange={labelsTypeChange} placeholder="标签集合类型" defaultValue='separateWordsProperty'>
@@ -35,6 +36,7 @@ class LabelAndLabels extends React.Component {
               <Option value="markEntity">实体标注</Option>
               <Option value="emotion">情感标注</Option>
             </Select>
+            <Button style={{float: 'right'}} onClick={labelsRefresh}>刷新</Button>
           </Col>
         </Row>
         <Row type='flex' justify='space-around'>
@@ -54,7 +56,7 @@ class LabelAndLabels extends React.Component {
                   }) : null }
                   { record.entities ? record.entities.map((item, index, arr) => {
                       return index === arr.length-1 ? item.name : item.name + '、'
-                  }) : null }                  
+                  }) : null }        
                 </div>
               )}/>
             </Table>

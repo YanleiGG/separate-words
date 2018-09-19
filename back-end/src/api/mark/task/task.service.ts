@@ -75,6 +75,18 @@ export class TaskService {
 
     let task = new Task()
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
+    // 这里后面需要修改，暂时把所有用户都与任务建立关系，后面把用户权限做好了只需要标注用户就行
+    if (selectedUsers[0]==='all') {
+      let users = await this.UserRepository.find()
+      task.users = users
+    } else {
+      let users = []
+      await selectedUsers.map(async item => {
+        let user = await this.UserRepository.findOne({ name: item })
+        users.push(user)
+      })
+      task.users = users
+    }    
     switch (type) {
       case 'separateWordsProperty': {
         let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })

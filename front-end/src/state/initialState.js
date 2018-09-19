@@ -135,6 +135,8 @@ export const initialState = {
     labels: [],
     selectedLabelsId: null,
     docs: [],
+    markUsers: [],
+    selectedUsers: []
   },
   createLabels: {
     type: '',
@@ -160,6 +162,7 @@ export const initialState = {
     }
   },
   tasks: {
-    data: []
+    data: [],
+    type: ''
   }
 };

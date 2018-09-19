@@ -1,8 +1,8 @@
 import React from 'react'
-import { path } from '../../../../config'
-import { Row, Col, Input, Select, message, Table, Button } from 'antd'
+import { path } from '../../config'
+import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
-import store from '../../../../state/store'
+import store from '../../state/store'
 import axios from 'axios'
 
 const Option = Select.Option;
@@ -13,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh } = this.props
+    let { taskTypeChange, data, tasksRefresh, startTask } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -40,6 +40,16 @@ class TasksShow extends React.Component {
               <Column title="任务状态" key="state" dataIndex="state"/>
               <Column title="标签集合" key="labels" dataIndex="labels"/>
               <Column title="标注人员" key="users" dataIndex="users"/>
+              <Column 
+                title="操作" 
+                key="action" 
+                dataIndex="action"
+                render={(text, record) => (
+                  <span onClick={() => startTask(record.id)}>
+                    <a>开始任务</a>
+                  </span>
+                )}
+              />
             </Table>
           </Col>
         </Row>
@@ -63,6 +73,9 @@ let mapDispatchToProps = dispatch => {
     },
     taskTypeChange: async value => {
       refresh(value)
+    },
+    startTask: (id) => {
+      console.log(id)
     }
   }
 }
