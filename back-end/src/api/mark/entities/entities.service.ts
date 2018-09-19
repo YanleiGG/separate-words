@@ -16,7 +16,7 @@ export class EntitiesService {
     if (offset != undefined) {
       data = entities.reverse().splice(offset, pageSize)
     } else {
-      data = entities
+      data = entities.reverse()
     }
     return {
       code: 0,

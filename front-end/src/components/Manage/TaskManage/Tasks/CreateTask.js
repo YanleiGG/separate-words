@@ -14,9 +14,9 @@ class CreateTask extends React.Component {
   }
   render() {
     let { 
-      userChange, nameChange, instructionChange, 
+      nameChange, instructionChange, 
       typeChange, labels, labelChange, create, 
-      cancel, markUsers, selectedUsers, selectedLabelsId 
+      cancel, selectedLabelsId 
     } = this.props
     return (
       <div style={{textAlign: 'left'}}>
@@ -56,15 +56,6 @@ class CreateTask extends React.Component {
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>上传语料：</div>
             <UploadDocs/>
-          </Col>
-        </Row>
-        <Row style={{ marginBottom: '10px' }}>
-          <Col span={8} push={8}>
-            <div style={{ marginBottom: '10px' }}>任务分配至：</div>
-            <Select mode="multiple" style={{ width: '100%' }} value={selectedUsers} onChange={userChange}>
-              {markUsers.length > 0 ? <Option value="all">全部标注成员</Option> : null}
-              {markUsers.map(item => <Option value={item.id} key={item.id}>{item.name}</Option>)}
-            </Select>
           </Col>
         </Row>
         <Row style={{ marginTop: '20px', textAlign: 'center' }}>
@@ -144,24 +135,13 @@ let mapDispatchToProps = dispatch => {
         }
       })
     },
-    userChange: value => {
-      let createTask = store.getState().createTask
-      if (value.indexOf('all') != -1) value = ['all']
-      dispatch({
-        type: 'SET_CREATE_TASK',
-        createTask: {
-          ...createTask,
-          selectedUsers: value
-        }
-      })
-    },
     create: async () => {
       let state = store.getState()
       let {createTask} = state
-      let { name, instruction, type, selectedLabelsId, selectedUsers, docs } = createTask
+      let { name, instruction, type, selectedLabelsId, docs } = createTask
       console.log(createTask)
-      if (!name || !instruction || !type || selectedLabelsId === null || selectedUsers.length == 0 || docs.length == 0) {
-        let tips = message.error('请将所有内容填写完整!', 1.5)
+      if (!name || !instruction || !type || selectedLabelsId === null || docs.length == 0) {
+        message.error('请将所有内容填写完整!', 1.5)
         return
       }
       let tips = message.loading('创建中...')

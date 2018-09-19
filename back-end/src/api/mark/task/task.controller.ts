@@ -10,10 +10,15 @@ export class TaskController {
     return this.TaskService.find(req.query.offset, req.query.pageSize);
   }
 
-  @Get(":id")
-  findOne (@Param() param) {
-    return this.TaskService.findOne(param.id);
+  @Get(':type')
+  findByType(@Param() param) {
+    return this.TaskService.findByType(param.type);
   }
+
+  // @Get(":id")
+  // findOne (@Param() param) {
+  //   return this.TaskService.findOne(param.id);
+  // }
 
   @Post()
   create(@Body() body){

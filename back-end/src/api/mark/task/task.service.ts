@@ -39,32 +39,42 @@ export class TaskService {
     }
   }
 
+  async findByType(type) {
+    let tasks =  await this.TaskRepository.find({ relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] });
+    let totalCount = tasks.length
+    tasks = tasks.filter(item => {
+      return item.types.some(i => i.symbol === type)
+    })
+    return {
+      code: 0,
+      msg: 'find successed!',
+      totalCount,
+      tasks
+    }
+  }
+
   async findOne (id: number) {
     let tasks =  await this.TaskRepository.findOne({ id });
     return {
       code: 0,
-      msg: 'update successed!',
+      msg: 'find successed!',
       tasks
     }
   }
 
   async create (args) {
-    let {docs, selectedUsers, type, selectedLabelsId} = args
-    var parser = new xml2js.Parser()
+    let {name, docs, selectedUsers, type, selectedLabelsId} = args
+    let sameName = await this.TaskRepository.find({ name })
+    if (sameName.length > 0) {
+      return {
+        code: 10001,
+        msg: '任务名称已存在!',
+        data: null        
+      }
+    }
+
     let task = new Task()
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
-    // 这里后面需要修改，暂时把所有用户都与任务建立关系，后面把用户权限做好了只需要标注用户就行
-    if (selectedUsers[0]==='all') {
-      let users = await this.UserRepository.find()
-      task.users = users
-    } else {
-      let users = []
-      await selectedUsers.map(async item => {
-        let user = await this.UserRepository.findOne({ name: item })
-        users.push(user)
-      })
-      task.users = users
-    }
     switch (type) {
       case 'separateWordsProperty': {
         let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })
@@ -80,29 +90,38 @@ export class TaskService {
     task.instruction = args.instruction
     task.types = [type_1]
     task.state = '进行中'
-    for (let i = 0;i < docs.length;i++) {
-      let path = __dirname.replace(/\/api\/mark\/task/, `/static/docs/${docs[i]}`)
-      fs.readFile(path, (err, data) => {
-        parser.parseString(data, async (err, result) => {
-          if (result.doc) {
-            let docs = result.doc.doc
-            await docs.map(async item => {
-              let article = new Article()
-              article.title = item.title[0]
-              article.text = item.text[0]
-              article.task = task
-              await this.ArticleRepository.save(article)
-            })
-          }
-        })
-      })
-    }
-
+    await this.readXml(docs, task)
     await this.TaskRepository.save(task)
     return {
       code: 0,
       msg: 'create successed!',
       task
+    }
+  }
+
+  async readXml (docs, task) {
+    for (let i = 0;i < docs.length;i++) {
+      var parser = new xml2js.Parser()
+      let path = __dirname.replace(/\/api\/mark\/task/, `/static/docs/${docs[i]}`)
+      fs.readFile(path, async (err, data) => {
+        await parser.parseString(data, async (err, result) => {
+          if (result.docs) {
+            let docs = result.docs.doc
+            await docs.map(async item => {
+              let article = new Article()
+              article.title = item.title ? item.title[0] : null
+              article.text = item.text ? item.text[0] : null
+              article.task = task
+              await this.ArticleRepository.save(article)
+            })
+          } else {
+            return {
+              code: 10002,
+              msg: `${docs[i]}无法解析!`
+            }
+          }
+        })
+      })
     }
   }
 
