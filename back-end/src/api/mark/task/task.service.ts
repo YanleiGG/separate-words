@@ -54,7 +54,7 @@ export class TaskService {
   }
 
   async findATaskWithArticles(taskId, offset, pageSize, type) {
-    let relations = ['articles','users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] 
+    let relations = ['articles','users', 'types', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys', 'entitiesGroup'] 
     switch(type){
       case "separateWordsProperty": relations.push('articles.sep_words_property')
       case "markEntity": relations.push('articles.mark_entity')

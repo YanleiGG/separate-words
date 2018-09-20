@@ -58,8 +58,14 @@ export function formatWithProperty (data) {
   return res.substr(0, res.length-1)
 } 
 
-export function unformatWithProperty (formatedStr) {
-  if (!formatedStr) return []
+export function unformatWithProperty (formatedStr, firstFormat) {
+  if (firstFormat) {
+    let tempStr = ''
+    for (let i = 0;i <formatedStr.length;i++) {
+      tempStr += formatedStr[i] + '/ '
+    }
+    formatedStr = tempStr
+  }
   let arr = formatedStr.split(' ')
   let res = arr.map((item, index) => {
     let data = item.split('/')

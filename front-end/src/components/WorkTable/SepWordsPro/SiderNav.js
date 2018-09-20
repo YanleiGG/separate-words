@@ -40,27 +40,39 @@ let refresh = async dispatch => {
   let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
   console.log(res)
-  let articles = res.data.data.task.articles
+  let task = res.data.data.task
+  let articles = task.articles
   let siderNavData = articles.map((item, index) => {
     let firstFromatSepWords = false, firstFromatSepWordsPro = false
-    if (!item.sep_words_property || !item.sep_words_property.separateWords) firstFromatSepWords = true
-    if (!item.sep_words_property || !item.sep_words_property.separateWordsProperty) firstFromatSepWordsPro = true
-    let sep_words_propertys = item.sep_words_property || { separateWords: item.text, separateWordsProperty: item.text } 
-    articles[index].showContent = unformatWithoutProperty(sep_words_propertys.separateWords, firstFromatSepWords)
-    articles[index].showPro = unformatWithProperty(sep_words_propertys.separateWordsProperty)
+    let { sep_words_property } = item
+    if (sep_words_property === null) sep_words_property = {}
+    if (!sep_words_property || !sep_words_property.separateWords) {
+      firstFromatSepWords = true
+      sep_words_property.separateWords = item.text
+    }
+    if (!sep_words_property || !sep_words_property.separateWordsProperty) {
+      firstFromatSepWordsPro = true
+      sep_words_property.separateWordsProperty = item.text
+    }
+    articles[index].sep_words_property = sep_words_property
+    articles[index].showContent = unformatWithoutProperty(sep_words_property.separateWords, firstFromatSepWords)
+    articles[index].showPro = unformatWithProperty(sep_words_property.separateWordsProperty, firstFromatSepWordsPro)
     return {
       id: item.id,
       title: item.title || '无标题'
     }
   })
-  console.log(siderNavData)
+  let propertys = task.wordsPropertyGroup.words_propertys.map(item => {
+    return { label: item.name, value: item.symbol }
+  })
   dispatch({
     type: "SET_SEP_WORDS_PRO",
     sepWordsPro: {
       ...state.sepWordsPro,
       articles,
       siderNavData,
-      totalCount
+      totalCount,
+      propertys
     }
   })
 }

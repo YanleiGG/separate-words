@@ -28,7 +28,7 @@ let mapDispatchToProps = dispatch => {
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)
-        articles[showIndex].sep_words_property.id = res.data.data.id
+        if(!articles[showIndex].sep_words_property) articles[showIndex].sep_words_property = {id: res.data.data.id}
         dispatch({
           type: "SET_SEP_WORDS_PRO",
           sepWordsPro: {

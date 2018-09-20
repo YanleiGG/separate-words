@@ -1,11 +1,7 @@
 import * as React from "react";
-import { Modal, Radio, Pagination } from "antd";
 import { Layout } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
-import axios from 'axios'
-import { unformatWithoutProperty } from '../../../../util'
-
 import FooterBtn from './FooterBtn'
 
 const { Content, Footer, Sider } = Layout;

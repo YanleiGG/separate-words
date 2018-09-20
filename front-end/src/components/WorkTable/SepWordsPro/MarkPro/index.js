@@ -1,24 +1,24 @@
 import * as React from "react";
-import { Modal, Radio, Pagination } from "antd";
 import { Layout, Popover } from "antd";
 import { connect } from "react-redux";
-import store from '../../../../state/store'
-import axios from 'axios'
-import { unformatWithoutProperty } from '../../../../util'
 
 import FooterBtn from './FooterBtn'
 import PopoverContent from './PopoverContent'
+import axios from "axios";
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 class MarkPro extends React.Component {
+  componentWillMount() {
+    this.props.created()
+  }
   render() {
     let { articles, showIndex } = this.props
     let showPro = articles.length > 0 ? articles[showIndex].showPro : []
     return (
       <Layout>
         <Layout>
-          <Content style={{ padding: '15px', fontSize: '20px' }}>
+          <Content style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }}>
             {showPro.map((item, index) => {
               return  <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
                         <span key={item.id} style={{cursor:'pointer'}}>{ item.content + '|' }</span>
@@ -41,7 +41,11 @@ let mapStateToProps = state => {
 }
 
 let mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    created: async () => {
+      // let res = await axios.get()
+    }
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarkPro)

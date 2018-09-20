@@ -15,9 +15,10 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState()
       let { showIndex, articles } = state.sepWordsPro
       let showPro = articles[showIndex].showPro
-      articles[showIndex].separateWordsProperty = formatWithProperty(showPro)
+      console.log(articles[showIndex])
+      articles[showIndex].sep_words_property.separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
-      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...articles[showIndex]})
+      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...articles[showIndex].sep_words_property})
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)
