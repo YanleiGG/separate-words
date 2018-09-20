@@ -160,6 +160,12 @@ const reducer = (state = initialState, action) => {
         tasks: action.tasks
       })    
     }
+    case "SET_TASK_ID": {
+      return Object.assign({}, state, {
+        ...state,
+        taskId: action.taskId
+      }) 
+    }
     default:
       return state;
   }

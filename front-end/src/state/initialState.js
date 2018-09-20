@@ -58,9 +58,9 @@ export const initialState = {
     }
   },
   sepWordsPro: {
-    sep_words_propertys: [],
+    articles: [],
     SiderNavData: [],
-    totalCount: 0,
+    totalCount: 1,
     page: 1,
     selectedKeys: [],
     showIndex: 0,
@@ -164,5 +164,6 @@ export const initialState = {
   tasks: {
     data: [],
     type: ''
-  }
+  },
+  taskId: 27
 };

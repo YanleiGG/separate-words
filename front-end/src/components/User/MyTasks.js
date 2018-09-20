@@ -4,6 +4,7 @@ import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
 import store from '../../state/store'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const Option = Select.Option;
 const { Column } = Table;
@@ -45,8 +46,9 @@ class TasksShow extends React.Component {
                 key="action" 
                 dataIndex="action"
                 render={(text, record) => (
-                  <span onClick={() => startTask(record.id)}>
+                  <span onClick={() => startTask(record.id, record.types[0].symbol)}>
                     <a>开始任务</a>
+                    <Link to='/table/sepWordsPro' id='toSepWordsPro'/>
                   </span>
                 )}
               />
@@ -74,47 +76,47 @@ let mapDispatchToProps = dispatch => {
     taskTypeChange: async value => {
       refresh(value)
     },
-    startTask: (id) => {
-      console.log(id)
+    startTask: async (id, type) => {
+      store.dispatch({
+        type: 'SET_TASK_ID',
+        taskId: id
+      })
+      console.log(type)
+      switch(type){
+        case 'separateWordsProperty': {
+          document.getElementById('toSepWordsPro').click()
+        }
+      }
     }
   }
 }
 
 async function refresh(value) {
   let state = store.getState()
+  let tips = message.loading('获取数据中...')
+  let res
   if (value === 'all') {
-      let res = await axios.get(`${path}/api/task`)
-      if (res.data.code === 0) {
-        let data = format(res)
-        store.dispatch({
-          type: "SET_TASKS",
-          tasks: {
-            ...state.tasks,
-            data,
-            type: value
-          }
-        })
-      } else {
-        message.error('获取任务信息失败！')
-      }
+      res = await axios.get(`${path}/api/task`)
     } else {
-      let res = await axios.get(`${path}/api/task/${value}`)
-      if (res.data.code === 0) {
-        let data = format(res)
-        store.dispatch({
-          type: "SET_TASKS",
-          tasks: {
-            ...state.tasks,
-            data,
-            type: value
-          }
-        })
-      } else {
-        message.error('获取任务信息失败！')
-      }
-      console.log(res)
+      res = await axios.get(`${path}/api/task/${value}`)
     }
-}
+    message.destroy(tips)
+    if (res.data.code === 0) {
+      let data = format(res)
+      store.dispatch({
+        type: "SET_TASKS",
+        tasks: {
+          ...state.tasks,
+          data,
+          type: value
+        }
+      })
+      message.success('数据获取成功！', 1.5)
+    } else {
+      message.error('获取任务信息失败！', 1.5)
+    }
+    console.log(res)
+  }
 
 function format (res) {
   let data = res.data.tasks

@@ -10,7 +10,7 @@ class HeaderNav_UI extends React.Component {
       <Menu
         mode="horizontal"
         theme="dark"
-        style={{ lineHeight: '64px' }}
+        style={{ lineHeight: '64px', position: 'fixed', zIndex: 1, width: '100%' }}
       >
         {/* <span style={style.title}>{ headerNavData.title }</span> */}
         {headerNavData.data.map(item => {

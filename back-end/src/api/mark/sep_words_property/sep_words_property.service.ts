@@ -35,9 +35,7 @@ export class SepWordsPropertyService {
 
   async create (args) {
     let sep_words_property = new SepWordsProperty()
-    let article = new Article()
-    article.text = args.text
-    article.title = args.title
+    let article = await this.ArticleRepository.findOne({ id: args.articleId })
     sep_words_property.separateWords = args.separateWords || null
     sep_words_property.separateWordsProperty = args.separateWordsProperty || null
     sep_words_property.article = article
@@ -46,7 +44,7 @@ export class SepWordsPropertyService {
     return {
       code: 0,
       msg: 'create successed!',
-      sep_words_property
+      data: sep_words_property
     }
   }
 
@@ -58,7 +56,7 @@ export class SepWordsPropertyService {
     return {
       code: 0,
       msg: 'update successed!',
-      sep_words_property
+      data: sep_words_property
     }
   }
 

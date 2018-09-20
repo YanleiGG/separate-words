@@ -12,8 +12,8 @@ const { Content, Footer, Sider } = Layout;
 
 class SepWords extends React.Component {
   render() {
-    let { pickWords, sep_words_propertys, showIndex } = this.props
-    let showContent = sep_words_propertys.length > 0 ? sep_words_propertys[showIndex].showContent : []
+    let { pickWords, articles, showIndex } = this.props
+    let showContent = articles.length > 0 ? articles[showIndex].showContent : []
     return (
       <Layout>
         <Layout>
@@ -43,10 +43,10 @@ let mapDispatchToProps = dispatch => {
     pickWords: () => {
       if (window.getSelection().toString()) {
         let state = store.getState()
-        let sep_words_propertys = state.sepWordsPro.sep_words_propertys
+        let articles = state.sepWordsPro.articles
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
-        let showContent = sep_words_propertys[state.sepWordsPro.showIndex].showContent
+        let showContent = articles[state.sepWordsPro.showIndex].showContent
         if (showContent[start].content == '|' && start == end-1) return
         if (showContent[start - 1] && showContent[start - 1].content != '|') {
           showContent.splice(start, 0, { id: null, content: '|' })
@@ -59,12 +59,12 @@ let mapDispatchToProps = dispatch => {
         for (let i = end - 1; i >= start; i--) {
           if (showContent[i] && showContent[i].content == '|') showContent.splice(i, 1)
         }
-        sep_words_propertys[state.sepWordsPro.showIndex].showContent = showContent
+        articles[state.sepWordsPro.showIndex].showContent = showContent
         dispatch({
           type: "SET_SEP_WORDS_PRO",
           sepWordsPro: {
             ...state.sepWordsPro,
-            sep_words_propertys
+            articles
           }
         })
         window.getSelection().removeAllRanges()

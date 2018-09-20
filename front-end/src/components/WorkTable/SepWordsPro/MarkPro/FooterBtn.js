@@ -13,11 +13,11 @@ let mapDispatchToProps = dispatch => {
   return {
     save: async () => {
       let state = store.getState()
-      let { showIndex, sep_words_propertys } = state.sepWordsPro
-      let showPro = sep_words_propertys[showIndex].showPro
-      sep_words_propertys[showIndex].separateWordsProperty = formatWithProperty(showPro)
+      let { showIndex, articles } = state.sepWordsPro
+      let showPro = articles[showIndex].showPro
+      articles[showIndex].separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
-      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_propertys[showIndex]})
+      let res = await axios.put(`${state.path}/api/sep_words_property`, { ...articles[showIndex]})
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)

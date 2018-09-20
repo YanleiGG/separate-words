@@ -7,8 +7,8 @@ const RadioGroup = Radio.Group
 
 class PopoverContent extends React.Component {
   render () {
-    let { propertys, index, optionsChange, sep_words_propertys, showIndex } = this.props
-    let showPro = sep_words_propertys[showIndex].showPro
+    let { propertys, index, optionsChange, articles, showIndex } = this.props
+    let showPro = articles[showIndex].showPro
     return (
       <Row style={{width: 400}}>
         <RadioGroup name="radiogroup" defaultValue={showPro[index].type} onChange={optionsChange.bind(this, index)}>
@@ -37,12 +37,12 @@ let mapDispatchToProps = dispatch => {
     optionsChange: (index, e) => {
       let state = store.getState()
       let showIndex = state.sepWordsPro.showIndex
-      let sep_words_propertys = state.sepWordsPro.sep_words_propertys
-      sep_words_propertys[showIndex].showPro[index].type = e.target.value
-      console.log(sep_words_propertys[showIndex].showPro[index].type)
+      let articles = state.sepWordsPro.articles
+      articles[showIndex].showPro[index].type = e.target.value
+      console.log(articles[showIndex].showPro[index].type)
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
-        sep_words_propertys
+        articles
       }})
     }
   }

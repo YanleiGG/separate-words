@@ -13,8 +13,8 @@ const { Content, Footer, Sider } = Layout;
 
 class MarkPro extends React.Component {
   render() {
-    let { sep_words_propertys, showIndex } = this.props
-    let showPro = sep_words_propertys.length > 0 ? sep_words_propertys[showIndex].showPro : []
+    let { articles, showIndex } = this.props
+    let showPro = articles.length > 0 ? articles[showIndex].showPro : []
     return (
       <Layout>
         <Layout>

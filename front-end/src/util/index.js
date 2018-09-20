@@ -19,7 +19,14 @@ export function formatWithoutProperty (data) {
   return res
 }
 
-export function unformatWithoutProperty (formatedStr) {
+export function unformatWithoutProperty (formatedStr, firstFormat) {
+  if (firstFormat) {
+    let tempStr = ''
+    for (let i = 0;i <formatedStr.length;i++) {
+      tempStr += formatedStr[i] + 'S'
+    }
+    formatedStr = tempStr
+  }
   let start, end, count = 0, content = '', format = ''
   for (let i = 0;i <formatedStr.length;i++) {
     if (i % 2 == 0) {
@@ -52,6 +59,7 @@ export function formatWithProperty (data) {
 } 
 
 export function unformatWithProperty (formatedStr) {
+  if (!formatedStr) return []
   let arr = formatedStr.split(' ')
   let res = arr.map((item, index) => {
     let data = item.split('/')
