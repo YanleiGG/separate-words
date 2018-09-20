@@ -17,7 +17,7 @@ class SepWords extends React.Component {
     return (
       <Layout>
         <Layout>
-          <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
+          <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }} id="content">
               {showContent.map((i, index) => {
                 return <span key={index} id={index}>{i.content}</span>
               })}

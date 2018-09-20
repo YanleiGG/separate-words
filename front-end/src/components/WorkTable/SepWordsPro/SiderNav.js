@@ -28,7 +28,7 @@ class SiderNav_UI extends React.Component {
               return <Menu.Item  onClick={() => handleClick(i.id)} key={i.id} >{ i.title }</Menu.Item>
             })}
           </Menu>
-          <Pagination style={{marginTop: "-60px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+          <Pagination style={{marginTop: "-200px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
         </Sider>
     )
   }

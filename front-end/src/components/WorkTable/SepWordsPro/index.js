@@ -13,7 +13,7 @@ class SepWordsPro extends React.Component {
   render () {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Header>
+        <Header style={{padding: 0}}>
           <HeaderNav/>
         </Header>
         <Content>
