@@ -1,6 +1,3 @@
-import store from '../state/store'
-import axios from 'axios'
-
 export function formatWithoutProperty (data) {
   let str = '', res = ''
   data.forEach(item => {

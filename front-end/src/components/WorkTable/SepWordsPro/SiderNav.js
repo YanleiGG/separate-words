@@ -3,7 +3,7 @@ import { Menu, Icon, Tooltip, Modal, message, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
-import { unformatWithoutProperty, unformatWithProperty } from '../../../util'
+import { unformatWithoutProperty, unformatWithProperty, formatWithoutProperty, formatWithProperty } from '../../../util'
 import { path } from '../../../config'
 
 const { Sider } = Layout;
@@ -54,9 +54,12 @@ let refresh = async dispatch => {
       firstFromatSepWordsPro = true
       sep_words_property.separateWordsProperty = item.text
     }
-    articles[index].sep_words_property = sep_words_property
     articles[index].showContent = unformatWithoutProperty(sep_words_property.separateWords, firstFromatSepWords)
     articles[index].showPro = unformatWithProperty(sep_words_property.separateWordsProperty, firstFromatSepWordsPro)
+    articles[index].sep_words_property = {
+      separateWords: formatWithoutProperty(articles[index].showContent),
+      separateWordsProperty: formatWithProperty(articles[index].showPro)
+    }
     return {
       id: item.id,
       title: item.title || '无标题'
