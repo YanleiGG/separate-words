@@ -19,16 +19,14 @@ let mapDispatchToProps = dispatch => {
       sep_words_property.separateWords = formatWithoutProperty(showContent)
       let tips = message.loading('保存中...')
       let res
-      if (sep_words_property.id){
-        res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_property })
-      } else {
-        res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
-      }
+      console.log(sep_words_property)
+      res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
       console.log(res)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)
         if(!articles[showIndex].sep_words_property) articles[showIndex].sep_words_property = {id: res.data.data.id}
+        if(!articles[showIndex].sep_words_property.id) articles[showIndex].sep_words_property.id = res.data.data.id
         dispatch({
           type: "SET_SEP_WORDS_PRO",
           sepWordsPro: {

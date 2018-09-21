@@ -35,7 +35,12 @@ export class SepWordsPropertyService {
 
   async create (args) {
     let sep_words_property = new SepWordsProperty()
-    let article = await this.ArticleRepository.findOne({ id: args.articleId })
+    let article = await this.ArticleRepository.findOne({ 
+      where: {id: args.articleId},
+      relations: ['sep_words_property']
+    })
+    console.log(article.sep_words_property)
+    if(article.sep_words_property) return this.update({...args, id: article.sep_words_property.id})
     sep_words_property.separateWords = args.separateWords || null
     sep_words_property.separateWordsProperty = args.separateWordsProperty || null
     sep_words_property.article = article

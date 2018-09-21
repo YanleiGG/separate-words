@@ -20,11 +20,7 @@ let mapDispatchToProps = dispatch => {
       let tips = message.loading('保存中...')
       let res
       console.log(articles[showIndex])
-      if (sep_words_property.id){
-        res = await axios.put(`${state.path}/api/sep_words_property`, { ...sep_words_property })
-      } else {
-        res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
-      }
+      res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
       message.destroy(tips)
       if (res.data.code == 0) {
         sep_words_property.id = res.data.data.id
