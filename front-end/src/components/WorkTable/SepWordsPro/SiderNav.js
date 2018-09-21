@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Icon, Tooltip, Modal, message, Pagination, Layout } from 'antd';
+import { Menu, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
@@ -25,7 +25,7 @@ class SiderNav_UI extends React.Component {
             selectedKeys = { selectedKeys }
           >
             {siderNavData.map(i => {
-              return <Menu.Item  onClick={() => handleClick(i.id)} key={i.id} >{ i.title }</Menu.Item>
+              return <Menu.Item onClick={() => handleClick(i.id)} key={i.id} >{ i.title }</Menu.Item>
             })}
           </Menu>
           <Pagination style={{marginTop: "-200px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />

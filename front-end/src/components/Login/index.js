@@ -32,7 +32,7 @@ class Login extends React.Component {
             onChange={passwordChange}
           />
           <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
-          <Link to='/WorkTable/separate-words' id="login"></Link>
+          <Link to='/user/myTasks' id="login"></Link>
         </Content>
       </Layout>
     )
@@ -58,8 +58,11 @@ let mapDispatchToProps = dispatch => {
       })
       message.destroy(tips)
       if (res.data.code != 0) return message.error('登录失败，账号或密码错误！')
+      console.log(res)
       dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
+      dispatch({ type: 'SET_USER', user: res.data.user })
       document.getElementById('login').click()
+      
     },
     usernameChange: e => dispatch({ type: "SET_USERNAME", username: e.target.value }),
     passwordChange: e => dispatch({ type: "SET_PASSWORD", password: e.target.value })

@@ -9,34 +9,13 @@ export const initialState = {
   totalCount: 0,
   path: 'http://localhost:3000',
   selectedKeys: [],
-  articles: [
-    { 
-      id: null,
-      title: '',
-      content: '',
-      separateWords: [],
-      separateWordsProperty: [],
-      markEntity: []
-    }
-  ],
   selection: {
     content: '',
     start: 0,
     end: 0
   },
-  showArticle: { 
-    id: null,
-    title: '',
-    content: '',
-    separateWords: [],
-    separateWordsProperty: [],
-    markEntity: []
-  },
-  createArticle: '',
-  createArticleTitle: '',
-  createArticleSelected: [],
   username: 'admin',
-  password: '123456',
+  password: '123',
   classData: [],
   ClassListAddInputValue: '',
   addClassVisible: false,
@@ -118,5 +97,9 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 25
+  taskId: 25, //设一个默认值，方便调试，实际设为null
+  user: {
+    id: 1,  //设一个默认值，方便调试，实际设为null
+    name: ''
+  }
 };

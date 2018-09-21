@@ -15,6 +15,15 @@ export class TaskController {
     return this.TaskService.findByType(param.type);
   }
 
+  @Get('user/:id')
+  findByUserId(@Param() param) {
+    return this.TaskService.findByUserId(param.id);
+  }
+  @Get(':type/user/:id')
+  findByUserIdAndType(@Param() param) {
+    return this.TaskService.findByUserIdAndType(param.type, param.id);
+  }
+
   @Get(':id/articles/:type')
   findATaskWithArticles(@Req() req, @Param() param){
     return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type);

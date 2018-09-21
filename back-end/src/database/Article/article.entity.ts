@@ -28,11 +28,11 @@ export class Article {
     task: Task;
 
     @OneToOne(type => Emotion, emotion => emotion.article)
-    emotion: string;
+    emotion: Emotion;
 
     @OneToOne(type => SepWordsProperty, sep_words_property => sep_words_property.article)
-    sep_words_property: string;
+    sep_words_property: SepWordsProperty;
 
     @OneToOne(type => MarkEntity, mark_entity => mark_entity.article)
-    mark_entity: string;
+    mark_entity: MarkEntity;
 }

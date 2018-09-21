@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import HeaderNav_UI from '../WorkTable/HeaderNav_UI'
+import HeaderNav_UI from '../public/HeaderNav_UI'
 
 let mapStateToProps = state => {
   return {

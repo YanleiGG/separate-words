@@ -1,4 +1,4 @@
-import FooterBtn_UI from '../../FooterBtn_UI'
+import FooterBtn_UI from '../../../public/FooterBtn_UI'
 import store from '../../../../state/store'
 import { connect } from "react-redux";
 import { formatWithoutProperty } from '../../../../util'

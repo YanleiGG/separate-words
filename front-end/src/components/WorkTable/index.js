@@ -2,7 +2,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
-import CreateArticle from './CreateArticle'
 import Emotion from './Emotion'
 import SepWordsPro from './SepWordsPro'
 import MarkEntity from './MarkEntity'
@@ -17,7 +16,6 @@ class App extends React.Component {
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <Switch>
-                <Route path='/table/create-article' component={ CreateArticle }></Route>
                 <Route path='/table/emotion' component={ Emotion }></Route>
                 <Route path='/table/sepWordsPro' component={ SepWordsPro }></Route>
                 <Route path='/table/markEntity' component={ MarkEntity }></Route>

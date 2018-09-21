@@ -93,30 +93,32 @@ let mapDispatchToProps = dispatch => {
 
 async function refresh(value) {
   let state = store.getState()
+  let userId = state.user.id
   let tips = message.loading('获取数据中...')
   let res
   if (value === 'all') {
-      res = await axios.get(`${path}/api/task`)
-    } else {
-      res = await axios.get(`${path}/api/task/${value}`)
-    }
-    message.destroy(tips)
-    if (res.data.code === 0) {
-      let data = format(res)
-      store.dispatch({
-        type: "SET_TASKS",
-        tasks: {
-          ...state.tasks,
-          data,
-          type: value
-        }
-      })
-      message.success('数据获取成功！', 1.5)
-    } else {
-      message.error('获取任务信息失败！', 1.5)
-    }
-    console.log(res)
+    res = await axios.get(`${path}/api/task/user/${userId}`)
+  } else {
+    res = await axios.get(`${path}/api/task/${value}/user/${userId}`)
   }
+  console.log(res)
+  message.destroy(tips)
+  if (res.data.code === 0) {
+    let data = format(res)
+    store.dispatch({
+      type: "SET_TASKS",
+      tasks: {
+        ...state.tasks,
+        data,
+        type: value
+      }
+    })
+    message.success('数据获取成功！', 1.5)
+  } else {
+    message.error('获取任务信息失败！', 1.5)
+  }
+  console.log(res)
+}
 
 function format (res) {
   let data = res.data.tasks

@@ -53,6 +53,39 @@ export class TaskService {
     }
   }
 
+  async findByUserId(userId) {
+    let user = await this.UserRepository.findOne({ 
+      where: {id: userId}, 
+      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup'] 
+    });
+    let tasks = user.tasks.reverse()
+    let totalCount = tasks.length
+    return {
+      code: 0,
+      msg: 'find successed!',
+      totalCount,
+      tasks
+    }
+  }
+
+  async findByUserIdAndType(type, userId) {
+    let user = await this.UserRepository.findOne({ 
+      where: {id: userId}, 
+      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup'] 
+    });
+    let tasks = user.tasks.reverse()
+    let totalCount = tasks.length
+    tasks = tasks.filter(item => {
+      return item.types.some(i => i.symbol === type)
+    })
+    return {
+      code: 0,
+      msg: 'find successed!',
+      totalCount,
+      tasks
+    }
+  }
+
   async findATaskWithArticles(taskId, offset, pageSize, type) {
     let relations = ['articles','users', 'types', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys', 'entitiesGroup'] 
     switch(type){
