@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import FooterBtn from './FooterBtn'
 import PopoverContent from './PopoverContent'
-import axios from "axios";
 
 const { Content, Footer } = Layout;
 

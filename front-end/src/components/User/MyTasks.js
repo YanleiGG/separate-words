@@ -48,7 +48,7 @@ class TasksShow extends React.Component {
                 render={(text, record) => (
                   <span onClick={() => startTask(record.id, record.types[0].symbol)}>
                     <a>开始任务</a>
-                    <Link to='/table/sepWordsPro' id='toSepWordsPro'/>
+                    <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
                   </span>
                 )}
               />
@@ -81,7 +81,7 @@ let mapDispatchToProps = dispatch => {
         type: 'SET_TASK_ID',
         taskId: id
       })
-      console.log(type)
+      console.log(id)
       switch(type){
         case 'separateWordsProperty': {
           document.getElementById('toSepWordsPro').click()

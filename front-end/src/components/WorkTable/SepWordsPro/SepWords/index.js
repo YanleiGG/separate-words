@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import store from '../../../../state/store'
 import FooterBtn from './FooterBtn'
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 class SepWords extends React.Component {
   render() {

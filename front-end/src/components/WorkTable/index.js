@@ -6,7 +6,7 @@ import Emotion from './Emotion'
 import SepWordsPro from './SepWordsPro'
 import MarkEntity from './MarkEntity'
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 class App extends React.Component {
   render() {
@@ -30,10 +30,9 @@ class App extends React.Component {
 
 let mapAllStateToProps = state => {
   return state
-};
+}
 let mapDispatchToApp = dispatch => {
-  return {
-  }
+  return {}
 }
 
-export default connect(mapAllStateToProps, mapDispatchToApp)(App) 
+export default connect(mapAllStateToProps, mapDispatchToApp)(App)

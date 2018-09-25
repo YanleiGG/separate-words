@@ -25,7 +25,7 @@ class Login extends React.Component {
           />
           <Input
             style={{marginBottom: '20px'}}
-            placeholder="密码 / 123456"
+            placeholder="密码 / 123"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type='password'
             value={password}
