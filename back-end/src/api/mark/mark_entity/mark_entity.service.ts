@@ -33,9 +33,11 @@ export class MarkEntityService {
 
   async create (args) {
     let mark_entity = new MarkEntity()
-    let article = new Article()
-    article.text = args.text
-    article.title = args.title
+    let article = await this.ArticleRepository.findOne({ 
+      where: {id: args.articleId},
+      relations: ['mark_entity']
+    })
+    if(article.mark_entity) return this.update({...args, id: article.mark_entity.id})
     mark_entity.markEntity = args.markEntity || null
     mark_entity.article = article
     await this.ArticleRepository.save(article)
@@ -43,18 +45,18 @@ export class MarkEntityService {
     return {
       code: 0,
       msg: 'create successed!',
-      mark_entity
+      data: mark_entity
     }
   }
 
   async update (args) {
     let mark_entity = await this.MarkEntityRepository.findOne({ id: args.id })
-    mark_entity.markEntity = args.markEntity
+    mark_entity.markEntity = args.markEntity || null
     await this.MarkEntityRepository.save(mark_entity)
     return {
       code: 0,
       msg: 'update successed!',
-      mark_entity
+      data: mark_entity
     }
   }
 

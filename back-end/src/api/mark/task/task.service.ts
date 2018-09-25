@@ -87,17 +87,17 @@ export class TaskService {
   }
 
   async findATaskWithArticles(taskId, offset, pageSize, type) {
-    let relations = ['articles','users', 'types', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys', 'entitiesGroup'] 
+    let relations = ['articles','users', 'types'] 
     switch(type){
-      case "separateWordsProperty": relations.push('articles.sep_words_property')
-      case "markEntity": relations.push('articles.mark_entity')
+      case "separateWordsProperty": relations.push('articles.sep_words_property', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys')
+      case "markEntity": relations.push('articles.mark_entity', 'entitiesGroup', 'entitiesGroup.entities')
       case 'emotion': relations.push('articles.emotion')
       default: {}
     }
     let task =  await this.TaskRepository.findOne({ 
       where: { id: taskId },
       relations
-    });
+    })
     let totalCount = task.articles.length
     task.articles = task.articles.reverse().splice(offset, pageSize)
     return {

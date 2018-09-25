@@ -46,9 +46,10 @@ class TasksShow extends React.Component {
                 key="action" 
                 dataIndex="action"
                 render={(text, record) => (
-                  <span onClick={() => startTask(record.id, record.types[0].symbol)}>
-                    <a>开始任务</a>
+                  <span>
+                    <a onClick={() => startTask(record.id, record.types[0].symbol)}>开始任务</a>
                     <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
+                    <Link to='/table/markEntity' id='toMarkEntity'/>
                   </span>
                 )}
               />
@@ -77,15 +78,19 @@ let mapDispatchToProps = dispatch => {
       refresh(value)
     },
     startTask: async (id, type) => {
-      store.dispatch({
+      console.log(id)
+      await store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
       })
-      console.log(id)
       switch(type){
         case 'separateWordsProperty': {
           document.getElementById('toSepWordsPro').click()
         }
+        case 'markEntity': {
+          document.getElementById('toMarkEntity').click()
+        }
+        default: break;
       }
     }
   }

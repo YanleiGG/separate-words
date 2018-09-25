@@ -20,7 +20,7 @@ class MarkPro extends React.Component {
           <Content style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }}>
             {showPro.map((item, index) => {
               return  <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
-                        <span key={item.id} style={{cursor:'pointer'}}>{ item.content + '|' }</span>
+                        <span key={item.id} style={{cursor:'pointer'}}>{ item.content }</span>
                       </Popover>
             })}
           </Content>

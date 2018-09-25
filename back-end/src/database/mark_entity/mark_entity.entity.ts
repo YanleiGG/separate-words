@@ -6,7 +6,10 @@ export class MarkEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+        type: "longtext",
+        nullable: true
+    })
     markEntity: string;    // 实体
 
     @CreateDateColumn()

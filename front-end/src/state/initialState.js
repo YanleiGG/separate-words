@@ -47,12 +47,19 @@ export const initialState = {
     propertys: [],
   },
   markEntity: {
+    articles: [],
+    SiderNavData: [],
+    totalCount: 1,
+    page: 1,
+    selectedKeys: [],
+    showIndex: 0,
     headerNavData: {
       title: '实体标注',
       data: [
         { name: '实体标注', path: '/table/markEntity', key: '实体标注' }
       ]
     },
+    propertys: []
   },
   createTask: {
     name: '',
@@ -91,9 +98,12 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 30, //设一个默认值，方便调试，实际设为null
+  taskId: 32, //设一个默认值，方便调试，实际设为null
   user: {
     id: 1,  //设一个默认值，方便调试，实际设为null
     name: ''
+  },
+  users: {
+    data: []
   }
 };

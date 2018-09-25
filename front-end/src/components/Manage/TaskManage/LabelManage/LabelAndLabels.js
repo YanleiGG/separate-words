@@ -1,7 +1,7 @@
 import React from 'react'
 import { path } from '../../../../config'
 import { connect } from "react-redux";
-import { Table, Row, Col, Select, Button, Tooltip, Icon } from 'antd'
+import { Table, Row, Col, Select, Button } from 'antd'
 import axios from 'axios'
 import store from '../../../../state/store'
 
@@ -75,9 +75,7 @@ let mapDispatchToProps = dispatch => {
   return {
     labelRefresh: async () => {
       let state = store.getState()
-      console.log(state.labelAndLabels)
-      let value = state.labelAndLabels.label.type, url = ''
-      if (value === 'separateWordsProperty') url = `${path}/api/words_property`
+      let value = state.labelAndLabels.label.type, url = `${path}/api/words_property`
       if (value === 'markEntity') url = `${path}/api/entities`
       let res = await axios.get(url)
       res.data.data.forEach(item => {
@@ -95,8 +93,7 @@ let mapDispatchToProps = dispatch => {
       })
     },
     labelTypeChange: async value => {
-      let state = store.getState(), url = ''
-      if (value === 'separateWordsProperty') url = `${path}/api/words_property`
+      let state = store.getState(), url = `${path}/api/words_property`
       if (value === 'markEntity') url = `${path}/api/entities`
       let res = await axios.get(url), data = res.data.data
       data.forEach(item => {
@@ -116,8 +113,7 @@ let mapDispatchToProps = dispatch => {
     },
     labelsRefresh: async () => {
       let state = store.getState()
-      let value = state.labelAndLabels.labels.type, url = ''
-      if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      let value = state.labelAndLabels.labels.type, url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
       let res = await axios.get(url)
       console.log(res)
@@ -137,8 +133,7 @@ let mapDispatchToProps = dispatch => {
       })
     },
     labelsTypeChange: async value => {
-      let state = store.getState(), url = ''
-      if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      let state = store.getState(), url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
       let res = await axios.get(url), data = res.data.data
       console.log(res)

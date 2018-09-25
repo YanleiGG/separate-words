@@ -3,7 +3,7 @@ import { Menu, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
-import { unformatWithoutProperty, unformatWithProperty, formatWithoutProperty, formatWithProperty } from '../../../util'
+import { unformatWithProperty, formatWithProperty } from '../../../util'
 import { path } from '../../../config'
 
 const { Sider } = Layout;
@@ -15,7 +15,7 @@ class SiderNav_UI extends React.Component {
 
   render () {
     let { selectedKeys, handleClick, pageChange, totalCount } = this.props
-    let siderNavData = this.props.sepWordsPro.articles.length > 0 ? this.props.siderNavData : []
+    let siderNavData = this.props.markEntity.articles.length > 0 ? this.props.siderNavData : []
     
     return (
         <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
@@ -36,29 +36,47 @@ class SiderNav_UI extends React.Component {
 
 let refresh = async dispatch => {
   let state = store.getState()
-  let page = state.sepWordsPro.page, taskId = state.taskId
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty?offset=${(page-1)*10}&pageSize=10`)
+  let page = state.markEntity.page, taskId = state.taskId
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
   console.log(res)
   let task = res.data.data.task
   let articles = task.articles
   let siderNavData = articles.map((item, index) => {
+    let firstFromatMarkEntity = false
+    let { mark_entity } = item
+    if (!mark_entity) {
+      articles[index].mark_entity = { markEntity: item.text }
+      firstFromatMarkEntity = true
+    }
+    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, firstFromatMarkEntity)
+    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro)
     return {
       id: item.id,
       title: item.title || '无标题'
     }
   })
+  let propertys = task.entitiesGroup.entities.map(item => {
+    return { label: item.name, value: item.symbol }
+  })
   dispatch({
-    type: "SET_MARK_ENTITY"
+    type: "SET_MARK_ENTITY",
+    markEntity: {
+      ...state.markEntity,
+      articles,
+      siderNavData,
+      totalCount,
+      propertys
+    }
   })
 }
 
 let mapStateToProps = state => {
   return {
     ...state,
-    siderNavData: state.sepWordsPro.siderNavData,
-    selectedKeys: state.sepWordsPro.selectedKeys,
-    totalCount: state.sepWordsPro.totalCount
+    siderNavData: state.markEntity.siderNavData,
+    selectedKeys: state.markEntity.selectedKeys,
+    totalCount: state.markEntity.totalCount
   }
 };
 
@@ -67,24 +85,24 @@ let mapDispatchToSiderNav = dispatch => {
     created: async () => {
       await refresh(dispatch)
       let state = store.getState()
-      let articles = state.sepWordsPro.articles
+      let articles = state.markEntity.articles
       let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
       dispatch({
-        type: "SET_SEP_WORDS_PRO",
-        sepWordsPro: {
-          ...state.sepWordsPro,
+        type: "SET_MARK_ENTITY",
+        markEntity: {
+          ...state.markEntity,
           selectedKeys
         }
       })
     },
     handleClick: id => {
       let state = store.getState()
-      let articles = state.sepWordsPro.articles
+      let articles = state.markEntity.articles
       let showIndex = articles.findIndex(item => item.id == id)
       dispatch({
-        type: "SET_SEP_WORDS_PRO", 
-        sepWordsPro: {
-          ...state.sepWordsPro,
+        type: "SET_MARK_ENTITY", 
+        markEntity: {
+          ...state.markEntity,
           showIndex,
           selectedKeys: [id.toString()]
         }
@@ -92,8 +110,8 @@ let mapDispatchToSiderNav = dispatch => {
     },
     pageChange: async (page) => {
       let state = store.getState()
-      dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
-        ...state.sepWordsPro,
+      dispatch({ type: "SET_MARK_ENTITY", markEntity: {
+        ...state.markEntity,
         page
       }})
       refresh(dispatch)

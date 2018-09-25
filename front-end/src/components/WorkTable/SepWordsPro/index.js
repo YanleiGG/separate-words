@@ -6,15 +6,13 @@ import SiderNav from './SiderNav'
 import SepWords from './SepWords'
 import MarkPro from './MarkPro'
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 class SepWordsPro extends React.Component {
   render () {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Header style={{padding: 0}}>
-          <HeaderNav/>
-        </Header>
+        <HeaderNav/>
         <Content>
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
