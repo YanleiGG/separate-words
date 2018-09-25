@@ -75,7 +75,11 @@ let mapDispatchToProps = dispatch => {
   return {
     labelRefresh: async () => {
       let state = store.getState()
-      let res = await axios.get(`${path}/api/words_property`)
+      console.log(state.labelAndLabels)
+      let value = state.labelAndLabels.label.type, url = ''
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property`
+      if (value === 'markEntity') url = `${path}/api/entities`
+      let res = await axios.get(url)
       res.data.data.forEach(item => {
         item.key = item.id
       })
@@ -112,7 +116,10 @@ let mapDispatchToProps = dispatch => {
     },
     labelsRefresh: async () => {
       let state = store.getState()
-      let res = await axios.get(`${path}/api/words_property_group`)
+      let value = state.labelAndLabels.labels.type, url = ''
+      if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
+      if (value === 'markEntity') url = `${path}/api/entities_group`
+      let res = await axios.get(url)
       console.log(res)
       let data = res.data.data
       data.forEach(item => {

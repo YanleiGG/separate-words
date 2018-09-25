@@ -16,7 +16,7 @@ class Emotion extends React.Component {
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <Switch>
-                {/* <Route path='/table/emotion/classify' component={ Classify }></Route> */}
+                {/* <Route path='/table/markEntity' component={ Classify }></Route> */}
               </Switch>
             </Layout>
           </Layout>

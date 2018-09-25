@@ -1,7 +1,6 @@
 export const initialState = {
   isLogin: true,
   visible: false,
-  radioValue: -1,
   wordsType: ['无', '名词', '动词', '形容词'],
   color: ['black', 'red', 'green', 'blue'],
   typeArr: [0, 1, 2, 3],
@@ -16,11 +15,6 @@ export const initialState = {
   },
   username: 'admin',
   password: '123',
-  classData: [],
-  ClassListAddInputValue: '',
-  addClassVisible: false,
-  addClassInputValue: '',
-  addClassId: '',
   emotion: {
     emotions: [],
     SiderLeftData: [],
