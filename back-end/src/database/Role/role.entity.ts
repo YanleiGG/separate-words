@@ -1,6 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { User } from '../user/user.entity'
-import { Permission } from '../permission/permission.entity';
 
 @Entity()
 export class Role {
@@ -16,10 +15,7 @@ export class Role {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(type => User, user => user.role)
-    users: User[];
-
-    @ManyToMany(type => Permission, permission => permission.roles)
+    @ManyToMany(type => User, user => user.roles)
     @JoinTable()
-    permissions: Permission[];
+    users: User[];
 }

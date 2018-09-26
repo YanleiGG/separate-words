@@ -19,8 +19,8 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToOne(type => Role, role => role.users)
-    role: string;
+    @ManyToMany(type => Role, role => role.users)
+    roles: Role[];
 
     @ManyToMany(type => Task, task => task.users)
     tasks: Task[];

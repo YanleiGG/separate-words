@@ -1,21 +1,28 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../../../database/user/user.entity';
-  
+import { Role } from '../../../database/role/role.entity';
+
+
 @Injectable()
 export class UserService {
   constructor(
     @Inject('UserRepositoryToken')
-    private readonly UserRepository: Repository<User>
+    private readonly UserRepository: Repository<User>,
+    @Inject('RoleRepositoryToken')
+    private readonly RoleRepository: Repository<Role>
   ) {}
 
-  async findOne (username: string, password: string) {
+  async findOne (username: string) {
     let user = await this.UserRepository.findOne({ name: username })
     return user
   }
 
-  async findMarkUser () {
-    let users = await this.UserRepository.find()
+  async findAll () {
+    let users = await this.UserRepository.find({relations: ['roles']})
+    users.forEach(item => {
+      delete item.password
+    })
     return {
       code: 0,
       msg: 'success',
@@ -23,7 +30,30 @@ export class UserService {
     }
   }
 
-  async post( type: string ,username: string, password: string ) {
+  async create(args) {
+    let sameName = await this.UserRepository.findOne({ name: args.username })
+    if (sameName) {
+      return {
+        code: 10001,
+        msg: '账号名称已存在!',
+        data: null        
+      }
+    }
+
+    let user = new User()
+    user.name = args.username
+    user.password = args.password
+    let rolePromises = args.selectAuthIds.map(async item => {
+      return await this.RoleRepository.findOne({ id: item })
+    })
+    let roles = await Promise.all(rolePromises)
+    user.roles = roles
+    await this.UserRepository.save(user)
+    return {
+      code: 0,
+      msg: 'success',
+      data: user
+    }
   }
 
   async update (username: string, password: string) {

@@ -108,6 +108,18 @@ const reducer = (state = initialState, action) => {
         markEntity: action.markEntity
       })
     }
+    case "SET_USERS": {
+      return Object.assign({}, state, {
+        ...state,
+        users: action.users
+      })
+    }   
+    case "SET_CREATE_USER": {
+      return Object.assign({}, state, {
+        ...state,
+        createUser: action.createUser
+      })
+    }  
     default:
       return state;
   }

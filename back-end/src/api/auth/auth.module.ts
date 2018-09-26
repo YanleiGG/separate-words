@@ -8,16 +8,23 @@ import { UserController } from './user/user.controller'
 import { LoginService } from './login/login.service'
 import { LoginController } from './login/login.controller'
 
+import { roleProviders } from '../../database/role/role.provider';
+import { RoleService } from './role/role.service';
+import { RoleController } from './role/role.controller'
+
 @Module({
   imports: [DatabaseModule],
   providers: [
     ...userProviders,
+    ...roleProviders,
     UserService,
-    LoginService
+    LoginService,
+    RoleService
   ],
   controllers: [
     UserController,
-    LoginController
+    LoginController,
+    RoleController
   ]
   // exports: [...userProviders],
 })

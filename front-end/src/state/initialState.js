@@ -105,5 +105,11 @@ export const initialState = {
   },
   users: {
     data: []
+  },
+  createUser: {
+    username: '',
+    password: '',
+    selectAuthIds: [],
+    auths: []
   }
 };

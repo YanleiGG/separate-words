@@ -1,40 +1,22 @@
 import { Get, Req, Post, Put, Body, Controller } from '@nestjs/common';
 import { UserService } from './user.service';
 
-class IGet {
-  query: {
-    readonly username: string;
-    readonly password: string;
-  }
-}
-
-class IPost {
-  readonly type: string;
-  readonly username: string;
-  readonly password: string;
-}
-
-class IPut {
-  readonly username: string;
-  readonly password: string;
-}
-
 @Controller('api/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
-  @Get('mark')
-  findMarkUser() {
-    return this.UserService.findMarkUser()
+  @Get()
+  findAll() {
+    return this.UserService.findAll()
   }
 
   @Post()
-  post(@Body() data: IPost) {
-    return this.UserService.post(data.type, data.username, data.password);
+  post(@Body() body) {
+    return this.UserService.create(body);
   }
 
   @Put()
-  put(@Body() data: IPut) {
+  put(@Body() data) {
     return this.UserService.update(data.username, data.password);
   }
 }
