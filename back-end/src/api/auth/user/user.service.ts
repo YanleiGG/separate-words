@@ -30,6 +30,18 @@ export class UserService {
     }
   }
 
+  async findMarkUser() {
+    let users = await this.UserRepository.find({relations: ['roles']})
+    users = users.filter(item => {
+      return item.roles.some(i => i.name === '任务标注')
+    })
+    return {
+      code: 0,
+      msg: 'success',
+      data: users
+    }
+  }
+
   async create(args) {
     let sameName = await this.UserRepository.findOne({ name: args.username })
     if (sameName) {

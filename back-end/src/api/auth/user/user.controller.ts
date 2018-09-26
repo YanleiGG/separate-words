@@ -10,6 +10,11 @@ export class UserController {
     return this.UserService.findAll()
   }
 
+  @Get('mark')
+  findMarkUser() {
+    return this.UserService.findMarkUser()
+  }
+
   @Post()
   post(@Body() body) {
     return this.UserService.create(body);

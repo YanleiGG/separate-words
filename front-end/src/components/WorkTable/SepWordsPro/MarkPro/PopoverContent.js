@@ -39,7 +39,6 @@ let mapDispatchToProps = dispatch => {
       let showIndex = state.sepWordsPro.showIndex
       let articles = state.sepWordsPro.articles
       articles[showIndex].showPro[index].type = e.target.value
-      console.log(articles[showIndex].showPro[index].type)
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
         articles

@@ -1,3 +1,5 @@
+import store from '../state/store'
+
 export function formatWithoutProperty (data) {
   let str = '', res = ''
   data.forEach(item => {
@@ -55,7 +57,7 @@ export function formatWithProperty (data) {
   return res.substr(0, res.length-1)
 } 
 
-export function unformatWithProperty (formatedStr, firstFormat) {
+export function unformatWithProperty (formatedStr, propertys, firstFormat) {
   if (firstFormat) {
     let tempStr = ''
     for (let i = 0;i <formatedStr.length;i++) {
@@ -63,13 +65,22 @@ export function unformatWithProperty (formatedStr, firstFormat) {
     }
     formatedStr = tempStr
   }
+  let label = ''
   let arr = formatedStr.split(' ')
   let res = arr.map((item, index) => {
     let data = item.split('/')
+    if (!data[1]) {
+      label = '无'
+    } else {
+      label = propertys.find(item => {
+        return item.symbol === data[1]
+      }).name
+    }
     return {
       id: index,
       content: data[0],
-      type: data[1]
+      type: data[1],
+      label
     }
   })
   return res  

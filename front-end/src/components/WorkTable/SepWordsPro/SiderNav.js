@@ -55,7 +55,7 @@ let refresh = async dispatch => {
       sep_words_property.separateWordsProperty = item.text
     }
     articles[index].showContent = unformatWithoutProperty(sep_words_property.separateWords, firstFromatSepWords)
-    articles[index].showPro = unformatWithProperty(sep_words_property.separateWordsProperty, firstFromatSepWordsPro)
+    articles[index].showPro = unformatWithProperty(sep_words_property.separateWordsProperty, task.wordsPropertyGroup.words_propertys, firstFromatSepWordsPro)
     articles[index].sep_words_property = {
       separateWords: formatWithoutProperty(articles[index].showContent),
       separateWordsProperty: formatWithProperty(articles[index].showPro)

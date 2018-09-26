@@ -9,11 +9,19 @@ class HeaderNav_UI extends React.Component {
     let { headerNavData } = this.props
     if (!headerNavData) headerNavData = { data: [] }   // 这里后面重构好了得删掉
     return (
-      <Header style={{padding: 0}}>
+      <Header style={{
+        padding: 0,
+        marginBottom: '50px'
+      }}>
         <Menu
           mode="horizontal"
           theme="dark"
-          style={{ lineHeight: '64px', position: 'fixed', zIndex: 1, width: '100%' }}
+          style={{ 
+            lineHeight: '64px', 
+            position: 'fixed', 
+            zIndex: 1, 
+            width: '100%'
+          }}
         >
           {/* <span style={style.title}>{ headerNavData.title }</span> */}
           {headerNavData.data.map(item => {

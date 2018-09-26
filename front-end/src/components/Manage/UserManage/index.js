@@ -13,7 +13,7 @@ class TaskManage extends React.Component {
       <Layout style={{ minHeight: '100vh' }}>
         <HeaderNav/>
         <Content>
-          <Layout style={{ minHeight: '90vh', marginTop: '50px' }}>
+          <Layout style={{ minHeight: '90vh' }}>
             <Switch>
               <Route path='/manage/user/users' component={ Users }></Route>
               <Route path='/manage/user/create' component={ CreateUser }></Route>

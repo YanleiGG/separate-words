@@ -49,7 +49,7 @@ let refresh = async dispatch => {
       articles[index].mark_entity = { markEntity: item.text }
       firstFromatMarkEntity = true
     }
-    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, firstFromatMarkEntity)
+    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities, firstFromatMarkEntity)
     articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro)
     return {
       id: item.id,

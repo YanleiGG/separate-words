@@ -15,7 +15,7 @@ class TasksShow extends React.Component {
   render() {
     let { data, refresh } = this.props
     return (
-      <div style={{textAlign: 'left', marginTop: '50px'}}>
+      <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
           <Col span={16}>
             <Table dataSource={data}>
