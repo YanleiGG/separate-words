@@ -61,7 +61,6 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     labelsSelectChange: value => {
-      console.log(value)
       let {createLabels} = store.getState()
       dispatch({
         type: 'SET_CREATE_LABELS',

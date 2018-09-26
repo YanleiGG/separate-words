@@ -78,4 +78,13 @@ export class UserService {
       user
     }
   }
+
+  async delete (id) {
+    let user = await this.UserRepository.findOne({ id })
+    await this.UserRepository.remove(user)
+    return {
+      code: 0,
+      msg: 'delete success!'
+    }
+  }
 }

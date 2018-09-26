@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Input, Select, message, Table, Button } from 'antd'
+import { Row, Col, Select, message, Table, Popconfirm } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
@@ -13,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { data, refresh } = this.props
+    let { data, refresh, deleteUser } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -26,9 +26,9 @@ class TasksShow extends React.Component {
                 key="action" 
                 dataIndex="action"
                 render={(text, record) => (
-                  <span>
-                    {1}
-                  </span>
+                  <Popconfirm title="确认删除吗?" onConfirm={() => deleteUser(record.id)} okText="确认" cancelText="取消">
+                  <a href="#">删除</a>
+                </Popconfirm>
                 )}
               />
             </Table>
@@ -39,6 +39,26 @@ class TasksShow extends React.Component {
   }
 }
 
+let refresh = async () => {
+  let state = store.getState()
+  let res = await axios.get(`${path}/api/user`)
+  res.data.data.forEach(item => {
+    item.roleName = item.roles.map((i, index) => {
+      return index === item.roles.length-1 ? i.name : i.name + '、'
+    })
+  })
+  if (res.data.code === 0) {
+    store.dispatch({
+      type: 'SET_USERS',
+      users: {
+        ...state.users,
+        data: res.data.data
+      }
+    })
+  }
+  console.log(res.data.data)
+}
+
 let mapStateToProps = state => {
   return state.users
 }
@@ -46,25 +66,16 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     created: async () => {
-      let state = store.getState()
-      let res = await axios.get(`${path}/api/user`)
-      res.data.data.forEach(item => {
-        item.roleName = item.roles.map((i, index) => {
-          return index === item.roles.length-1 ? i.name : i.name + '、'
-        })
-      })
-      if (res.data.code === 0) {
-        dispatch({
-          type: 'SET_USERS',
-          users: {
-            ...state.users,
-            data: res.data.data
-          }
-        })
-      }
-      console.log(res.data.data)
+      refresh()
     },
-    refresh: () => {}
+    deleteUser: async (id) => {
+      let res = await axios({
+        url: `${path}/api/user`,
+        method: 'delete',
+        data: { id }
+      })
+      refresh()
+    }
   }
 }
 

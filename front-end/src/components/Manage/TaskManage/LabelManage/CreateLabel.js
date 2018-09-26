@@ -9,7 +9,7 @@ const Option = Select.Option;
 
 class CreateTask extends React.Component {
   render() {
-    let { labels, nameChange, create, cancel, typeChange, symbolChange } = this.props
+    let { nameChange, create, cancel, typeChange, symbolChange } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
