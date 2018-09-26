@@ -36,9 +36,12 @@ let mapDispatchToProps = dispatch => {
   return {
     optionsChange: (index, e) => {
       let state = store.getState()
-      let showIndex = state.sepWordsPro.showIndex
-      let articles = state.sepWordsPro.articles
-      articles[showIndex].showPro[index].type = e.target.value
+      let type = e.target.value
+      let {showIndex, propertys, articles} = state.sepWordsPro
+      let label = propertys.find(item => item.value === type).label
+      articles[showIndex].showPro[index].type = type
+      articles[showIndex].showPro[index].label = label
+      console.log(articles[showIndex].showPro[index])
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
         articles

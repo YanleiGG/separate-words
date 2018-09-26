@@ -50,7 +50,6 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     created: async () => {
-      // let res = await axios.get()
     }
   }
 }
