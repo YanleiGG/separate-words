@@ -3,7 +3,10 @@ import { Menu, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
-import { unformatWithoutProperty, unformatWithProperty, formatWithoutProperty, formatWithProperty } from '../../../util'
+import { 
+  unformatWithoutProperty, unformatWithProperty, 
+  formatWithoutProperty, formatWithProperty, showContentToShowPro 
+} from '../../../util'
 import { path } from '../../../config'
 
 const { Sider } = Layout;
@@ -43,22 +46,17 @@ let refresh = async dispatch => {
   let task = res.data.data.task
   let articles = task.articles
   let siderNavData = articles.map((item, index) => {
-    let firstFromatSepWords = false, firstFromatSepWordsPro = false
     let { sep_words_property } = item
     if (sep_words_property === null) sep_words_property = {}
     if (!sep_words_property || !sep_words_property.separateWords) {
-      firstFromatSepWords = true
-      sep_words_property.separateWords = item.text
+      articles[index].showContent = unformatWithoutProperty(item.text, true)
+    } else {
+      articles[index].showContent = unformatWithoutProperty(articles[index].sep_words_property.separateWords, false)
     }
     if (!sep_words_property || !sep_words_property.separateWordsProperty) {
-      firstFromatSepWordsPro = true
-      sep_words_property.separateWordsProperty = item.text
-    }
-    articles[index].showContent = unformatWithoutProperty(sep_words_property.separateWords, firstFromatSepWords)
-    articles[index].showPro = unformatWithProperty(sep_words_property.separateWordsProperty, task.wordsPropertyGroup.words_propertys, firstFromatSepWordsPro)
-    articles[index].sep_words_property = {
-      separateWords: formatWithoutProperty(articles[index].showContent),
-      separateWordsProperty: formatWithProperty(articles[index].showPro)
+      articles[index].showPro = showContentToShowPro(articles[index].showContent)
+    } else {
+      articles[index].showPro = unformatWithProperty(articles[index].sep_words_property.separateWordsProperty, task.wordsPropertyGroup.words_propertys)
     }
     return {
       id: item.id,

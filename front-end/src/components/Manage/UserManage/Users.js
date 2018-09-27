@@ -27,8 +27,8 @@ class TasksShow extends React.Component {
                 dataIndex="action"
                 render={(text, record) => (
                   <Popconfirm title="确认删除吗?" onConfirm={() => deleteUser(record.id)} okText="确认" cancelText="取消">
-                  <a href="#">删除</a>
-                </Popconfirm>
+                    <a href="#">删除</a>
+                  </Popconfirm>
                 )}
               />
             </Table>

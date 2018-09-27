@@ -1,5 +1,3 @@
-import store from '../state/store'
-
 export function formatWithoutProperty (data) {
   let str = '', res = ''
   data.forEach(item => {
@@ -57,14 +55,7 @@ export function formatWithProperty (data) {
   return res.substr(0, res.length-1)
 } 
 
-export function unformatWithProperty (formatedStr, propertys, firstFormat) {
-  if (firstFormat) {
-    let tempStr = ''
-    for (let i = 0;i <formatedStr.length;i++) {
-      tempStr += formatedStr[i] + '/ '
-    }
-    formatedStr = tempStr
-  }
+export function unformatWithProperty (formatedStr, propertys) {
   let label = ''
   let arr = formatedStr.split(' ')
   let res = arr.map((item, index) => {
@@ -84,4 +75,18 @@ export function unformatWithProperty (formatedStr, propertys, firstFormat) {
     }
   })
   return res  
+}
+
+export function showContentToShowPro (showContent, showPro) {
+  let word = '', res = [], id = 0
+  for (let i = 0;i < showContent.length;i++) {
+    if (showContent[i].content !== '|') {
+      word += showContent[i].content
+    } else {
+      res.push({id, content: word, type: "", label: "无"})
+      id++
+      word = ''
+    }
+  }
+  if(!showPro) return res
 }
