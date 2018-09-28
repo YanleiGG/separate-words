@@ -88,5 +88,39 @@ export function showContentToShowPro (showContent, showPro) {
       word = ''
     }
   }
-  if(!showPro) return res
+
+  if(showPro) {
+    let longLen = 0, shortLen = 0, proIndex = 0
+    for (let i = 0;i < res.length; i++) {
+      // console.log(res[i].content, showPro[proIndex].content)
+      if (!res[i].content || !showPro[proIndex].content) return res
+      if (res[i].content === showPro[proIndex].content) {
+        res[i] = showPro[proIndex]
+        res[i].id = id + showPro[proIndex].id // 保证 id 不重复
+        proIndex++
+      } else {
+        // 核心：把 i 调整到合理位置，使 res 和 showPro 回到同一起跑线
+        // 取更长的那个字符串的长度
+        if (res[i].content.length > showPro[proIndex].content.length) {
+          longLen = res[i].content.length
+          shortLen = showPro[proIndex].content.length
+          while(longLen != shortLen) {
+            if (longLen > shortLen) shortLen += showPro[proIndex++].content.length
+            if (longLen < shortLen) longLen += res[i++].content.length
+          }
+        } else {
+          longLen = showPro[proIndex].content.length
+          shortLen = res[i++].content.length
+          while(longLen != shortLen) {
+            if (longLen > shortLen) shortLen += res[i++].content.length
+            if (longLen < shortLen) longLen += showPro[proIndex++].content.length
+          } 
+        }
+        longLen = 0
+        shortLen = 0
+        proIndex++
+      }
+    }
+  }
+  return res
 }

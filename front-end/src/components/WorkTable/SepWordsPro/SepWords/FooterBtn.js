@@ -1,7 +1,7 @@
 import FooterBtn_UI from '../../../public/FooterBtn_UI'
 import store from '../../../../state/store'
 import { connect } from "react-redux";
-import { formatWithoutProperty } from '../../../../util'
+import { formatWithoutProperty, showContentToShowPro, formatWithProperty } from '../../../../util'
 import axios from 'axios'
 import { message } from 'antd'
 
@@ -14,13 +14,14 @@ let mapDispatchToProps = dispatch => {
     save: async () => {
       let state = store.getState()
       let { showIndex, articles } = state.sepWordsPro
-      let showContent = articles[showIndex].showContent
+      let {showContent, showPro} = articles[showIndex]
+      console.log(showContentToShowPro(showContent, showPro))
+      articles[showIndex].showPro = showContentToShowPro(showContent, showPro)
       let sep_words_property = articles[showIndex].sep_words_property || {}
       sep_words_property.separateWords = formatWithoutProperty(showContent)
+      sep_words_property.separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
-      let res
-      console.log(sep_words_property)
-      res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
+      let res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
       console.log(res)
       message.destroy(tips)
       if (res.data.code == 0) {
@@ -38,9 +39,7 @@ let mapDispatchToProps = dispatch => {
         message.error('保存失败!', 1.5)
       }
     },
-    cancel: async () => {
-      console.log('cancel')
-    }
+    cancel: async () => {}
   }
 }
 
