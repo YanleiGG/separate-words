@@ -92,8 +92,7 @@ export function showContentToShowPro (showContent, showPro) {
   if(showPro) {
     let longLen = 0, shortLen = 0, proIndex = 0
     for (let i = 0;i < res.length; i++) {
-      // console.log(res[i].content, showPro[proIndex].content)
-      if (!res[i].content || !showPro[proIndex].content) return res
+      if (!res[i] || !showPro[proIndex]) return res
       if (res[i].content === showPro[proIndex].content) {
         res[i] = showPro[proIndex]
         res[i].id = id + showPro[proIndex].id // 保证 id 不重复

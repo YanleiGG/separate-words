@@ -15,7 +15,7 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState()
       let { showIndex, articles } = state.sepWordsPro
       let showPro = articles[showIndex].showPro
-      let sep_words_property = articles[showIndex].sep_words_property
+      let sep_words_property = articles[showIndex].sep_words_property || {}
       sep_words_property.separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
       let res

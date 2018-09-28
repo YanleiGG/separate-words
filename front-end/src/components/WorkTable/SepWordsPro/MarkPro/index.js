@@ -19,17 +19,17 @@ class MarkPro extends React.Component {
         <Layout>
           <Content style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }}>
             {showPro.map((item, index) => {
-              return  <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
-                        <div key={item.id} style={{
-                          cursor:'pointer',
+                      return  <div key={item.id} style={{
+                          // cursor:'pointer',
                           display: 'inline-block',
                           textAlign: 'center'                      
                         }}>
                           <span>{ item.content }</span>
                           <br/>
-                          <Tag style={{marginBottom:'10px'}} color="#108ee9">{item.label || '无'}</Tag>
+                          <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
+                            <Tag style={{marginBottom:'10px'}} color={item.label ? "#108ee9" : "grey"}>{item.label || '无'}</Tag>
+                          </Popover>
                         </div>
-                      </Popover>
             })}
           </Content>
           <Footer>

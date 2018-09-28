@@ -98,7 +98,7 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 30, //设一个默认值，方便调试，实际设为null
+  taskId: 31, //设一个默认值，方便调试，实际设为null
   user: {
     id: 1,  //设一个默认值，方便调试，实际设为null
     name: ''

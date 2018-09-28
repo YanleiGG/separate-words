@@ -15,7 +15,6 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState()
       let { showIndex, articles } = state.sepWordsPro
       let {showContent, showPro} = articles[showIndex]
-      console.log(showContentToShowPro(showContent, showPro))
       articles[showIndex].showPro = showContentToShowPro(showContent, showPro)
       let sep_words_property = articles[showIndex].sep_words_property || {}
       sep_words_property.separateWords = formatWithoutProperty(showContent)
