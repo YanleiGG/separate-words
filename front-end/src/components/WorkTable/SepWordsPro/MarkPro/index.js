@@ -27,7 +27,7 @@ class MarkPro extends React.Component {
                           <span>{ item.content }</span>
                           <br/>
                           <Popover placement='bottom' content={<PopoverContent index={index}/>} key={item.id} title={item.content}>
-                            <Tag style={{marginBottom:'10px'}} color={item.label ? "#108ee9" : "grey"}>{item.label || '无'}</Tag>
+                            <Tag style={{marginBottom:'10px'}} color={item.label != '无' ? "#108ee9" : "grey"}>{item.label || '无'}</Tag>
                           </Popover>
                         </div>
             })}
