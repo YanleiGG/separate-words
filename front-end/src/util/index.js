@@ -60,7 +60,7 @@ export function unformatWithProperty (formatedStr, propertys) {
   let arr = formatedStr.split(' ')
   let res = arr.map((item, index) => {
     let data = item.split('/')
-    if (!data[1]) {
+    if (!data[1] || data[1] === 'default') {
       label = '无'
     } else {
       label = propertys.find(item => {

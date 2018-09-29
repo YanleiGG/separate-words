@@ -63,7 +63,7 @@ export const initialState = {
     end: 0,
     radioValue: '',
     labels: ['无', '人名', '地名', '组织机构名'],
-    colors: ['black', 'red', 'green', 'blue'],
+    colors: ['black', '#f50', '#389e0d', '#108ee9'],
   },
   createTask: {
     name: '',

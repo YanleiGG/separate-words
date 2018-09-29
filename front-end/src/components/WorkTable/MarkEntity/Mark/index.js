@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Modal, Radio } from "antd";
+import { Layout, Modal, Radio, Tag } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import FooterBtn from './FooterBtn'
@@ -17,6 +17,9 @@ class SepWords extends React.Component {
     return (
       <Layout>
         <Layout>
+          <div style={{ padding: '10px 15px 0px', marginLeft: '200px' }}>
+            { colors.map((item, index) => <Tag key={index} color={item}>{labels[index]}</Tag>) }
+          </div>
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }} id="content">
               {showPro.map((i, index) => {
                 let color = colors[labels.indexOf(i.label)]
@@ -77,7 +80,8 @@ let mapDispatchToProps = dispatch => {
       let {articles, showIndex, start, end, radioValue, propertys} = state.markEntity
       for (let i = start; i < end; i++) {
         articles[showIndex].showPro[i].type = radioValue
-        articles[showIndex].showPro[i].label = propertys.find(item => item.value === radioValue).label
+        let property = propertys.find(item => item.value === radioValue)
+        articles[showIndex].showPro[i].label = property ? property.label : '无'
       }
       console.log(articles[showIndex].showPro)
       dispatch({
