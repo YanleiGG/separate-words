@@ -14,7 +14,7 @@ class SepWordsPro extends React.Component {
       <Layout style={{ minHeight: '100vh' }}>
         <HeaderNav/>
         <Content>
-          <Layout style={{ minHeight: '90vh', marginTop: '-50px' }}>
+          <Layout style={{ minHeight: '90vh' }}>
             <Layout>
               <SiderNav/>
               <Switch>

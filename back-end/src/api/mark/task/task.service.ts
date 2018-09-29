@@ -99,7 +99,7 @@ export class TaskService {
       relations
     })
     let totalCount = task.articles.length
-    task.articles = task.articles.reverse().splice(offset, pageSize)
+    task.articles = task.articles.splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',

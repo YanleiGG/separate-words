@@ -1,8 +1,6 @@
 export const initialState = {
   isLogin: true,
   visible: false,
-  wordsType: ['无', '名词', '动词', '形容词'],
-  color: ['black', 'red', 'green', 'blue'],
   typeArr: [0, 1, 2, 3],
   page: 1,
   totalCount: 0,
@@ -59,7 +57,13 @@ export const initialState = {
         { name: '实体标注', path: '/table/markEntity', key: '实体标注' }
       ]
     },
-    propertys: []
+    propertys: [],
+    visible: false,
+    start: 0,
+    end: 0,
+    radioValue: '',
+    labels: ['无', '人名', '地名', '组织机构名'],
+    colors: ['black', 'red', 'green', 'blue'],
   },
   createTask: {
     name: '',
@@ -98,7 +102,7 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 30, //设一个默认值，方便调试，实际设为null
+  taskId: 32, //设一个默认值，方便调试，实际设为null
   user: {
     id: 1,  //设一个默认值，方便调试，实际设为null
     name: ''

@@ -43,14 +43,13 @@ let refresh = async dispatch => {
   let task = res.data.data.task
   let articles = task.articles
   let siderNavData = articles.map((item, index) => {
-    let firstFromatMarkEntity = false
     let { mark_entity } = item
     if (!mark_entity) {
-      articles[index].mark_entity = { markEntity: item.text }
-      firstFromatMarkEntity = true
+      let markEntity = item.text.split('').map(item => item + '/ ').join('')
+      articles[index].mark_entity = { markEntity }
     }
-    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities, firstFromatMarkEntity)
-    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro)
+    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities)
+    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro) 
     return {
       id: item.id,
       title: item.title || '无标题'

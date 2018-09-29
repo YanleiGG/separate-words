@@ -1,27 +1,46 @@
 import * as React from "react";
-import { Layout } from "antd";
+import { Layout, Modal, Radio } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import FooterBtn from './FooterBtn'
 
 const { Content, Footer } = Layout;
+const RadioGroup = Radio.Group
 
 class SepWords extends React.Component {
   render() {
-    let { pickWords, articles, showIndex } = this.props
-    console.log(articles)
+    let { 
+      pickWords, articles, showIndex, visible, 
+      modalCancel, modalOk, radioChange, radioValue, 
+      propertys, labels, colors } = this.props
     let showPro = articles.length > 0 ? articles[showIndex].showPro : []
     return (
       <Layout>
         <Layout>
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }} id="content">
               {showPro.map((i, index) => {
-                return <span key={index} id={index}>{i.content}</span>
+                let color = colors[labels.indexOf(i.label)]
+                return <span key={index} id={index} style={{color}}>{i.content}</span>
               })}
           </Content>
           <Footer>
             <FooterBtn/>
           </Footer>
+          <Modal
+            title="选择实体类型"
+            visible={visible}
+            onOk={modalOk}
+            onCancel={modalCancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <RadioGroup onChange={radioChange} value={radioValue}>
+              <Radio key='default' value='default'>无</Radio>
+              {propertys.map(item => {
+                return <Radio key={item.value} value={item.value}>{item.label}</Radio>
+              })}
+            </RadioGroup>    
+          </Modal>
         </Layout>
       </Layout>
     )
@@ -39,32 +58,56 @@ let mapDispatchToProps = dispatch => {
     pickWords: () => {
       if (window.getSelection().toString()) {
         let state = store.getState()
-        let {articles, showIndex} = state.markEntity
         let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
-        let showPro = articles[showIndex].showPro
-        if (showPro[start].content == '|' && start == end-1) return
-        if (showPro[start - 1] && showPro[start - 1].content != '|') {
-          showPro.splice(start, 0, { id: null, content: '|' })
-          start++
-          end++
-        }
-        if (showPro[end] && showPro[end].content != '|') {
-          showPro.splice(end, 0, { id: 1, content: '|' })
-        }
-        for (let i = end - 1; i >= start; i--) {
-          if (showPro[i] && showPro[i].content == '|') showPro.splice(i, 1)
-        }
-        articles[showIndex].showPro = showPro
         dispatch({
           type: "SET_MARK_ENTITY",
           markEntity: {
             ...state.markEntity,
-            articles
+            visible: true,
+            start,
+            end
           }
         })
         window.getSelection().removeAllRanges()
       }
+    },
+    modalOk: () => {
+      let state = store.getState()
+      let {articles, showIndex, start, end, radioValue, propertys} = state.markEntity
+      for (let i = start; i < end; i++) {
+        articles[showIndex].showPro[i].type = radioValue
+        articles[showIndex].showPro[i].label = propertys.find(item => item.value === radioValue).label
+      }
+      console.log(articles[showIndex].showPro)
+      dispatch({
+        type: "SET_MARK_ENTITY",
+        markEntity: {
+          ...state.markEntity,
+          articles,
+          visible: false
+        }
+      })
+    },
+    modalCancel: () => {
+      let state = store.getState()
+      dispatch({
+        type: "SET_MARK_ENTITY",
+        markEntity: {
+          ...state.markEntity,
+          visible: false
+        }
+      })
+    },
+    radioChange: e => {
+      let state = store.getState()
+      dispatch({
+        type: "SET_MARK_ENTITY",
+        markEntity: {
+          ...state.markEntity,
+          radioValue: e.target.value
+        }
+      })
     }
   }
 }

@@ -11,7 +11,6 @@ class HeaderNav_UI extends React.Component {
     return (
       <Header style={{
         padding: 0,
-        marginBottom: '50px'
       }}>
         <Menu
           mode="horizontal"
