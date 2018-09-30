@@ -11,7 +11,7 @@ class PopoverContent extends React.Component {
     let showPro = articles[showIndex].showPro
     return (
       <Row style={{width: 400}}>
-        <RadioGroup name="radiogroup" defaultValue={showPro[index].type} onChange={optionsChange.bind(this, index)}>
+        <RadioGroup name="radiogroup" value={showPro[index].type} onChange={optionsChange.bind(this, index)}>
           {propertys.map(item => {
             return <Col span={6} key={item.value}>
                     <Radio key={item.value} value={item.value}>
