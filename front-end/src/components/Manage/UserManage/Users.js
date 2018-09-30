@@ -17,7 +17,7 @@ class TasksShow extends React.Component {
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
-          <Col span={16}>
+          <Col span={20}>
             <Table dataSource={data}>
               <Column title="用户名" key="name" dataIndex="name"/>
               <Column title="用户权限" key="id" dataIndex="roleName"/>

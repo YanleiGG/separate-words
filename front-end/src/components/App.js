@@ -5,8 +5,7 @@ import store from '../state/store'
 import WorkTable from './WorkTable'
 import Login from './Login'
 import Entry from './Entry'
-import Manage from './Manage'
-import User from './User'
+import Home from './Home'
 
 class App extends React.Component {
   render () {
@@ -17,14 +16,8 @@ class App extends React.Component {
           <Route path='/table' render={props => {
             return store.getState().isLogin ? <WorkTable {...props}/> : <Redirect to="/login" />
           }}/>
-          <Route exact path='/entry' render={props => {
-            return store.getState().isLogin ? <Entry {...props}/> : <Redirect to="/login" />
-          }}/>
-          <Route path='/manage' render={props => {
-            return store.getState().isLogin ? <Manage {...props}/> : <Redirect to="/login" />
-          }}/>
-          <Route path='/user' render={props => {
-            return store.getState().isLogin ? <User {...props}/> : <Redirect to="/login" />
+          <Route path='/' render={props => {
+            return store.getState().isLogin ? <Home {...props}/> : <Redirect to="/login" />
           }}/>
         </Switch>
       </BrowserRouter>

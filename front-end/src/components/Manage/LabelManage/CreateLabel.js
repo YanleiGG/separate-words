@@ -1,8 +1,8 @@
 import React from 'react'
-import { path } from '../../../../config'
+import { path } from '../../../config'
 import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
-import store from '../../../../state/store'
+import store from '../../../state/store'
 import axios from 'axios'
 
 const Option = Select.Option;

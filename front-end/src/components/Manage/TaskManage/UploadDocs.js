@@ -1,5 +1,5 @@
 import React from 'react'
-import store from '../../../../state/store'
+import store from '../../../state/store'
 import { Button, Upload, Icon, message } from 'antd'
 
 const uploadProps = {

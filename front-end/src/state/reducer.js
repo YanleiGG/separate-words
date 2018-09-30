@@ -119,7 +119,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         createUser: action.createUser
       })
-    }  
+    }
+    case "SET_HOME": {
+      return Object.assign({}, state, {
+        ...state,
+        home: action.home
+      })
+    }
     default:
       return state;
   }

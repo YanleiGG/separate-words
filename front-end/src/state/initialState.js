@@ -115,5 +115,8 @@ export const initialState = {
     password: '',
     selectAuthIds: [],
     auths: []
+  },
+  home: {
+    collapsed: false
   }
 };
