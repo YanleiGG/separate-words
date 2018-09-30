@@ -1,9 +1,10 @@
 import FooterBtn_UI from '../../../public/FooterBtn_UI'
 import store from '../../../../state/store'
 import { connect } from "react-redux";
-import { formatWithoutProperty, showContentToShowPro, formatWithProperty } from '../../../../util'
+import { formatWithoutProperty, showContentToShowPro, formatWithProperty, unformatWithoutProperty } from '../../../../util'
 import axios from 'axios'
 import { message } from 'antd'
+import { path } from '../../../../config'
 
 let mapStateToProps = state => {
   return {}
@@ -41,7 +42,18 @@ let mapDispatchToProps = dispatch => {
     cancel: async () => {
       let state = store.getState()
       let { showIndex, articles } = state.sepWordsPro
-      console.log(articles[showIndex])
+      let id = articles[showIndex].id
+      let res = await axios.get(`${path}/api/article/separateWordsProperty/${id}`)
+      let { separateWords } = res.data.article.sep_words_property
+      articles[showIndex].sep_words_property.separateWords = separateWords
+      articles[showIndex].showContent = unformatWithoutProperty(separateWords)
+      dispatch({
+        type: "SET_SEP_WORDS_PRO",
+        sepWordsPro: {
+          ...state.sepWordsPro,
+          articles
+        }
+      })
     }
   }
 }
