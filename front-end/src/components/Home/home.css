@@ -12,6 +12,13 @@
 
 #home .logo {
   height: 32px;
-  background: rgba(255,255,255,.2);
   margin: 16px;
+}
+
+#home .title {
+  position: absolute;
+  top: 21px;
+  color: white;
+  font-family: 'Microsoft Yahei', Courier, monospace;
+  font-size: 16px;
 }

@@ -5,6 +5,7 @@ import store from '../../state/store'
 import { Link, Route, Redirect } from "react-router-dom";
 import Manage from '../Manage'
 import User from '../User'
+import ictImg from '../../assets/ict.png'
 import './home.css'
 
 const { Header, Sider, Content } = Layout;
@@ -21,7 +22,10 @@ class Home extends React.Component {
           collapsible
           collapsed={collapsed}
         >
-          <div className="logo" />
+          <div>
+            <img className="logo" src={ictImg}/>
+            {collapsed ? null : <span className="title">分词系统</span>}
+          </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <SubMenu key="sub1" title={<span><Icon type="user" /><span>用户管理</span></span>}>
               <Menu.Item key="11">
@@ -53,7 +57,8 @@ class Home extends React.Component {
             </Menu.Item>
             <Menu.Item key="6">
               <Link to='/user/myTasks'>
-                <Icon type="upload" />我的任务
+                <Icon type="upload" />
+                <span>我的任务</span>
               </Link>
             </Menu.Item>
           </Menu>

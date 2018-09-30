@@ -4,7 +4,6 @@ import store from '../state/store'
 
 import WorkTable from './WorkTable'
 import Login from './Login'
-import Entry from './Entry'
 import Home from './Home'
 
 class App extends React.Component {
