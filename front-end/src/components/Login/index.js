@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import store from '../../state/store'
 import axios from 'axios'
 import { Link } from "react-router-dom";
+import ictImg from '../../assets/ict.png'
+import background from '../../assets/background.svg'
 
 const { Header, Content } = Layout;
 
@@ -11,21 +13,28 @@ class Login extends React.Component {
   render () {
     const { login, username, password, usernameChange, passwordChange} = this.props
     return (
-      <Layout style={{minHeight: '100vh'}}>
+      <Layout style={{minHeight: '100vh', backgroundImage: background}}>
         <Header>
-          <div style={{ color: 'white', fontSize: '20px' }}>XX 系统</div>
+          <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
+          <span style={{ 
+            position: 'absolute', color: 'white',
+            fontFamily: 'Microsoft Yahei', 
+            Courier: 'monospace',fontSize: '16px'
+          }}>
+            分词系统
+          </span>
         </Header>
-        <Content style={{ padding: '15% 30%' }}>
+        <Content style={{ padding: '10% 30%' }}>
+          <div style={{marginBottom: '10px'}}>账号：</div>
           <Input
             style={{marginBottom: '20px'}}
-            placeholder="账号 / admin"
             prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)' }} />}
             value={username}
             onChange={usernameChange}
           />
+          <div style={{marginBottom: '10px'}}>密码：</div>
           <Input
             style={{marginBottom: '20px'}}
-            placeholder="密码 / 123"
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type='password'
             value={password}

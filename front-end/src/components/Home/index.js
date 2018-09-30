@@ -23,11 +23,22 @@ class Home extends React.Component {
           collapsed={collapsed}
         >
           <div>
-            <img className="logo" src={ictImg}/>
+            <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
             {collapsed ? null : <span className="title">分词系统</span>}
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <SubMenu key="sub1" title={<span><Icon type="user" /><span>用户管理</span></span>}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['6']}>
+            <Menu.Item key="6">
+              <Link to='/user/myTasks'>
+                <Icon type="bars" theme="outlined" />
+                <span>我的任务</span>
+              </Link>
+            </Menu.Item>
+            <SubMenu key="sub1" title={
+              <span>
+                <Icon type="user" theme="outlined" />
+                <span>用户管理</span>
+              </span>
+            }>
               <Menu.Item key="11">
                 <Link to="/manage/user/users">用户总览</Link>
               </Menu.Item>
@@ -35,7 +46,12 @@ class Home extends React.Component {
                 <Link to="/manage/user/create">创建用户</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="user" /><span>任务管理</span></span>}>
+            <SubMenu key="sub2" title={
+                <span>
+                  <Icon type="solution" theme="outlined" />
+                  <span>任务管理</span>
+                </span>
+            }>
               <Menu.Item key="21">
                 <Link to="/manage/task/tasks">任务总览</Link>
               </Menu.Item>
@@ -43,7 +59,12 @@ class Home extends React.Component {
                 <Link to="/manage/task/createTask">创建任务</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="sub3" title={<span><Icon type="user" /><span>标签管理</span></span>}>
+            <SubMenu key="sub3" title={
+                <span>
+                  <Icon type="tags" theme="outlined" />
+                  <span>标签管理</span>
+                </span>
+            }>
               <Menu.Item key="31">
                 <Link to='/manage/label/labels'>标签总览</Link>
               </Menu.Item>
@@ -52,14 +73,8 @@ class Home extends React.Component {
               </Menu.Item>
             </SubMenu>
             <Menu.Item key="5">
-              <Icon type="upload" />
+              <Icon type="database" theme="outlined" />
               <span>数据管理</span>
-            </Menu.Item>
-            <Menu.Item key="6">
-              <Link to='/user/myTasks'>
-                <Icon type="upload" />
-                <span>我的任务</span>
-              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
