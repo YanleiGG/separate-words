@@ -8,10 +8,6 @@ class IGet {
   }
 }
 
-class IGetByID {
-  id: number
-}
-
 class IPost {
   title: string
   separateWords: string
@@ -42,9 +38,9 @@ export class ArticleController {
     return this.ArticleService.find(req.query.offset, req.query.pageSize);
   }
 
-  @Get(":id")
-  findOne (@Param() param: IGetByID) {
-    return this.ArticleService.findOne(param.id);
+  @Get(":type/:id")
+  findWithFormatData (@Param() param) {
+    return this.ArticleService.findWithFormatData(param.id, param.type);
   }
 
   @Post()

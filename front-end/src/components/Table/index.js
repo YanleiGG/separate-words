@@ -24,7 +24,7 @@ class App extends React.Component {
           </Layout>
         </Content>
       </Layout>
-    );
+    )
   }
 }
 

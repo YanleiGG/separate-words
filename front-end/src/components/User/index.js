@@ -3,7 +3,7 @@ import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
 import MyTasks from './MyTasks'
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 class TaskManage extends React.Component {
   render () {

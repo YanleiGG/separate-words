@@ -25,9 +25,28 @@ export class ArticleService {
     let article =  await this.ArticleRepository.findOne({ id });
     return {
       code: 0,
-      msg: 'update successed!',
+      msg: 'find successed!',
       article
     }
+  }
+
+  async findWithFormatData (id, type) {
+    let relations = []
+    switch(type){
+      case "separateWordsProperty": relations.push('sep_words_property')
+      case "markEntity": relations.push('mark_entity')
+      case 'emotion': relations.push('emotion')
+      default: {}
+    }
+    let article = await this.ArticleRepository.findOne({
+      where: { id },
+      relations
+    })
+    return {
+      code: 0,
+      msg: 'find successed!',
+      article
+    }    
   }
 
   async create (args) {

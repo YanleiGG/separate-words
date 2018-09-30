@@ -38,7 +38,11 @@ let mapDispatchToProps = dispatch => {
         message.error('保存失败!', 1.5)
       }
     },
-    cancel: async () => {}
+    cancel: async () => {
+      let state = store.getState()
+      let { showIndex, articles } = state.sepWordsPro
+      console.log(articles[showIndex])
+    }
   }
 }
 

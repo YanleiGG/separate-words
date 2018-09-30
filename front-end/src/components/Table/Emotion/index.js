@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
 import HeaderNav from './HeaderNav'

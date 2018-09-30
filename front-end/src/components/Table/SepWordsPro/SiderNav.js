@@ -3,10 +3,7 @@ import { Menu, Pagination, Layout } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
-import { 
-  unformatWithoutProperty, unformatWithProperty, 
-  formatWithoutProperty, formatWithProperty, showContentToShowPro 
-} from '../../../util'
+import { unformatWithoutProperty, unformatWithProperty, showContentToShowPro } from '../../../util'
 import { path } from '../../../config'
 
 const { Sider } = Layout;
