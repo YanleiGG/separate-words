@@ -14,17 +14,15 @@ class HeaderNav_UI extends React.Component {
       }}>
         <Menu
           mode="horizontal"
-          theme="dark"
           style={{ 
             lineHeight: '64px', 
             position: 'fixed', 
             zIndex: 1, 
-            width: '100%'
+            width: '100%',
           }}
         >
-          {/* <span style={style.title}>{ headerNavData.title }</span> */}
-          {headerNavData.data.map(item => {
-            return  <Menu.Item key={item.key}>
+          {headerNavData.data.map((item, index) => {
+            return  <Menu.Item key={item.key} style={index === 0 ? { marginLeft: '30%' } : null}>
               <Link to={ item.path }>
                 <Icon type="pie-chart" />
                 <span>{ item.name }</span>
@@ -34,15 +32,6 @@ class HeaderNav_UI extends React.Component {
         </Menu>
       </Header>
     )
-  }
-}
-
-let style = {
-  title: { 
-    color: 'white',
-    float: 'left',
-    marginLeft: '-150px',
-    fontSize: '18px'
   }
 }
 

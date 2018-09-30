@@ -78,7 +78,7 @@ let mapDispatchToProps = dispatch => {
       refresh(value)
     },
     startTask: async (id, type) => {
-      console.log(id)
+      console.log(id, type)
       await store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
@@ -86,9 +86,11 @@ let mapDispatchToProps = dispatch => {
       switch(type){
         case 'separateWordsProperty': {
           document.getElementById('toSepWordsPro').click()
+          break;
         }
         case 'markEntity': {
           document.getElementById('toMarkEntity').click()
+          break;
         }
         default: break;
       }

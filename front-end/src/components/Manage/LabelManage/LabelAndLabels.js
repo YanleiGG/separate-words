@@ -20,7 +20,7 @@ class LabelAndLabels extends React.Component {
     return (
       <div>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
-          <Col span={10}>
+          <Col span={11}>
             <Select style={{ width: '50%' }} onChange={labelTypeChange} placeholder="标签类型" defaultValue='separateWordsProperty'>
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
@@ -29,7 +29,7 @@ class LabelAndLabels extends React.Component {
             </Select>
             <Button style={{float: 'right'}} onClick={labelRefresh}>刷新</Button>
           </Col>
-          <Col span={10}>
+          <Col span={11}>
             <Select style={{ width: '50%' }} onChange={labelsTypeChange} placeholder="标签集合类型" defaultValue='separateWordsProperty'>
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
@@ -40,13 +40,13 @@ class LabelAndLabels extends React.Component {
           </Col>
         </Row>
         <Row type='flex' justify='space-around'>
-          <Col span={10}>
+          <Col span={11}>
             <Table dataSource={label.data}>
               <Column title="标签名称" dataIndex="name" key="name"/>
               <Column title="标签代号" dataIndex="symbol" key="symbol"/>
             </Table>
           </Col>
-          <Col span={10}>
+          <Col span={11}>
             <Table dataSource={labels.data}>
               <Column title="标签集合名称" dataIndex="name" key="name"/>
               <Column title="所含标签" render={(text, record) => (

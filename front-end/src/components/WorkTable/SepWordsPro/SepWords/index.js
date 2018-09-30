@@ -2,6 +2,7 @@ import * as React from "react";
 import { Layout } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
+import HeaderNav from '../HeaderNav'
 import FooterBtn from './FooterBtn'
 
 const { Content, Footer } = Layout;
@@ -11,17 +12,16 @@ class SepWords extends React.Component {
     let { pickWords, articles, showIndex } = this.props
     let showContent = articles.length > 0 ? articles[showIndex].showContent : []
     return (
-      <Layout>
-        <Layout>
-          <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px', marginLeft: '200px' }} id="content">
-              {showContent.map((i, index) => {
-                return <span key={index} id={index}>{i.content}</span>
-              })}
-          </Content>
-          <Footer>
-            <FooterBtn/>
-          </Footer>
-        </Layout>
+      <Layout style={{marginLeft: '200px'}}>
+        <HeaderNav/>
+        <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
+            {showContent.map((i, index) => {
+              return <span key={index} id={index}>{i.content}</span>
+            })}
+        </Content>
+        <Footer>
+          <FooterBtn/>
+        </Footer>
       </Layout>
     )
   }

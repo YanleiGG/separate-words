@@ -1,7 +1,6 @@
 import React from 'react'
 import { Layout } from "antd";
 import { Route, Switch } from "react-router-dom";
-import HeaderNav from './HeaderNav'
 import SiderNav from './SiderNav'
 import SepWords from './SepWords'
 import MarkPro from './MarkPro'
@@ -12,7 +11,6 @@ class SepWordsPro extends React.Component {
   render () {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <HeaderNav/>
         <Content>
           <Layout style={{ minHeight: '90vh' }}>
             <Layout>
