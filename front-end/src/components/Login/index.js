@@ -1,19 +1,20 @@
 import React from 'react'
-import { Input, Icon, Layout, Button, message } from 'antd';
+import { Input, Icon, Layout, Button, message, Tabs } from 'antd';
 import { connect } from "react-redux";
 import store from '../../state/store'
 import axios from 'axios'
 import { Link } from "react-router-dom";
 import ictImg from '../../assets/ict.png'
-import background from '../../assets/background.svg'
+import background from '../../assets/background.png'
 
 const { Header, Content } = Layout;
+const TabPane = Tabs.TabPane
 
 class Login extends React.Component {
   render () {
     const { login, username, password, usernameChange, passwordChange} = this.props
     return (
-      <Layout style={{minHeight: '100vh', backgroundImage: background}}>
+      <Layout style={{minHeight: '100vh'}}>
         <Header>
           <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
           <span style={{ 
@@ -24,24 +25,35 @@ class Login extends React.Component {
             分词系统
           </span>
         </Header>
-        <Content style={{ padding: '10% 30%' }}>
-          <div style={{marginBottom: '10px'}}>账号：</div>
-          <Input
-            style={{marginBottom: '20px'}}
-            prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)' }} />}
-            value={username}
-            onChange={usernameChange}
-          />
-          <div style={{marginBottom: '10px'}}>密码：</div>
-          <Input
-            style={{marginBottom: '20px'}}
-            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            type='password'
-            value={password}
-            onChange={passwordChange}
-          />
-          <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
-          <Link to='/user/myTasks' id="login"></Link>
+        <Content 
+          style={{ 
+            padding: '10% 30%', 
+            backgroundImage: `url(${background})`, 
+            backgroundSize: 'cover',
+            textAlign: 'center'
+          }}
+        >
+          <Tabs defaultActiveKey="1" size="large">
+            <TabPane tab="登录" key="1" style={{textAlign: 'left'}}>
+              <div style={{marginBottom: '10px'}}>账号：</div>
+              <Input
+                style={{marginBottom: '20px'}}
+                prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)' }} />}
+                value={username}
+                onChange={usernameChange}
+              />
+              <div style={{marginBottom: '10px'}}>密码：</div>
+              <Input
+                style={{marginBottom: '20px'}}
+                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                type='password'
+                value={password}
+                onChange={passwordChange}
+              />
+              <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
+              <Link to='/user/myTasks' id="login"></Link>
+            </TabPane>
+          </Tabs>
         </Content>
       </Layout>
     )
