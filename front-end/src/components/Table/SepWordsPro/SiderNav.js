@@ -63,6 +63,7 @@ let refresh = async dispatch => {
   let propertys = task.wordsPropertyGroup.words_propertys.map(item => {
     return { label: item.name, value: item.symbol }
   })
+  propertys.unshift({label: '无', value: ''})
   dispatch({
     type: "SET_SEP_WORDS_PRO",
     sepWordsPro: {

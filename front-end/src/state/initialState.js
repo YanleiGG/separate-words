@@ -43,6 +43,9 @@ export const initialState = {
       ]
     },
     propertys: [],
+    visible: false,
+    radioValue: '',
+    wordIndex: null
   },
   markEntity: {
     articles: [],
