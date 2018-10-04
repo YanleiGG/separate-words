@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Pagination, Layout, Icon } from 'antd';
+import { Menu, Pagination, Layout, Icon, Select } from 'antd';
 import store from '../../../state/store'
 import axios from 'axios'
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import { unformatWithProperty, formatWithProperty } from '../../../util'
 import { path } from '../../../config'
 
 const { Sider } = Layout;
+const Option = Select.Option
 
 class SiderNav_UI extends React.Component {
   componentWillMount () {
@@ -14,11 +15,16 @@ class SiderNav_UI extends React.Component {
   }
 
   render () {
-    let { selectedKeys, handleClick, pageChange, totalCount } = this.props
+    let { selectedKeys, handleClick, pageChange, totalCount, filterChange } = this.props
     let siderNavData = this.props.markEntity.articles.length > 0 ? this.props.siderNavData : []
     
     return (
         <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
+          <Select defaultValue="all" style={{ width: 150, margin: '10px 15px' }} onChange={filterChange}>
+            <Option value="all">全部</Option>
+            <Option value="marking">标注中</Option>
+            <Option value="completed">已完成</Option>
+          </Select>
           <Menu
             mode="inline"
             style={{ height: '100%' }}
@@ -43,8 +49,8 @@ class SiderNav_UI extends React.Component {
 
 let refresh = async dispatch => {
   let state = store.getState()
-  let page = state.markEntity.page, taskId = state.taskId
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity?offset=${(page-1)*10}&pageSize=10`)
+  let {page, filter} = state.markEntity, taskId = state.taskId
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
   console.log(res)
   let task = res.data.data.task
@@ -120,6 +126,14 @@ let mapDispatchToSiderNav = dispatch => {
       dispatch({ type: "SET_MARK_ENTITY", markEntity: {
         ...state.markEntity,
         page
+      }})
+      refresh(dispatch)
+    },
+    filterChange: async value => {
+      let state = store.getState()
+      dispatch({ type: "SET_MARK_ENTITY", markEntity: {
+        ...state.markEntity,
+        filter: value
       }})
       refresh(dispatch)
     }
