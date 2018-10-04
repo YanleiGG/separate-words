@@ -41,7 +41,22 @@ let mapDispatchToProps = dispatch => {
       let { showIndex, articles, propertys } = state.sepWordsPro
       let id = articles[showIndex].id
       let res = await axios.get(`${path}/api/article/separateWordsProperty/${id}`)
-      let { separateWordsProperty } = res.data.article.sep_words_property
+      let sep_words_property = res.data.article.sep_words_property
+      if (!sep_words_property) {
+        sep_words_property = {}
+        articles[showIndex].sep_words_property = {}
+        res.data.article.text = res.data.article.text.replace(' ', '')
+        let tempArr = res.data.article.text.split('').map((item, index) => {
+          return {
+            id: index,
+            content: item,
+            type: '',
+            label: ''
+          }
+        })
+        sep_words_property.separateWordsProperty = formatWithProperty(tempArr)
+      }
+      let separateWordsProperty = sep_words_property.separateWordsProperty
       articles[showIndex].sep_words_property.separateWordsProperty = separateWordsProperty
       propertys = propertys.map(item => {
         return {

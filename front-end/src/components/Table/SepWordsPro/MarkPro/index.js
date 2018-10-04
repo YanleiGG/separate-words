@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Popover, Tag, Modal, Radio } from "antd";
+import { Layout, Tag, Modal, Radio } from "antd";
 import { connect } from "react-redux";
 import HeaderNav from '../HeaderNav'
 import FooterBtn from './FooterBtn'
@@ -68,7 +68,6 @@ let mapDispatchToProps = dispatch => {
       let {articles, showIndex, wordIndex, radioValue, propertys} = state.sepWordsPro
       articles[showIndex].showPro[wordIndex].type = radioValue
       articles[showIndex].showPro[wordIndex].label = propertys.find(item => item.value === radioValue).label
-      console.log(radioValue, articles[showIndex].showPro[wordIndex])
       dispatch({
         type: "SET_SEP_WORDS_PRO",
         sepWordsPro: {
@@ -101,7 +100,6 @@ let mapDispatchToProps = dispatch => {
     openModal: index => {
       let state = store.getState()
       let {articles, showIndex} = state.sepWordsPro
-      console.log(articles[showIndex].showPro[index])
       dispatch({
         type: "SET_SEP_WORDS_PRO",
         sepWordsPro: {

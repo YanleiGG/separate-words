@@ -46,6 +46,7 @@ let refresh = async dispatch => {
     let { sep_words_property } = item
     if (sep_words_property === null) sep_words_property = {}
     if (!sep_words_property || !sep_words_property.separateWords) {
+      item.text = item.text.replace(' ', '')
       articles[index].showContent = unformatWithoutProperty(item.text, true)
     } else {
       articles[index].showContent = unformatWithoutProperty(articles[index].sep_words_property.separateWords, false)
