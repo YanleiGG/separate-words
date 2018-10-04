@@ -3,7 +3,7 @@ import store from '../../../../state/store'
 import { connect } from "react-redux";
 import { unformatWithProperty, formatWithProperty } from '../../../../util'
 import axios from 'axios'
-import { message, Button } from 'antd'
+import { message, Button, Popconfirm } from 'antd'
 import { path } from '../../../../config'
 
 class FooterBtn_UI extends React.Component {
@@ -11,7 +11,9 @@ class FooterBtn_UI extends React.Component {
   const { save, cancel, complete } = this.props
   return (
       <div style={{textAlign: 'center'}}>
-        <Button onClick={ complete } type="primary">完成</Button>
+        <Popconfirm title="确认完成标注吗?" onConfirm={complete} okText="确认" cancelText="取消">
+          <Button type="primary">完成标注</Button>
+        </Popconfirm>
         <Button onClick= { save } type="primary" style={{ marginLeft: '20px'}}>保存</Button>
         <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
       </div>
