@@ -15,19 +15,23 @@ class SiderNav_UI extends React.Component {
   }
 
   render () {
-    let { selectedKeys, handleClick, pageChange, totalCount, filterChange } = this.props
-    let siderNavData = this.props.sepWordsPro.articles.length > 0 ? this.props.siderNavData : []
+    let { selectedKeys, handleClick, pageChange, totalCount, filterChange, page } = this.props
+    let siderNavData = this.props.articles.length > 0 ? this.props.siderNavData : []
     
     return (
-        <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
-          <Select defaultValue="all" style={{ width: 150, margin: '10px 15px' }} onChange={filterChange}>
+        <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+          <Select 
+            defaultValue="all" 
+            style={{ width: 150, margin: '15px' }} 
+            onChange={filterChange}
+          >
             <Option value="all">全部</Option>
             <Option value="marking">标注中</Option>
             <Option value="completed">已完成</Option>
           </Select>
           <Menu
             mode="inline"
-            style={{ height: '100%' }}
+            style={{ height: '80%' }}
             selectedKeys = { selectedKeys }
           >
             {siderNavData.map(i => {
@@ -41,7 +45,7 @@ class SiderNav_UI extends React.Component {
                     </Menu.Item>
             })}
           </Menu>
-          <Pagination style={{marginTop: "-150px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+          <Pagination current={page} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
         </Sider>
     )
   }
@@ -93,10 +97,7 @@ let refresh = async dispatch => {
 
 let mapStateToProps = state => {
   return {
-    ...state,
-    siderNavData: state.sepWordsPro.siderNavData,
-    selectedKeys: state.sepWordsPro.selectedKeys,
-    totalCount: state.sepWordsPro.totalCount
+    ...state.sepWordsPro
   }
 };
 
@@ -128,7 +129,7 @@ let mapDispatchToSiderNav = dispatch => {
         }
       })
     },
-    pageChange: async (page) => {
+    pageChange: async page => {
       let state = store.getState()
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
@@ -140,7 +141,8 @@ let mapDispatchToSiderNav = dispatch => {
       let state = store.getState()
       dispatch({ type: "SET_SEP_WORDS_PRO", sepWordsPro: {
         ...state.sepWordsPro,
-        filter: value
+        filter: value,
+        page: 1
       }})
       refresh(dispatch)
     }

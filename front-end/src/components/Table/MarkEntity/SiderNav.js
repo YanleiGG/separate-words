@@ -15,8 +15,8 @@ class SiderNav_UI extends React.Component {
   }
 
   render () {
-    let { selectedKeys, handleClick, pageChange, totalCount, filterChange } = this.props
-    let siderNavData = this.props.markEntity.articles.length > 0 ? this.props.siderNavData : []
+    let { selectedKeys, handleClick, pageChange, totalCount, filterChange, page } = this.props
+    let siderNavData = this.props.articles.length > 0 ? this.props.siderNavData : []
     
     return (
         <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
@@ -27,7 +27,7 @@ class SiderNav_UI extends React.Component {
           </Select>
           <Menu
             mode="inline"
-            style={{ height: '100%' }}
+            style={{ height: '80%' }}
             selectedKeys = { selectedKeys }
           >
             {siderNavData.map(i => {
@@ -41,7 +41,7 @@ class SiderNav_UI extends React.Component {
               </Menu.Item>
             })}
           </Menu>
-          <Pagination style={{marginTop: "-150px"}} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+          <Pagination current={page} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
         </Sider>
     )
   }
@@ -86,10 +86,7 @@ let refresh = async dispatch => {
 
 let mapStateToProps = state => {
   return {
-    ...state,
-    siderNavData: state.markEntity.siderNavData,
-    selectedKeys: state.markEntity.selectedKeys,
-    totalCount: state.markEntity.totalCount
+    ...state.markEntity
   }
 };
 
@@ -133,7 +130,8 @@ let mapDispatchToSiderNav = dispatch => {
       let state = store.getState()
       dispatch({ type: "SET_MARK_ENTITY", markEntity: {
         ...state.markEntity,
-        filter: value
+        filter: value,
+        page: 1
       }})
       refresh(dispatch)
     }
