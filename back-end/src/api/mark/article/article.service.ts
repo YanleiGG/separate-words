@@ -53,6 +53,7 @@ export class ArticleService {
     let article = new Article()
     article.title = args.title
     article.text = args.text
+    article.state = args.state
     await this.ArticleRepository.save(article)
     return {
       code: 0,
@@ -65,6 +66,7 @@ export class ArticleService {
     let article = await this.ArticleRepository.findOne({ id: args.id })
     article.title = args.title
     article.text = args.text
+    article.state = args.state
     await this.ArticleRepository.save(article)
     return {
       code: 0,

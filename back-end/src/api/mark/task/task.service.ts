@@ -181,6 +181,7 @@ export class TaskService {
               let article = new Article()
               article.title = item.title ? item.title[0] : null
               article.text = item.text ? item.text[0] : null
+              article.state = 'marking'
               article.task = task
               await this.ArticleRepository.save(article)
             })

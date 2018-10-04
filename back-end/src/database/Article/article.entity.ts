@@ -18,6 +18,9 @@ export class Article {
     })
     text: string;
 
+    @Column()
+    state: string;
+
     @CreateDateColumn()
     createdAt: Date
 
