@@ -24,9 +24,9 @@ export class TaskController {
     return this.TaskService.findByUserIdAndType(param.type, param.id);
   }
 
-  @Get(':id/articles/:type')
+  @Get(':id/articles/:type/:filter')
   findATaskWithArticles(@Req() req, @Param() param){
-    return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type);
+    return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type, param.filter);
   }
 
   // @Get(":id")

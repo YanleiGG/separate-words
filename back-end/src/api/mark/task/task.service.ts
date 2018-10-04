@@ -86,7 +86,7 @@ export class TaskService {
     }
   }
 
-  async findATaskWithArticles(taskId, offset, pageSize, type) {
+  async findATaskWithArticles(taskId, offset, pageSize, type, filter) {
     let relations = ['articles','users', 'types'] 
     switch(type){
       case "separateWordsProperty": relations.push('articles.sep_words_property', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys')
@@ -98,6 +98,9 @@ export class TaskService {
       where: { id: taskId },
       relations
     })
+    if (filter === 'completed' || filter === 'marking') {
+      task.articles = task.articles.filter(item => item.state === filter)
+    }
     let totalCount = task.articles.length
     task.articles = task.articles.splice(offset, pageSize)
     return {

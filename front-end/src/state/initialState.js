@@ -45,7 +45,8 @@ export const initialState = {
     propertys: [],
     visible: false,
     radioValue: '',
-    wordIndex: null
+    wordIndex: null,
+    filter: 'all'
   },
   markEntity: {
     articles: [],

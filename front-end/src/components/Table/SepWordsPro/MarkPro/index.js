@@ -21,7 +21,6 @@ class MarkPro extends React.Component {
         <Content style={{ padding: '15px', fontSize: '20px' }}>
           {showPro.map((item, index) => {
             return  <div key={item.id} style={{
-                // cursor:'pointer',
                 display: 'inline-block',
                 textAlign: 'center'                      
               }}>

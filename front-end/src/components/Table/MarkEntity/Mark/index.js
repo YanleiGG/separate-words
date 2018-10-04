@@ -26,7 +26,7 @@ class SepWords extends React.Component {
                 return <span key={index} id={index} style={{color}}>{i.content}</span>
               })}
           </Content>
-          <Footer>
+          <Footer style={{ marginLeft: '200px' }}>
             <FooterBtn/>
           </Footer>
           <Modal
