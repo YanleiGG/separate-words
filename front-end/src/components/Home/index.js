@@ -73,8 +73,10 @@ class Home extends React.Component {
               </Menu.Item>
             </SubMenu>
             <Menu.Item key="5">
-              <Icon type="database" theme="outlined" />
-              <span>数据管理</span>
+              <Link to='/manage/data'>
+                <Icon type="database" theme="outlined" />
+                <span>数据管理</span>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>

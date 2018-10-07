@@ -33,7 +33,7 @@ class TasksShow extends React.Component {
             <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
           <Col span={20}>
-            <Table dataSource={data}>
+            <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
               <Column title="任务名称" key="name" dataIndex="name"/>
               <Column title="任务说明" key="instruction" dataIndex="instruction"/>
               <Column title="任务类别" key="type" dataIndex="type"/>

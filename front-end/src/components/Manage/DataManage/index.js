@@ -1,8 +1,8 @@
 import React from 'react'
-import { path } from '../../config'
+import { path } from '../../../config'
 import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
-import store from '../../state/store'
+import store from '../../../state/store'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
@@ -47,7 +47,7 @@ class TasksShow extends React.Component {
                 dataIndex="action"
                 render={(text, record) => (
                   <span>
-                    <a onClick={() => startTask(record.id, record.types[0].symbol)}>开始任务</a>
+                    <a onClick={() => startTask(record.id, record.types[0].symbol)}>查看详情</a>
                     <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
                     <Link to='/table/markEntity' id='toMarkEntity'/>
                   </span>
@@ -100,13 +100,12 @@ let mapDispatchToProps = dispatch => {
 
 async function refresh(value) {
   let state = store.getState()
-  let userId = state.user.id
   let tips = message.loading('获取数据中...')
   let res
   if (value === 'all') {
-    res = await axios.get(`${path}/api/task/user/${userId}`)
+    res = await axios.get(`${path}/api/task`)
   } else {
-    res = await axios.get(`${path}/api/task/${value}/user/${userId}`)
+    res = await axios.get(`${path}/api/task/${value}`)
   }
   console.log(res)
   message.destroy(tips)
