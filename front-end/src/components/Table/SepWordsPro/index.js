@@ -16,7 +16,7 @@ class SepWordsPro extends React.Component {
       <Layout style={{ minHeight: '100vh' }}>
         <Spin spinning={spinning} tip='加载数据中...'>
           <Content>
-            <Layout style={{ minHeight: '90vh' }}>
+            <Layout style={{ minHeight: '100vh' }}>
               <Layout>
                   <SiderNav/>
                   <Switch>

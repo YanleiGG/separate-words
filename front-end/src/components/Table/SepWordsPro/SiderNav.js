@@ -19,7 +19,7 @@ class SiderNav_UI extends React.Component {
     let siderNavData = this.props.articles.length > 0 ? this.props.siderNavData : []
     
     return (
-        <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+        <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100%', position: 'fixed', left: 0 }}>
           <Select 
             defaultValue="all" 
             style={{ width: 150, margin: '15px' }} 
@@ -38,10 +38,10 @@ class SiderNav_UI extends React.Component {
               return <Menu.Item onClick={() => handleClick(i.id)} key={i.id} >
                       { i.title }
                       { i.state === 'completed' ? <Icon 
-                                                    style={{color: 'green', float: 'right', marginTop: '15px'}} 
-                                                    type="check" 
-                                                    theme="outlined" 
-                                                  /> : null }
+                        style={{color: 'green', float: 'right', marginTop: '15px'}} 
+                        type="check" 
+                        theme="outlined" 
+                      /> : null }
                     </Menu.Item>
             })}
           </Menu>
@@ -53,6 +53,13 @@ class SiderNav_UI extends React.Component {
 
 let refresh = async dispatch => {
   let state = store.getState()
+  dispatch({
+    type: "SET_SEP_WORDS_PRO",
+    sepWordsPro: {
+      ...state.sepWordsPro,
+      spinning: true
+    }
+  })
   let {page, filter} = state.sepWordsPro, taskId = state.taskId
   let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty/${filter}?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
@@ -83,6 +90,7 @@ let refresh = async dispatch => {
     return { label: item.name, value: item.symbol }
   })
   propertys.unshift({label: '无', value: ''})
+  let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
   dispatch({
     type: "SET_SEP_WORDS_PRO",
     sepWordsPro: {
@@ -90,7 +98,9 @@ let refresh = async dispatch => {
       articles,
       siderNavData,
       totalCount,
-      propertys
+      propertys,
+      selectedKeys,
+      spinning: false
     }
   })
 }
@@ -105,17 +115,6 @@ let mapDispatchToSiderNav = dispatch => {
   return {
     created: async () => {
       await refresh(dispatch)
-      let state = store.getState()
-      let articles = state.sepWordsPro.articles
-      let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
-      dispatch({
-        type: "SET_SEP_WORDS_PRO",
-        sepWordsPro: {
-          ...state.sepWordsPro,
-          selectedKeys,
-          spinning: false
-        }
-      })
     },
     handleClick: id => {
       let state = store.getState()

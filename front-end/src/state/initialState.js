@@ -69,7 +69,8 @@ export const initialState = {
     radioValue: '',
     labels: ['无', '人名', '地名', '组织机构名'],
     colors: ['black', '#f50', '#389e0d', '#108ee9'],
-    filter: 'all'
+    filter: 'all',
+    spinning: true
   },
   createTask: {
     name: '',
@@ -108,7 +109,7 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 37, //设一个默认值，方便调试，实际设为null
+  taskId: 38, //设一个默认值，方便调试，实际设为null
   user: {
     id: 21,  //设一个默认值，方便调试，实际设为null
     name: ''

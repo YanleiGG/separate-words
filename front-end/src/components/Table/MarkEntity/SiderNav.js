@@ -34,10 +34,10 @@ class SiderNav_UI extends React.Component {
               return <Menu.Item onClick={() => handleClick(i.id)} key={i.id} >
                 { i.title }
                 { i.state === 'completed' ? <Icon 
-                                              style={{color: 'green', float: 'right', marginTop: '15px'}} 
-                                              type="check" 
-                                              theme="outlined" 
-                                            /> : null }
+                  style={{color: 'green', float: 'right', marginTop: '15px'}} 
+                  type="check" 
+                  theme="outlined" 
+                /> : null }
               </Menu.Item>
             })}
           </Menu>
@@ -45,43 +45,6 @@ class SiderNav_UI extends React.Component {
         </Sider>
     )
   }
-}
-
-let refresh = async dispatch => {
-  let state = store.getState()
-  let {page, filter} = state.markEntity, taskId = state.taskId
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10`)
-  let totalCount = res.data.data.totalCount
-  console.log(res)
-  let task = res.data.data.task
-  let articles = task.articles
-  let siderNavData = articles.map((item, index) => {
-    let { mark_entity } = item
-    if (!mark_entity) {
-      let markEntity = item.text.split('').map(item => item + '/ ').join('')
-      articles[index].mark_entity = { markEntity }
-    }
-    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities)
-    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro) 
-    return {
-      id: item.id,
-      title: item.title || '无标题',
-      state: item.state
-    }
-  })
-  let propertys = task.entitiesGroup.entities.map(item => {
-    return { label: item.name, value: item.symbol }
-  })
-  dispatch({
-    type: "SET_MARK_ENTITY",
-    markEntity: {
-      ...state.markEntity,
-      articles,
-      siderNavData,
-      totalCount,
-      propertys
-    }
-  })
 }
 
 let mapStateToProps = state => {
@@ -94,16 +57,6 @@ let mapDispatchToSiderNav = dispatch => {
   return {
     created: async () => {
       await refresh(dispatch)
-      let state = store.getState()
-      let articles = state.markEntity.articles
-      let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
-      dispatch({
-        type: "SET_MARK_ENTITY",
-        markEntity: {
-          ...state.markEntity,
-          selectedKeys
-        }
-      })
     },
     handleClick: id => {
       let state = store.getState()
@@ -136,6 +89,53 @@ let mapDispatchToSiderNav = dispatch => {
       refresh(dispatch)
     }
   }
+}
+
+let refresh = async dispatch => {
+  let state = store.getState()
+  dispatch({
+    type: "SET_MARK_ENTITY",
+    markEntity: {
+      ...state.markEntity,
+      spinning: true
+    }
+  })
+  let {page, filter} = state.markEntity, taskId = state.taskId
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10`)
+  let totalCount = res.data.data.totalCount
+  console.log(res)
+  let task = res.data.data.task
+  let articles = task.articles
+  let siderNavData = articles.map((item, index) => {
+    let { mark_entity } = item
+    if (!mark_entity) {
+      let markEntity = item.text.split('').map(item => item + '/ ').join('')
+      articles[index].mark_entity = { markEntity }
+    }
+    articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities)
+    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro) 
+    return {
+      id: item.id,
+      title: item.title || '无标题',
+      state: item.state
+    }
+  })
+  let propertys = task.entitiesGroup.entities.map(item => {
+    return { label: item.name, value: item.symbol }
+  })
+  let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
+  dispatch({
+    type: "SET_MARK_ENTITY",
+    markEntity: {
+      ...state.markEntity,
+      articles,
+      siderNavData,
+      totalCount,
+      propertys,
+      selectedKeys,
+      spinning: false
+    }
+  })
 }
 
 export default connect(mapStateToProps, mapDispatchToSiderNav)(SiderNav_UI)
