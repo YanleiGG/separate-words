@@ -124,7 +124,6 @@ async function refresh(value) {
   } else {
     message.error('获取任务信息失败！', 1.5)
   }
-  console.log(res)
 }
 
 function format (res) {

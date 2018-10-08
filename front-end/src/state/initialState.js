@@ -46,7 +46,8 @@ export const initialState = {
     visible: false,
     radioValue: '',
     wordIndex: null,
-    filter: 'all'
+    filter: 'all',
+    spinning: true
   },
   markEntity: {
     articles: [],
@@ -107,7 +108,7 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 35, //设一个默认值，方便调试，实际设为null
+  taskId: 37, //设一个默认值，方便调试，实际设为null
   user: {
     id: 21,  //设一个默认值，方便调试，实际设为null
     name: ''

@@ -48,7 +48,7 @@ class LabelAndLabels extends React.Component {
           </Col>
           <Col span={11}>
             <Table dataSource={labels.data}>
-              <Column title="标签集合名称" dataIndex="name" key="name"/>
+              <Column title="标签集合名称" dataIndex="name" key="name" width={180}/>
               <Column title="所含标签" render={(text, record) => (
                 <div>
                   { record.words_propertys ? record.words_propertys.map((item, index, arr) => {

@@ -112,7 +112,8 @@ let mapDispatchToSiderNav = dispatch => {
         type: "SET_SEP_WORDS_PRO",
         sepWordsPro: {
           ...state.sepWordsPro,
-          selectedKeys
+          selectedKeys,
+          spinning: false
         }
       })
     },
