@@ -135,10 +135,13 @@ export class TaskService {
 
     let task = new Task()
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
-    // 这里后面需要修改，暂时把所有用户都与任务建立关系，后面把用户权限做好了只需要标注用户就行
-    console.log(selectedUsers)
     if (selectedUsers[0]==='all') {
-      let users = await this.UserRepository.find()
+      let users = await this.UserRepository.find({relations: ['roles']})
+      users = users.filter(item => {
+        return item.roles.some(i => {
+          return i.name === '任务标注'
+        })
+      })
       task.users = users
     } else {
       let users = []
