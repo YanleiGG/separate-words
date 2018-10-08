@@ -133,6 +133,7 @@ let refresh = async dispatch => {
       totalCount,
       propertys,
       selectedKeys,
+      showIndex: 0,
       spinning: false
     }
   })
