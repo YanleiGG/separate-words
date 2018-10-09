@@ -45,7 +45,13 @@ class SiderNav_UI extends React.Component {
                     </Menu.Item>
             })}
           </Menu>
-          <Pagination current={page} onChange={ pageChange } defaultCurrent={1} total={totalCount} simple />
+          <Pagination 
+            current={page} 
+            onChange={ pageChange } 
+            defaultCurrent={1} 
+            total={totalCount} 
+            simple 
+          />
         </Sider>
     )
   }

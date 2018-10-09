@@ -1,20 +1,26 @@
 import React from 'react'
-import { Menu, Layout, Pagination } from 'antd';
+import { Menu, Layout, Pagination, Select } from 'antd';
 import { connect } from "react-redux";
 import store from '../../../state/store'
 import {path} from '../../../config'
 import axios from 'axios'
 
 const { Sider } = Layout;
+const Option = Select.Option
 
 class SiderNav_UI extends React.Component {
   async componentWillMount(){
    await this.props.created()
   }
   render () {
-    let { SiderNavData, selectedKeys, handleClick, totalCount, pageChange } = this.props
+    let { SiderNavData, selectedKeys, handleClick, totalCount, pageChange, filterChange, page } = this.props
     return (
-      <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100%', position: 'fixed', left: 0 }}>
+      <Sider width={200} style={{ background: '#fff',  overflow: 'hidden', height: '100%', position: 'fixed', left: 0 }}>
+        <Select defaultValue="all" style={{ width: 150, margin: '15px' }} onChange={filterChange}>
+          <Option value="all">全部</Option>
+          <Option value="marking">标注中</Option>
+          <Option value="completed">已完成</Option>
+        </Select>
         <Menu
           mode="inline"
           style={{ height: '100%' }}
@@ -27,8 +33,8 @@ class SiderNav_UI extends React.Component {
           })}
           <Pagination
             style={{marginTop: '50px'}}
+            current={page}
             onChange={ pageChange } 
-            defaultCurrent={1} 
             total={totalCount} 
             simple
           />
@@ -40,9 +46,17 @@ class SiderNav_UI extends React.Component {
 
 let refresh = async () => {
   let state = store.getState()
+  store.dispatch({
+    type: "SET_EMOTION",
+    emotion: {
+      ...state.emotion,
+      spinning: true
+    }
+  })  
   let {taskId} = state
   let {filter, page} = state.emotion
   let res = await axios.get(`${path}/api/task/${taskId}/articles/emotion/${filter}?offset=${(page-1)*10}&pageSize=10`)
+  console.log(res)
   let {articles} = res.data.data.task
   let totalCount = res.data.data.totalCount
   let SiderNavData = articles.map((item, index) => {
@@ -66,7 +80,8 @@ let refresh = async () => {
     SiderNavData,
     totalCount,
     showIndex: 0,
-    selectedKeys: [articles[0].id.toString()]
+    selectedKeys: [articles[0].id.toString()],
+    spinning: false
   }})
 }
 
@@ -100,6 +115,15 @@ let mapDispatchToSiderNav = dispatch => {
         page
       }})
       refresh()
+    },
+    filterChange: async value => {
+      let state = store.getState()
+      dispatch({ type: "SET_EMOTION", emotion: {
+        ...state.emotion,
+        filter: value,
+        page: 1
+      }})
+      refresh(dispatch)
     }
   }
 }

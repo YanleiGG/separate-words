@@ -27,7 +27,9 @@ export const initialState = {
         { name: '情感实体抽取', path: '/table/emotion/entity', key: '情感实体抽取' }
       ]
     },
-    filter: 'all'
+    filter: 'all',
+    spinning: true,
+    focusChangeValue: false
   },
   sepWordsPro: {
     articles: [],

@@ -20,7 +20,7 @@ class SiderNav_UI extends React.Component {
     
     return (
         <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
-          <Select defaultValue="all" style={{ width: 150, margin: '10px 15px' }} onChange={filterChange}>
+          <Select defaultValue="all" style={{ width: 150, margin: '15px' }} onChange={filterChange}>
             <Option value="all">全部</Option>
             <Option value="marking">标注中</Option>
             <Option value="completed">已完成</Option>

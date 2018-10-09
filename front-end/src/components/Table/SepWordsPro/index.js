@@ -17,13 +17,11 @@ class SepWordsPro extends React.Component {
         <Spin spinning={spinning} tip='加载数据中...' style={{marginTop: '10%'}}>
           <Content>
             <Layout style={{ minHeight: '100vh' }}>
-              <Layout>
-                  <SiderNav/>
-                  <Switch>
-                    <Route path='/table/sepWordsPro/sepWords' component={ SepWords }></Route>
-                    <Route path='/table/sepWordsPro/markPro' component={ MarkPro }></Route>
-                  </Switch>                
-              </Layout>
+              <SiderNav/>
+              <Switch>
+                <Route path='/table/sepWordsPro/sepWords' component={ SepWords }></Route>
+                <Route path='/table/sepWordsPro/markPro' component={ MarkPro }></Route>
+              </Switch>       
             </Layout>
           </Content>
         </Spin>

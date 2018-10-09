@@ -34,35 +34,31 @@ export class EmotionService {
   }
 
   async create (args) {
+    let article = await this.ArticleRepository.findOne({ 
+      where: {id: args.id},
+      relations: ['emotion']
+    })
+    if(article.emotion) return this.update({...args, id: article.emotion.id})
     let emotion = new Emotion()
-    let article = new Article()
-    article.text = args.text
-    article.title = args.title
-    emotion.perspective = args.perspective || null
-    emotion.attitude = args.attitude || null
-    emotion.degree = args.degree || null
-    emotion.emotion = args.emotion || null
+    emotion = args.emotion
     emotion.article = article
     await this.ArticleRepository.save(article)  
     await this.EmotionRepository.save(emotion)  // 关系拥有者后创建
     return {
       code: 0,
       msg: 'create successed!',
-      emotion
+      data: emotion
     }
   }
 
   async update (args) {
     let emotion = await this.EmotionRepository.findOne({ id: args.id })
-    emotion.perspective = args.perspective || null
-    emotion.attitude = args.attitude || null
-    emotion.degree = args.degree || null
-    emotion.emotion = args.emotion || null
+    emotion = args.emotion
     await this.EmotionRepository.save(emotion)
     return {
       code: 0,
       msg: 'update successed!',
-      emotion
+      data: emotion
     }
   }
 
