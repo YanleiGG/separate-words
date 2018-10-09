@@ -1,9 +1,10 @@
 import React from 'react'
-import { Menu, Layout, Pagination, Select } from 'antd';
+import { Menu, Layout, Pagination, Select, Icon } from 'antd';
 import { connect } from "react-redux";
 import store from '../../../state/store'
 import {path} from '../../../config'
 import axios from 'axios'
+import { unformatWithProperty, formatWithProperty } from '../../../util'
 
 const { Sider } = Layout;
 const Option = Select.Option
@@ -13,9 +14,9 @@ class SiderNav_UI extends React.Component {
    await this.props.created()
   }
   render () {
-    let { SiderNavData, selectedKeys, handleClick, totalCount, pageChange, filterChange, page } = this.props
+    let { siderNavData, selectedKeys, handleClick, totalCount, pageChange, filterChange, page } = this.props
     return (
-      <Sider width={200} style={{ background: '#fff',  overflow: 'hidden', height: '100%', position: 'fixed', left: 0 }}>
+      <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100%', position: 'fixed', left: 0 }}>
         <Select defaultValue="all" style={{ width: 150, margin: '15px' }} onChange={filterChange}>
           <Option value="all">全部</Option>
           <Option value="marking">标注中</Option>
@@ -23,22 +24,27 @@ class SiderNav_UI extends React.Component {
         </Select>
         <Menu
           mode="inline"
-          style={{ height: '100%' }}
+          style={{ height: '80%' }}
           selectedKeys = { selectedKeys }
         >
-          {SiderNavData.map(i => {
+          {siderNavData.map(i => {
             return <Menu.Item  onClick={() => handleClick(i.id)} key={i.id} >
               { i.title }
+              { i.state === 'completed' ? <Icon 
+                style={{color: 'green', float: 'right', marginTop: '15px'}} 
+                type="check" 
+                theme="outlined" 
+              /> : null }
             </Menu.Item>
           })}
-          <Pagination
-            style={{marginTop: '50px'}}
-            current={page}
-            onChange={ pageChange } 
-            total={totalCount} 
-            simple
-          />
         </Menu>
+        <Pagination 
+          current={page} 
+          onChange={ pageChange } 
+          defaultCurrent={1} 
+          total={totalCount} 
+          simple
+        />
       </Sider>
     )
   }
@@ -54,33 +60,41 @@ let refresh = async () => {
     }
   })  
   let {taskId} = state
-  let {filter, page} = state.emotion
+  let {filter, page, tempPropertys} = state.emotion
   let res = await axios.get(`${path}/api/task/${taskId}/articles/emotion/${filter}?offset=${(page-1)*10}&pageSize=10`)
   console.log(res)
   let {articles} = res.data.data.task
   let totalCount = res.data.data.totalCount
-  let SiderNavData = articles.map((item, index) => {
-    if (!articles[index].emotion) {
+  let siderNavData = articles.map((item, index) => {
+    if (!item.emotion) {
       articles[index].emotion = {
         perspective: '',
         attitude: '',
         emotion: '',
-        degree: ''
+        degree: '',
+        markEntity: ''
       }
     }
-
+    let { markEntity } = articles[index].emotion
+    if (!markEntity) {
+      articles[index].emotion.markEntity = item.text.split('').map(item => item + '/ ').join('')
+    }
+    articles[index].showPro = unformatWithProperty(articles[index].emotion.markEntity, tempPropertys)
+    articles[index].emotion.markEntity = formatWithProperty(articles[index].showPro)
     return {
       id: item.id,
-      title: item.title || '无标题'
+      title: item.title || '无标题',
+      state: item.state
     }
   })
+  let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
   store.dispatch({ type: "SET_EMOTION", emotion: {
     ...state.emotion,
     articles,
-    SiderNavData,
+    siderNavData,
     totalCount,
     showIndex: 0,
-    selectedKeys: [articles[0].id.toString()],
+    selectedKeys,
     spinning: false
   }})
 }

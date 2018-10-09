@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { Article } from '../article/article.entity'
+import { MarkEntity } from "../mark_entity/mark_entity.entity";
 
 @Entity()
 export class Emotion {
@@ -17,6 +18,12 @@ export class Emotion {
 
     @Column({ nullable: true })
     emotion: string;   // 喜、怒、哀、乐、惊、惧
+
+    @Column({
+        type: "longtext",
+        nullable: true
+    })
+    markEntity: string
 
     @CreateDateColumn()
     createdAt: Date

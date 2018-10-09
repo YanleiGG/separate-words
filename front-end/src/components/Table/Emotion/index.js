@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import Classify from './Classify'
 import SiderNav from './SiderNav'
 import { connect } from "react-redux";
+import MarkEntity from './MarkEntity'
 
 const { Content } = Layout;
 
@@ -18,6 +19,7 @@ class Emotion extends React.Component {
               <SiderNav/>
               <Switch>
                 <Route path='/table/emotion/classify' component={ Classify }></Route>
+                <Route path='/table/emotion/markEntity' component={ MarkEntity }></Route>
               </Switch>
             </Layout>
           </Content>

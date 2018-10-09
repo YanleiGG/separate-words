@@ -113,7 +113,7 @@ let refresh = async dispatch => {
       articles[index].mark_entity = { markEntity }
     }
     articles[index].showPro = unformatWithProperty(articles[index].mark_entity.markEntity, task.entitiesGroup.entities)
-    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro) 
+    articles[index].mark_entity.markEntity = formatWithProperty(articles[index].showPro)
     return {
       id: item.id,
       title: item.title || '无标题',

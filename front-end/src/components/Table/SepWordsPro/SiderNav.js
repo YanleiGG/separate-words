@@ -50,7 +50,7 @@ class SiderNav_UI extends React.Component {
             onChange={ pageChange } 
             defaultCurrent={1} 
             total={totalCount} 
-            simple 
+            simple
           />
         </Sider>
     )

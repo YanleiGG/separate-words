@@ -1,11 +1,7 @@
 export const initialState = {
   isLogin: true,
-  visible: false,
-  typeArr: [0, 1, 2, 3],
   page: 1,
-  totalCount: 0,
   path: 'http://localhost:3000',
-  selectedKeys: [],
   selection: {
     content: '',
     start: 0,
@@ -15,8 +11,8 @@ export const initialState = {
   password: '123',
   emotion: {
     articles: [],
-    SiderNavData: [],
-    totalCount: 0,
+    siderNavData: [],
+    totalCount: 1,
     page: 1,
     selectedKeys: [],
     showIndex: 0,
@@ -24,12 +20,30 @@ export const initialState = {
       title: '情感标注',
       data: [
         { name: '情感分类', path: '/table/emotion/classify', key: '情感分类' },
-        { name: '情感实体抽取', path: '/table/emotion/entity', key: '情感实体抽取' }
+        { name: '情感实体抽取', path: '/table/emotion/markEntity', key: '情感实体抽取' }
       ]
     },
     filter: 'all',
     spinning: true,
-    focusChangeValue: false
+    focusChangeValue: false,
+    propertys: [
+      { label: '无', value: '' },
+      { label: '观点对象', value: 'aim' },
+      { label: '观点持有者', value: 'hol' },
+      { label: '观点发布时间', value: 't' }
+    ],
+    tempPropertys: [
+      { name: '无', symbol: '' },
+      { name: '观点对象', symbol: 'aim' },
+      { name: '观点持有者', symbol: 'hol' },
+      { name: '观点发布时间', symbol: 't' }
+    ],
+    visible: false,
+    start: 0,
+    end: 0,
+    radioValue: '',
+    labels: ['无', '观点对象', '观点持有者', '观点发布时间'],
+    colors: ['black', '#f50', '#389e0d', '#108ee9'],
   },
   sepWordsPro: {
     articles: [],
