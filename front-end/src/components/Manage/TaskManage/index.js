@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import TasksShow from './TasksShow'
 import CreateTask from './CreateTask'
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 class TaskManage extends React.Component {
   render () {

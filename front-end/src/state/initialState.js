@@ -14,8 +14,8 @@ export const initialState = {
   username: 'admin',
   password: '123',
   emotion: {
-    emotions: [],
-    SiderLeftData: [],
+    articles: [],
+    SiderNavData: [],
     totalCount: 0,
     page: 1,
     selectedKeys: [],
@@ -26,7 +26,8 @@ export const initialState = {
         { name: '情感分类', path: '/table/emotion/classify', key: '情感分类' },
         { name: '情感实体抽取', path: '/table/emotion/entity', key: '情感实体抽取' }
       ]
-    }
+    },
+    filter: 'all'
   },
   sepWordsPro: {
     articles: [],
@@ -77,6 +78,7 @@ export const initialState = {
     instruction: '',
     type: '',
     labels: [],
+    labelsShow: false,
     selectedLabelsId: null,
     docs: [],
     markUsers: [],
@@ -109,9 +111,9 @@ export const initialState = {
     data: [],
     type: ''
   },
-  taskId: 41, //设一个默认值，方便调试，实际设为null
+  taskId: 44, //设一个默认值，方便调试，实际设为null
   user: {
-    id: 21,  //设一个默认值，方便调试，实际设为null
+    id: 1,  //设一个默认值，方便调试，实际设为null
     name: ''
   },
   users: {

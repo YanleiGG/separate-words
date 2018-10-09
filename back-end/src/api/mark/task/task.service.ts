@@ -150,7 +150,7 @@ export class TaskService {
         users.push(user)
       })
       task.users = users
-    }    
+    }
     switch (type) {
       case 'separateWordsProperty': {
         let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })

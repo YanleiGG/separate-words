@@ -8,11 +8,11 @@ const Option = Select.Option;
 
 class SiderRight_UI extends React.Component {
   render () {
-    let { perspectiveChange, attitudeChange, degreeChange, emotionChange, save, cancel, showIndex, emotions } = this.props
-    let perspective = emotions.length > 0 ? emotions[showIndex].perspective : null
-    let attitude = emotions.length > 0 ? emotions[showIndex].attitude : null
-    let emotion = emotions.length > 0 ? emotions[showIndex].emotion : null
-    let degree = emotions.length > 0 ? Number(emotions[showIndex].degree) : null
+    let { perspectiveChange, attitudeChange, degreeChange, emotionChange, save, cancel, showIndex, articles } = this.props
+    let perspective = articles.length > 0 ? articles[showIndex].emotion.perspective : null
+    let attitude = articles.length > 0 ? articles[showIndex].emotion.attitude : null
+    let emotion = articles.length > 0 ? articles[showIndex].emotion.emotion : null
+    let degree = articles.length > 0 ?  Number(articles[showIndex].emotion.degree) : null
     return (
       <Row style={{ height: "100%", textAlign: 'center' }}>
         <Card style={{ height: "100%" }}>
@@ -93,57 +93,57 @@ let mapDispatchToProps = dispatch => {
     perspectiveChange: value => {
       let state = store.getState()
       let showIndex = state.emotion.showIndex
-      let emotions = state.emotion.emotions
-      emotions[showIndex].perspective = value
+      let articles = state.emotion.articles
+      articles[showIndex].emotion.perspective = value
       dispatch({ type: "SET_EMOTION", emotion: {
         ...state.emotion,
-        emotions
+        articles
       }})
     },
     attitudeChange: value => {
       let state = store.getState()
       let showIndex = state.emotion.showIndex
-      let emotions = state.emotion.emotions
-      emotions[showIndex].attitude = value
+      let articles = state.emotion.articles
+      articles[showIndex].emotion.attitude = value
       dispatch({ type: "SET_EMOTION", emotion: {
         ...state.emotion,
-        emotions
+        articles
       }})
     },
     degreeChange: value => {
       let state = store.getState()
       let showIndex = state.emotion.showIndex
-      let emotions = state.emotion.emotions
-      emotions[showIndex].degree = value
+      let articles = state.emotion.articles
+      articles[showIndex].emotion.degree = value
       if (Number(value) > 5) value = 5
       if (Number(value) < 1) value = 1
       dispatch({ type: "SET_EMOTION", emotion: {
         ...state.emotion,
-        emotions
+        articles
       }})
     },
     emotionChange: value => {
       let state = store.getState()
       let showIndex = state.emotion.showIndex
-      let emotions = state.emotion.emotions
-      emotions[showIndex].emotion = value
+      let articles = state.emotion.articles
+      articles[showIndex].emotion.emotion = value
       dispatch({ type: "SET_EMOTION", emotion: {
         ...state.emotion,
-        emotions
+        articles
       }})
     },
     save: async () => {
       let state = store.getState()
       let { showIndex } = state.emotion
-      let data = state.emotion.emotions[showIndex]
-      let tips = message.loading('保存中...')
-      let res = await axios.put(`${state.path}/api/emotion`, data)
-      message.destroy(tips)
-      if (res.data.code == 0) {
-        message.success('保存成功!', 1.5)
-      } else {
-        message.error('保存失败!', 1.5)
-      }   
+      let article = state.emotion.articles[showIndex]
+      // let tips = message.loading('保存中...')
+      // let res = await axios.put(`${state.path}/api/emotion`, data)
+      // message.destroy(tips)
+      // if (res.data.code == 0) {
+      //   message.success('保存成功!', 1.5)
+      // } else {
+      //   message.error('保存失败!', 1.5)
+      // }
     },
     cancel: () => {
       let state = store.getState()

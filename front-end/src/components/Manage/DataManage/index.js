@@ -50,6 +50,7 @@ class TasksShow extends React.Component {
                     <a onClick={() => startTask(record.id, record.types[0].symbol)}>查看详情</a>
                     <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
                     <Link to='/table/markEntity' id='toMarkEntity'/>
+                    <Link to='/table/emotion/classify' id='toEmotion'/>
                   </span>
                 )}
               />
@@ -90,6 +91,10 @@ let mapDispatchToProps = dispatch => {
         }
         case 'markEntity': {
           document.getElementById('toMarkEntity').click()
+          break;
+        }
+        case 'emotion': {
+          document.getElementById('toEmotion').click()
           break;
         }
         default: break;

@@ -106,6 +106,7 @@ async function refresh(value) {
 function format (res) {
   let data = res.data.tasks
   data.forEach(item => {
+    console.log(item)
     let type = ''
     let users = ''
     let labels = ''
