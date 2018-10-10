@@ -20,11 +20,11 @@ class SepWords extends React.Component {
         <Layout style={{ marginLeft: '200px' }}>
           <HeaderNav/>
           <div style={{ padding: '10px 15px 0px' }}>
-            { colors.map((item, index) => <Tag key={index} color={item}>{labels[index]}</Tag>) }
+            { propertys.map((item, index) => <Tag key={index} color={colors[index]}>{item.label}</Tag>) }
           </div>
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
               {showPro.map((i, index) => {
-                let color = colors[labels.indexOf(i.label)]
+                let color = colors[propertys.findIndex(item => item.label === i.label)]
                 return <span key={index} id={index} style={{color}}>{i.content}</span>
               })}
           </Content>
@@ -40,7 +40,6 @@ class SepWords extends React.Component {
             cancelText="取消"
           >
             <RadioGroup onChange={radioChange} value={radioValue}>
-              <Radio key='default' value='default'>无</Radio>
               {propertys.map(item => {
                 return <Radio key={item.value} value={item.value}>{item.label}</Radio>
               })}

@@ -123,6 +123,7 @@ let refresh = async dispatch => {
   let propertys = task.entitiesGroup.entities.map(item => {
     return { label: item.name, value: item.symbol }
   })
+  propertys.unshift({ label: '无', value: '' })
   let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
   dispatch({
     type: "SET_MARK_ENTITY",
