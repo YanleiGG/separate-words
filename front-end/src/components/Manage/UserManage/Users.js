@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Select, message, Table, Popconfirm } from 'antd'
+import { Row, Col, Select, Table, Popconfirm } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
@@ -13,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { data, refresh, deleteUser } = this.props
+    let { data, deleteUser } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>

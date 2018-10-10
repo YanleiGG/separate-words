@@ -56,7 +56,10 @@ class LabelAndLabels extends React.Component {
                   }) : null }
                   { record.entities ? record.entities.map((item, index, arr) => {
                       return index === arr.length-1 ? item.name : item.name + '、'
-                  }) : null }        
+                  }) : null }     
+                  { record.emotionTypes ? record.emotionTypes.map((item, index, arr) => {
+                      return index === arr.length-1 ? item.name : item.name + '、'
+                  }) : null }       
                 </div>
               )}/>
             </Table>
@@ -77,6 +80,7 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState()
       let value = state.labelAndLabels.label.type, url = `${path}/api/words_property`
       if (value === 'markEntity') url = `${path}/api/entities`
+      if (value === 'emotion') url = `${path}/api/emotionType`
       let res = await axios.get(url)
       res.data.data.forEach(item => {
         item.key = item.id
@@ -95,6 +99,7 @@ let mapDispatchToProps = dispatch => {
     labelTypeChange: async value => {
       let state = store.getState(), url = `${path}/api/words_property`
       if (value === 'markEntity') url = `${path}/api/entities`
+      if (value === 'emotion') url = `${path}/api/emotionType`
       let res = await axios.get(url), data = res.data.data
       data.forEach(item => {
         item.key = item.id
@@ -115,6 +120,7 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState()
       let value = state.labelAndLabels.labels.type, url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
+      if (value === 'emotion') url = `${path}/api/emotionTypeGroup`
       let res = await axios.get(url)
       console.log(res)
       let data = res.data.data
@@ -135,6 +141,7 @@ let mapDispatchToProps = dispatch => {
     labelsTypeChange: async value => {
       let state = store.getState(), url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
+      if (value === 'emotion') url = `${path}/api/emotionTypeGroup`
       let res = await axios.get(url), data = res.data.data
       console.log(res)
       data.forEach(item => {

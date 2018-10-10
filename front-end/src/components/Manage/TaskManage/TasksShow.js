@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Input, Select, message, Table, Button } from 'antd'
+import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'

@@ -8,7 +8,7 @@ const Option = Select.Option;
 
 class FooterTable_UI extends React.Component {
   render () {
-    let { perspectiveChange, attitudeChange, degreeChange, emotionChange, save, cancel, showIndex, articles, focusChangeValue } = this.props
+    let { perspectiveChange, attitudeChange, degreeChange, emotionChange, save, cancel, showIndex, articles, focusChangeValue, emotionTypes } = this.props
     let perspective = articles.length > 0 ? articles[showIndex].emotion.perspective : null
     let attitude = articles.length > 0 ? articles[showIndex].emotion.attitude : null
     let emotion = articles.length > 0 ? articles[showIndex].emotion.emotion : null
@@ -23,9 +23,9 @@ class FooterTable_UI extends React.Component {
                 onChange={perspectiveChange}
                 value={ perspective }
               >
-                <Option value="subjective">主观句</Option>
-                <Option value="objective">客观句</Option>
-                <Option value="disabled">无法判断</Option>
+                <Option value="subjective" key="subjective">主观句</Option>
+                <Option value="objective" key="objective">客观句</Option>
+                <Option value="disabled" key="disabled">无法判断</Option>
               </Select>
             </Col>
             <Col span={6}>
@@ -35,10 +35,7 @@ class FooterTable_UI extends React.Component {
                 onChange={attitudeChange}
                 value = { attitude }
               >
-                <Option value="pos">正面</Option>
-                <Option value="neg">负面</Option>
-                <Option value="neutral">中性/无明显情感</Option>
-                <Option value="disabled">无法判断</Option>
+                {emotionTypes.map(item => <Option value={item.symbol} key={item.symbol}>{item.name}</Option>)}
               </Select>            
             </Col>
             <Col span={6}>

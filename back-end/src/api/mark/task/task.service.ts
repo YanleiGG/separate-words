@@ -6,6 +6,7 @@ import { Type } from '../../../database/type/type.entity'
 import { User } from '../../../database/user/user.entity'
 import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity'
 import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity'
+import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity'
 var fs = require('fs')
 var xml2js = require('xml2js')
 
@@ -24,6 +25,8 @@ export class TaskService {
     private readonly WordsPropertyGroupRepository: Repository<WordsPropertyGroup>,
     @Inject('EntitiesGroupRepositoryToken')
     private readonly EntitiesGroupRepository: Repository<EntitiesGroup>,
+    @Inject('EmotionTypeGroupRepositoryToken')
+    private readonly EmotionTypeGroupRepository: Repository<EmotionTypeGroup>,
   ) {}
 
   async find(offset: number, pageSize: number) {
@@ -91,7 +94,7 @@ export class TaskService {
     switch(type){
       case "separateWordsProperty": relations.push('articles.sep_words_property', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys')
       case "markEntity": relations.push('articles.mark_entity', 'entitiesGroup', 'entitiesGroup.entities')
-      case 'emotion': relations.push('articles.emotion')
+      case 'emotion': relations.push('articles.emotion', 'emotionTypeGroup', 'emotionTypeGroup.emotionTypes')
       default: {}
     }
     let task =  await this.TaskRepository.findOne({ 
@@ -159,6 +162,10 @@ export class TaskService {
       case 'markEntity': {
         let entitiesGroup = await this.EntitiesGroupRepository.findOne({ id: selectedLabelsId })
         task.entitiesGroup = entitiesGroup
+      }
+      case 'emotion': {
+        let emotionTypeGroup = await this.EmotionTypeGroupRepository.findOne({ id: selectedLabelsId })
+        task.emotionTypeGroup = emotionTypeGroup
       }
       default: {}
     }

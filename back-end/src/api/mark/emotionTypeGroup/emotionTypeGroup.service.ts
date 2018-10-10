@@ -20,7 +20,7 @@ export class EmotionTypeGroupService {
   }
 
   async findAll () {
-    let data = await this.EmotionTypeGroupRepository.find({relations: ["words_propertys"]})
+    let data = await this.EmotionTypeGroupRepository.find({relations: ["emotionTypes"]})
     return {
       code: 0,
       msg: 'successed!',

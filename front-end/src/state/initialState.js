@@ -44,6 +44,9 @@ export const initialState = {
     radioValue: '',
     labels: ['无', '观点对象', '观点持有者', '观点发布时间'],
     colors: ['black', '#f50', '#389e0d', '#108ee9'],
+    emotionTypes: [
+      { name: '无', symbol: 'disabled' }
+    ]
   },
   sepWordsPro: {
     articles: [],

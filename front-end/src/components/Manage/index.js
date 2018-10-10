@@ -7,8 +7,6 @@ import UserManage from './UserManage'
 import LabelManage from './LabelManage'
 import DataManage from './DataManage'
 
-const { Content } = Layout;
-
 class Manage extends React.Component {
   render() {
     return (

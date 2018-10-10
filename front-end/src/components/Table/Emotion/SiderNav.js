@@ -58,12 +58,12 @@ let refresh = async () => {
       ...state.emotion,
       spinning: true
     }
-  })  
+  })
   let {taskId} = state
-  let {filter, page, tempPropertys} = state.emotion
+  let {filter, page, tempPropertys, emotionTypes} = state.emotion
   let res = await axios.get(`${path}/api/task/${taskId}/articles/emotion/${filter}?offset=${(page-1)*10}&pageSize=10`)
   console.log(res)
-  let {articles} = res.data.data.task
+  let {articles, emotionTypeGroup} = res.data.data.task
   let totalCount = res.data.data.totalCount
   let siderNavData = articles.map((item, index) => {
     if (!item.emotion) {
@@ -88,6 +88,7 @@ let refresh = async () => {
     }
   })
   let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
+  emotionTypes = emotionTypeGroup.emotionTypes.concat(emotionTypes)
   store.dispatch({ type: "SET_EMOTION", emotion: {
     ...state.emotion,
     articles,
@@ -95,6 +96,7 @@ let refresh = async () => {
     totalCount,
     showIndex: 0,
     selectedKeys,
+    emotionTypes,
     spinning: false
   }})
 }

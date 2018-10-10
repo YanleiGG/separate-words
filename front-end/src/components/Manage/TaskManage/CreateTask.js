@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Input, Select, Button, Upload, Icon, message } from 'antd'
+import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
@@ -44,14 +44,14 @@ class CreateTask extends React.Component {
             </Select>
           </Col>
         </Row>
-        { labelsShow ? <Row style={{ marginBottom: '10px' }}>
+        <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>标签集合：</div>
             <Select style={{ width: '100%' }} onChange={labelChange} value={selectedLabelsId}>
               {labels.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Col>
-        </Row> : null }
+        </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>上传语料：</div>
@@ -120,19 +120,9 @@ let mapDispatchToProps = dispatch => {
     typeChange: async value => {
       let state = store.getState()
       let createTask = state.createTask, url = ''
-      if (value === 'emotion') {
-        dispatch({ 
-          type: 'SET_CREATE_TASK',
-          createTask: {
-            ...createTask,
-            type: value,
-            labelsShow: false
-          }
-        })
-        return
-      }
       if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
+      if (value === 'emotion') url = `${path}/api/emotionTypeGroup`
       let res = await axios.get(url), data = res.data.data
       console.log(data)
       dispatch({ 
@@ -141,8 +131,7 @@ let mapDispatchToProps = dispatch => {
           ...createTask,
           type: value,
           labels: data,
-          selectedLabelsId: null,
-          labelsShow: true
+          selectedLabelsId: null
         }
       })
     },
@@ -172,8 +161,7 @@ let mapDispatchToProps = dispatch => {
       let {createTask} = state
       let { name, instruction, type, selectedLabelsId, selectedUsers, docs } = createTask
       console.log(createTask)
-      let temp = type !== 'emotion' && selectedLabelsId === null
-      if (!name || !instruction || !type || temp || docs.length == 0 || selectedUsers.length == 0) {
+      if (!name || !instruction || !type || selectedLabelsId === null || docs.length == 0 || selectedUsers.length == 0) {
         message.error('请将所有内容填写完整!', 1.5)
         return
       }
