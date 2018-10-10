@@ -7,6 +7,7 @@ import { Article } from '../article/article.entity'
 import { Type } from '../type/type.entity'
 import { WordsPropertyGroup } from '../words_property_group/words_property_group.entity'
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
+import { EmotionTypeGroup } from '../emotionTypeGroup/emotionTypeGroup.entity'
 
 @Entity()
 export class Task {
@@ -40,6 +41,9 @@ export class Task {
 
     @ManyToOne(type => EntitiesGroup, entitiesGroup => entitiesGroup.tasks)
     entitiesGroup: EntitiesGroup;
+
+    @ManyToOne(type => EmotionTypeGroup, emotionTypeGroup => emotionTypeGroup.tasks)
+    emotionTypeGroup: EmotionTypeGroup;
 
     @ManyToMany(type => Type, type => type.tasks)
     @JoinTable()

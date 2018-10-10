@@ -37,6 +37,14 @@ import { markEntityProviders } from "../../database/mark_entity/mark_entity.prov
 import { MarkEntityService } from './mark_entity/mark_entity.service'
 import { MarkEntityController } from './mark_entity/mark_entity.controller'
 
+import { emotionTypeProviders } from "../../database/emotionType/emotionType.provider" 
+import { EmotionTypeService } from './emotionType/emotionType.service'
+import { EmotionTypeController } from './emotionType/emotionType.controller' 
+
+import { emotionTypeGroupProviders } from "../../database/emotionTypeGroup/emotionTypeGroup.provider" 
+import { EmotionTypeGroupService } from './emotionTypeGroup/emotionTypeGroup.service'
+import { EmotionTypeGroupController } from './emotionTypeGroup/emotionTypeGroup.controller' 
+
 import { sepWordsPropertyProviders } from '../../database/sep_words_property/sep_words_property.provider'
 import { SepWordsPropertyService } from './sep_words_property/sep_words_property.service'
 import { SepWordsPropertyController } from './sep_words_property/sep_words_property.controller'
@@ -68,6 +76,8 @@ import { userProviders } from '../../database/user/user.provider'
     ...sepWordsPropertyProviders,
     ...typeProviders,
     ...userProviders,
+    ...emotionTypeProviders,
+    ...emotionTypeGroupProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,
@@ -79,7 +89,9 @@ import { userProviders } from '../../database/user/user.provider'
     MarkEntityService,
     SepWordsPropertyService,
     TaskService,
-    UploadService
+    UploadService,
+    EmotionTypeService,
+    EmotionTypeGroupService
   ],
   controllers: [
     ArticleController,
@@ -93,7 +105,9 @@ import { userProviders } from '../../database/user/user.provider'
     MarkEntityController,
     SepWordsPropertyController,
     TaskController,
-    UploadController
+    UploadController,
+    EmotionTypeController,
+    EmotionTypeGroupController
   ]
 })
 export class MarkModule {}
