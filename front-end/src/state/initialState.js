@@ -97,7 +97,6 @@ export const initialState = {
     instruction: '',
     type: '',
     labels: [],
-    labelsShow: false,
     selectedLabelsId: null,
     docs: [],
     markUsers: [],
@@ -107,7 +106,9 @@ export const initialState = {
     type: '',
     labels: [],
     labelsValue: [],
-    name: ''
+    name: '',
+    contentTypeLabels: [],
+    uploadShow: false
   },
   createLabel: {
     type: '',

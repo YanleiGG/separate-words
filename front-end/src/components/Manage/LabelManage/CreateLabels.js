@@ -4,12 +4,13 @@ import { Row, Col, Input, Select, Button, message } from 'antd'
 import { connect } from "react-redux";
 import store from '../../../state/store'
 import axios from 'axios'
+import UploadLabels from './UploadLabels'
 
 const Option = Select.Option;
 
 class CreateLabels extends React.Component {
   render() {
-    let { labelsSelectChange, labels, nameChange, create, cancel, typeChange } = this.props
+    let { labelsSelectChange, labels, nameChange, create, cancel, typeChange, uploadShow } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row style={{ marginBottom: '10px' }}>
@@ -29,7 +30,13 @@ class CreateLabels extends React.Component {
             <Input onChange={nameChange}></Input>
           </Col>
         </Row>
-        <Row style={{ marginBottom: '10px' }}>
+        { uploadShow ? <Row style={{ marginBottom: '10px' }}>
+          <Col span={10} push={7}>
+            <div style={{ marginBottom: '10px' }}>上传标签体系：</div>
+            <UploadLabels/>
+          </Col>
+        </Row> : null}        
+        { !uploadShow ? <Row style={{ marginBottom: '10px' }}>
           <Col span={10} push={7}>
             <div style={{ marginBottom: '10px' }}>所含标签：</div>
             <Select
@@ -40,7 +47,7 @@ class CreateLabels extends React.Component {
             { labels.map(item => <Option key={item.name}>{item.name}</Option>) }
             </Select>
           </Col>
-        </Row>
+        </Row> : null}
         <Row style={{ marginTop: '20px', textAlign: 'center' }}>
           <Col span={10} push={7}>
             <Button onClick={ create } type="primary">创建</Button>
@@ -53,9 +60,7 @@ class CreateLabels extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return {
-    labels: state.createLabels.labels
-  }
+  return state.createLabels
 }
 
 let mapDispatchToProps = dispatch => {
@@ -82,6 +87,17 @@ let mapDispatchToProps = dispatch => {
     },
     typeChange: async value => {
       let state = store.getState(), url = '', {createLabels} = state
+      if (value === 'contentType') {
+        dispatch({
+          type: 'SET_CREATE_LABELS',
+          createLabels: {
+            ...createLabels,
+            type: value,
+            uploadShow: true
+          }
+        })
+        return
+      }
       if (value === 'separateWordsProperty') url = `${path}/api/words_property`
       if (value === 'markEntity') url = `${path}/api/entities`
       if (value === 'emotion') url = `${path}/api/emotionType`
@@ -91,7 +107,8 @@ let mapDispatchToProps = dispatch => {
         createLabels: {
           ...createLabels,
           type: value,
-          labels: res.data.data
+          labels: res.data.data,
+          uploadShow: false
         }
       })
     },
@@ -108,10 +125,15 @@ let mapDispatchToProps = dispatch => {
     create: async () => {
       let state = store.getState(), url = '', {createLabels} = state
       let {type, labelsValue, name} = createLabels
-      if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
       if (type === 'separateWordsProperty') url = `${path}/api/words_property_group`
       if (type === 'markEntity') url = `${path}/api/entities_group`
       if (type === 'emotion') url = `${path}/api/emotionTypeGroup`
+      if (type === 'contentType') {
+        url = `${path}/api/contentLabelGroup`
+        labelsValue = createLabels.contentTypeLabels
+        console.log(labelsValue)
+      }
+      if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
       let tips = message.loading('创建中...')
       let res = await axios.post(url, { name, labels: labelsValue })
       message.destroy(tips)

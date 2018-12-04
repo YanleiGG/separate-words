@@ -88,7 +88,7 @@ let refresh = async () => {
     }
   })
   let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
-  emotionTypes = emotionTypeGroup.emotionTypes.concat(emotionTypes)
+  emotionTypes = emotionTypeGroup.emotionTypes
   store.dispatch({ type: "SET_EMOTION", emotion: {
     ...state.emotion,
     articles,

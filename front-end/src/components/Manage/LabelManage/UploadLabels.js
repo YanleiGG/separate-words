@@ -8,7 +8,7 @@ let pathname = path.replace('http://', '')
 const uploadProps = {
   name: 'file',
   accept: '.xml',
-  action: `//${pathname}/api/upload/docs`,
+  action: `//${pathname}/api/upload/labels`,
   withCredentials: true,
   onChange(info) {
     if (info.file.status !== 'uploading') {
@@ -16,14 +16,14 @@ const uploadProps = {
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} 上传成功！`)
-      let state = store.getState(), {createTask} = state
-      let docs = state.createTask.docs
-      docs.push(info.file.response.data.fileName)
+      let state = store.getState(), {createLabels} = state
+      let contentTypeLabels = createLabels.contentTypeLabels
+      contentTypeLabels.push(info.file.response.data.fileName)
       store.dispatch({ 
-        type: 'SET_CREATE_TASK',
-        createTask: {
-          ...createTask,
-          docs
+        type: 'SET_CREATE_LABELS',
+        createLabels: {
+          ...createLabels,
+          contentTypeLabels
         }
       })
     } else if (info.file.status === 'error') {
@@ -31,14 +31,14 @@ const uploadProps = {
     }
   },
   onRemove(file) {
-    let state = store.getState(), {createTask} = state
+    let state = store.getState(), {createLabels} = state
     let name = file.response.data.fileName
-    let docs = createTask.docs.filter(item => item !== name)
+    let contentTypeLabels = createLabels.contentTypeLabels.filter(item => item !== name)
     store.dispatch({ 
-      type: 'SET_CREATE_TASK',
-      createTask: {
-        ...createTask,
-        docs
+      type: 'SET_CREATE_LABELS',
+      createLabels: {
+        ...createLabels,
+        contentTypeLabels
       }
     })
   }

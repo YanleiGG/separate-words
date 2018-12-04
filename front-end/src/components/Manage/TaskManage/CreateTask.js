@@ -15,7 +15,7 @@ class CreateTask extends React.Component {
   render() {
     let { 
       nameChange, instructionChange, markUsers,
-      typeChange, labels, labelChange, create, labelsShow,
+      typeChange, labels, labelChange, create,
       cancel, selectedLabelsId, selectedUsers, userChange
     } = this.props
     return (
