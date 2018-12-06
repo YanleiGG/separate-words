@@ -13,13 +13,16 @@ export class EmotionService {
   ) {}
   
   async find(offset: number, pageSize: number) {
-    let emotions =  await this.EmotionRepository.find({relations: ['article']});
+    let emotions =  await this.EmotionRepository.find({
+      relations: ['article'],
+      skip: offset,
+      take: pageSize
+    });
     let totalCount = emotions.length
-    let data = emotions.reverse().splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',
-      emotions: data,
+      emotions,
       totalCount
     }
   }

@@ -1,23 +1,20 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { EmotionType } from '../../../database/emotionType/emotionType.entity';
+import { ContentLabel } from '../../../database/ContentLabel/ContentLabel.entity';
 
 @Injectable()
-export class EmotionTypeService {
+export class ContentLabelService {
   constructor(
-    @Inject('EmotionTypeRepositoryToken')
-    private readonly EmotionTypeRepository: Repository<EmotionType>
+    @Inject('ContentLabelRepositoryToken')
+    private readonly ContentLabelRepository: Repository<ContentLabel>
   ) {}
 
   async findOne (id: number) {
-    return this.EmotionTypeRepository.findOne({ id })
+    return this.ContentLabelRepository.findOne({ id })
   }
 
   async find (offset: number, pageSize: number) {
-    let data = await this.EmotionTypeRepository.find({
-      skip: offset,
-      take: pageSize
-    })
+    let data = await this.ContentLabelRepository.find()
     let totalCount = data.length
     if (offset != undefined) {
       data = data.reverse().splice(offset, pageSize)
@@ -32,8 +29,8 @@ export class EmotionTypeService {
   
   async create (args) {
     let { name, symbol } = args
-    let sameName = await this.EmotionTypeRepository.find({ name })
-    let sameSymbol = await this.EmotionTypeRepository.find({ symbol })
+    let sameName = await this.ContentLabelRepository.find({ name })
+    let sameSymbol = await this.ContentLabelRepository.find({ symbol })
     if (sameName.length > 0 || sameSymbol.length > 0) {
       return {
         code: 10001,
@@ -42,10 +39,10 @@ export class EmotionTypeService {
       }
     }
 
-    let item = new EmotionType()
+    let item = new ContentLabel()
     item.name = name
     item.symbol = symbol
-    let wordsProperty = await this.EmotionTypeRepository.save(item)
+    let wordsProperty = await this.ContentLabelRepository.save(item)
     return {
       code: 0,
       msg: 'successed!',
@@ -54,10 +51,10 @@ export class EmotionTypeService {
   }
 
   async update (args) {
-    let item = await this.EmotionTypeRepository.findOne({ id: args.id })
+    let item = await this.ContentLabelRepository.findOne({ id: args.id })
     item.name = args.name
     item.symbol = args.symbol
-    let res = await this.EmotionTypeRepository.save(item)
+    let res = await this.ContentLabelRepository.save(item)
     return {
       code: 0,
       msg: 'successed!',
@@ -66,8 +63,8 @@ export class EmotionTypeService {
   }
 
   async delete (id: number) {
-    let item = await this.EmotionTypeRepository.findOne({ id })
-    let res = await this.EmotionTypeRepository.delete(item)
+    let item = await this.ContentLabelRepository.findOne({ id })
+    let res = await this.ContentLabelRepository.delete(item)
     return {
       code: 0,
       msg: 'successed!',

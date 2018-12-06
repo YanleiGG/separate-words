@@ -8,9 +8,9 @@ export class UploadService {
   constructor(
   ) {}
 
-  uploadDocs(file) {
+  upload(file, pathname) {
     let name = timestamp.utc('YYYYMMDDmmss').toString() + file.originalname
-    let path = __dirname.replace(/\/api\/mark\/upload/, `/static/docs/${name}`)
+    let path = __dirname.replace(/\/api\/mark\/upload/, `/static/${pathname}/${name}`)
     fs.writeFile(path, file.buffer, 'utf8', () => {})
     return {
       code: 0,

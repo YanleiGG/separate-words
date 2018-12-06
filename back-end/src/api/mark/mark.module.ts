@@ -53,6 +53,14 @@ import { taskProviders } from '../../database/task/task.provider'
 import { TaskService } from './task/task.service'
 import { TaskController } from './task/task.controller'
 
+import { contentLabelGroupProviders } from '../../database/contentLabelGroup/contentLabelGroup.provider'
+import { ContentLabelGroupService } from './contentLabelGroup/contentLabelGroup.service'
+import { ContentLabelGroupController } from './contentLabelGroup/contentLabelGroup.controller'
+
+import { contentLabelProviders } from '../../database/contentLabel/contentLabel.provider'
+import { ContentLabelService } from './contentLabel/contentLabel.service'
+import { ContentLabelController } from './contentLabel/contentLabel.controller'
+
 import { UploadService } from './upload/upload.service'
 import { UploadController } from './upload/upload.controller'
 
@@ -78,6 +86,8 @@ import { userProviders } from '../../database/user/user.provider'
     ...userProviders,
     ...emotionTypeProviders,
     ...emotionTypeGroupProviders,
+    ...contentLabelGroupProviders,
+    ...contentLabelProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,
@@ -91,7 +101,9 @@ import { userProviders } from '../../database/user/user.provider'
     TaskService,
     UploadService,
     EmotionTypeService,
-    EmotionTypeGroupService
+    EmotionTypeGroupService,
+    ContentLabelGroupService,
+    ContentLabelService
   ],
   controllers: [
     ArticleController,
@@ -107,7 +119,9 @@ import { userProviders } from '../../database/user/user.provider'
     TaskController,
     UploadController,
     EmotionTypeController,
-    EmotionTypeGroupController
+    EmotionTypeGroupController,
+    ContentLabelGroupController,
+    ContentLabelController
   ]
 })
 export class MarkModule {}

@@ -1,6 +1,6 @@
 import {
     Entity,JoinTable, Column, PrimaryGeneratedColumn, 
-    ManyToMany, CreateDateColumn, UpdateDateColumn, OneToMany 
+    ManyToMany, CreateDateColumn, UpdateDateColumn, OneToMany, Index
 } from "typeorm";
 import { EmotionType } from '../emotionType/emotionType.entity'
 import { Task } from '../task/task.entity'

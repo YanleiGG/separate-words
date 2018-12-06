@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { ClassifyGroup } from '../classify_group/classify_group.entity'
 
 @Entity()

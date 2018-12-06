@@ -2,11 +2,11 @@ import {
     Entity,JoinTable, Column, PrimaryGeneratedColumn, 
     ManyToMany, CreateDateColumn, UpdateDateColumn, OneToMany, Index
 } from "typeorm";
-import { WordsProperty } from '../words_property/words_property.entity'
+import { ContentLabel } from '../contentLabel/contentLabel.entity'
 import { Task } from '../task/task.entity'
 
 @Entity()
-export class WordsPropertyGroup {
+export class ContentLabelGroup {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,10 +19,10 @@ export class WordsPropertyGroup {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(type => Task, task => task.wordsPropertyGroup)
+    @OneToMany(type => Task, task => task.contentLabelGroup)
     tasks: Task[];
 
-    @ManyToMany(type => WordsProperty, words_property => words_property.words_property_groups)
+    @ManyToMany(type => ContentLabel, contentLabel => contentLabel.contentLabelGroups)
     @JoinTable()
-    words_propertys: WordsProperty[];
+    contentLabels: ContentLabel[];
 }

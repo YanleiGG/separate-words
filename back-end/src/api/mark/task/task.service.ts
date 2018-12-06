@@ -97,15 +97,31 @@ export class TaskService {
       case 'emotion': relations.push('articles.emotion', 'emotionTypeGroup', 'emotionTypeGroup.emotionTypes')
       default: {}
     }
+    let date1 = new Date().valueOf()
     let task =  await this.TaskRepository.findOne({ 
       where: { id: taskId },
-      relations
+      relations,
     })
+    let date2 = new Date().valueOf()
+    console.log('date2-date1:', date2-date1)
+    // let task =  await this.TaskRepository
+    // .createQueryBuilder("task")
+    // .innerJoinAndSelect("photo.metadata", "metadata")
+    // .leftJoinAndSelect("photo.albums", "album")
+    // .where(`task.id = ${taskId}`)
+    // .andWhere(`task.articles.state = ${filter}`)
+    // .andWhere("(photo.name = :photoName OR photo.name = :bearName)")
+    // .orderBy("photo.id", "DESC")
+    // .skip(offset)
+    // .take(pageSize)
+    // .getMany();
     if (filter === 'completed' || filter === 'marking') {
       task.articles = task.articles.filter(item => item.state === filter)
     }
+    let date3 = new Date().valueOf()
     let totalCount = task.articles.length
     task.articles = task.articles.splice(offset, pageSize)
+    let date4 = new Date().valueOf()
     return {
       code: 0,
       msg: 'find successed!',

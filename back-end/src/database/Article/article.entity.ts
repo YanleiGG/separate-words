@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, Index} from "typeorm";
 import { Emotion } from '../emotion/emotion.entity'
 import { SepWordsProperty } from '../sep_words_property/sep_words_property.entity'
 import { MarkEntity } from '../mark_entity/mark_entity.entity'

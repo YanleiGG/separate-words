@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable, Index} from "typeorm";
 import { EmotionTypeGroup } from '../emotionTypeGroup/emotionTypeGroup.entity'
 
 @Entity()

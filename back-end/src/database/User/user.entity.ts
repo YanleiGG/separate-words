@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, ManyToMany} from "typeorm";
+import {Entity, Column, Index, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, ManyToMany} from "typeorm";
 import { Role } from '../role/role.entity'
 import { Task } from '../task/task.entity'
 

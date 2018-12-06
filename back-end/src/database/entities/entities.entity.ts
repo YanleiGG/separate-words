@@ -1,4 +1,4 @@
-import {Entity, ManyToMany, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, ManyToMany, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, Index} from "typeorm";
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
 
 @Entity()

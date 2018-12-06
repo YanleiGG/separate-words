@@ -8,6 +8,12 @@ export class UploadController {
   @Post('docs')
   @UseInterceptors(FileInterceptor('file'))
   uploadDocs(@UploadedFile() file) {
-    return this.UploadService.uploadDocs(file)
+    return this.UploadService.upload(file, 'docs')
+  }
+
+  @Post('labels')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadLabels(@UploadedFile() file) {
+    return this.UploadService.upload(file, 'labels')
   }
 }

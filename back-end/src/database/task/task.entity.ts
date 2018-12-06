@@ -1,13 +1,14 @@
 import {
     OneToMany, Entity, Column, PrimaryGeneratedColumn, 
     ManyToMany, CreateDateColumn, UpdateDateColumn, 
-    JoinTable, ManyToOne} from "typeorm";
+    JoinTable, ManyToOne, Index} from "typeorm";
 import { User } from '../user/user.entity'
 import { Article } from '../article/article.entity'
 import { Type } from '../type/type.entity'
 import { WordsPropertyGroup } from '../words_property_group/words_property_group.entity'
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
 import { EmotionTypeGroup } from '../emotionTypeGroup/emotionTypeGroup.entity'
+import { ContentLabelGroup } from '../contentLabelGroup/contentLabelGroup.entity'
 
 @Entity()
 export class Task {
@@ -44,6 +45,9 @@ export class Task {
 
     @ManyToOne(type => EmotionTypeGroup, emotionTypeGroup => emotionTypeGroup.tasks)
     emotionTypeGroup: EmotionTypeGroup;
+
+    @ManyToOne(type => ContentLabelGroup, contentLabelGroup => contentLabelGroup.tasks)
+    contentLabelGroup: ContentLabelGroup;
 
     @ManyToMany(type => Type, type => type.tasks)
     @JoinTable()
