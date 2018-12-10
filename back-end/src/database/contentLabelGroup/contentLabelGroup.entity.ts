@@ -22,7 +22,7 @@ export class ContentLabelGroup {
     @OneToMany(type => Task, task => task.contentLabelGroup)
     tasks: Task[];
 
-    @ManyToMany(type => ContentLabel, contentLabel => contentLabel.contentLabelGroups)
+    @OneToMany(type => ContentLabel, contentLabel => contentLabel.contentLabelGroup)
     @JoinTable()
     contentLabels: ContentLabel[];
 }

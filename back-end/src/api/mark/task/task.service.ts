@@ -7,6 +7,7 @@ import { User } from '../../../database/user/user.entity'
 import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity'
 import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity'
 import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity'
+import { readAndParseXML } from 'tools';
 var fs = require('fs')
 var xml2js = require('xml2js')
 
@@ -118,10 +119,8 @@ export class TaskService {
     if (filter === 'completed' || filter === 'marking') {
       task.articles = task.articles.filter(item => item.state === filter)
     }
-    let date3 = new Date().valueOf()
     let totalCount = task.articles.length
     task.articles = task.articles.splice(offset, pageSize)
-    let date4 = new Date().valueOf()
     return {
       code: 0,
       msg: 'find successed!',
@@ -189,39 +188,30 @@ export class TaskService {
     task.instruction = args.instruction
     task.types = [type_1]
     task.state = '进行中'
-    await this.readXml(docs, task)
-    await this.TaskRepository.save(task)
-    return {
-      code: 0,
-      msg: 'create successed!',
-      task
-    }
-  }
-
-  async readXml (docs, task) {
-    for (let i = 0;i < docs.length;i++) {
-      var parser = new xml2js.Parser()
-      let path = __dirname.replace(/\/api\/mark\/task/, `/static/docs/${docs[i]}`)
-      fs.readFile(path, async (err, data) => {
-        await parser.parseString(data, async (err, result) => {
-          if (result.docs) {
-            let docs = result.docs.doc
-            await docs.map(async item => {
-              let article = new Article()
-              article.title = item.title ? item.title[0] : null
-              article.text = item.text ? item.text[0] : null
-              article.state = 'marking'
-              article.task = task
-              await this.ArticleRepository.save(article)
-            })
-          } else {
-            return {
-              code: 10002,
-              msg: `${docs[i]}无法解析!`
-            }
-          }
-        })
+    let path = __dirname.replace(/\/api\/mark\/task/, `/static/docs/${docs[0]}`)
+    let result = await readAndParseXML(path)
+    if (result.docs) {
+      await this.TaskRepository.save(task)
+      let docs = result.docs.doc
+      docs.map(async item => {
+        let article = new Article()
+        article.title = item.title ? item.title[0] : null
+        article.text = item.text ? item.text[0] : null
+        article.state = 'marking'
+        article.task = task
+        await this.ArticleRepository.save(article)
       })
+      await this.TaskRepository.save(task)
+      return {
+        code: 0,
+        msg: '创建成功!',
+        task
+      }
+    } else {
+      return {
+        code: 10002,
+        msg: `${docs[0]}无法解析!`
+      }
     }
   }
 

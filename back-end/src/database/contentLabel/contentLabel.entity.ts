@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, Index} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { ContentLabelGroup } from '../contentLabelGroup/contentLabelGroup.entity'
 
 @Entity()
@@ -13,10 +13,10 @@ export class ContentLabel {
     mainId: string;
 
     @Column({
-        type: "integer",
+        type: "varchar",
         nullable: true
     })    
-    parentId: number;
+    parentId: string;
 
     @CreateDateColumn()
     createdAt: Date
@@ -24,6 +24,6 @@ export class ContentLabel {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToMany(type => ContentLabelGroup, contentLabelGroup => contentLabelGroup.contentLabels)
-    contentLabelGroups: ContentLabelGroup[];
+    @ManyToOne(type => ContentLabelGroup, contentLabelGroup => contentLabelGroup.contentLabels)
+    contentLabelGroup: ContentLabelGroup;
 } 

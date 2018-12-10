@@ -28,9 +28,9 @@ export class ContentLabelService {
   }
   
   async create (args) {
-    let { name, symbol } = args
+    let { name, mainId } = args
     let sameName = await this.ContentLabelRepository.find({ name })
-    let sameSymbol = await this.ContentLabelRepository.find({ symbol })
+    let sameSymbol = await this.ContentLabelRepository.find({ mainId })
     if (sameName.length > 0 || sameSymbol.length > 0) {
       return {
         code: 10001,
@@ -41,7 +41,7 @@ export class ContentLabelService {
 
     let item = new ContentLabel()
     item.name = name
-    item.symbol = symbol
+    item.mainId = mainId
     let wordsProperty = await this.ContentLabelRepository.save(item)
     return {
       code: 0,
@@ -53,7 +53,7 @@ export class ContentLabelService {
   async update (args) {
     let item = await this.ContentLabelRepository.findOne({ id: args.id })
     item.name = args.name
-    item.symbol = args.symbol
+    item.mainId = args.symbol
     let res = await this.ContentLabelRepository.save(item)
     return {
       code: 0,

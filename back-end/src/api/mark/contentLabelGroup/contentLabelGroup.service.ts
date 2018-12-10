@@ -3,8 +3,7 @@ import { Repository } from 'typeorm';
 import { ContentLabelGroup } from '../../../database/contentLabelGroup/contentLabelGroup.entity';
 import { ContentLabel } from '../../../database/contentLabel/contentLabel.entity'
 import { Type } from '../../../database/type/type.entity'
-var fs = require('fs')
-var xml2js = require('xml2js')
+import { readAndParseXML, getContentLabelsTree } from 'tools';
 
 @Injectable()
 export class ContentLabelGroupService {
@@ -18,11 +17,22 @@ export class ContentLabelGroupService {
   ) {}
 
   async findOne (id: number) {
-    return this.ContentLabelGroupRepository.findOne({ id })
+    let contentLabelGroup = await this.ContentLabelGroupRepository.findOne({  
+      where: { id },
+      relations: ["contentLabels"]
+    })
+    return {
+      code: 0,
+      msg: 'successed!',
+      data: {
+        ...contentLabelGroup,
+        treeData: getContentLabelsTree(contentLabelGroup.contentLabels)
+      }
+    }
   }
 
   async findAll () {
-    let data = await this.ContentLabelGroupRepository.find({relations: ["words_propertys"]})
+    let data = await this.ContentLabelGroupRepository.find({relations: ["contentLabel"]})
     return {
       code: 0,
       msg: 'successed!',
@@ -43,19 +53,37 @@ export class ContentLabelGroupService {
 
     let contentLabelGroup = new ContentLabelGroup(), 
         {labels} = args
-    this.readXml(labels, null)
-    // contentLabelGroup.name = name
-    // contentLabelGroup.contentLabels = []
-    // let res = await this.ContentLabelGroupRepository.save(contentLabelGroup)
-    // for (let i = 0; i < labels.length; i++) {
-    //   contentLabelGroup.contentLabels.push(await this.ContentLabelRepository.findOne({ name: labels[i] }))
-    // }
-    // await this.ContentLabelGroupRepository.save(contentLabelGroup)
-    // return {
-    //   code: 0,
-    //   msg: 'successed!',
-    //   data: res
-    // }
+    contentLabelGroup.name = name
+    contentLabelGroup.contentLabels = []
+
+    let path = __dirname.replace(/\/api\/mark\/contentLabelGroup/, `/static/labels/${labels[0]}`)
+    let result = await readAndParseXML(path)
+    if (result.classes) {
+      await this.ContentLabelGroupRepository.save(contentLabelGroup)
+      let contentLabels = this.flatten(result.classes.class, null)
+      this.res = []
+      contentLabels.map(async item => {
+        let contentLabel = new ContentLabel()
+        contentLabel.mainId = item.mainId
+        contentLabel.name = item.name
+        contentLabel.parentId = item.parentId
+        contentLabel.contentLabelGroup = contentLabelGroup
+        await this.ContentLabelRepository.save(contentLabel)
+        contentLabelGroup.contentLabels.push(contentLabel)
+      })
+      await this.ContentLabelGroupRepository.save(contentLabelGroup)
+      return {
+        code: 0,
+        msg: '创建成功!',
+        data: contentLabelGroup        
+      }
+    } else {
+      return {
+        code: 10001,
+        msg: '分类体系树格式错误!',
+        data: null        
+      }
+    }
   }
 
   async update (args) {
@@ -79,29 +107,6 @@ export class ContentLabelGroupService {
     }
   }
 
-  async readXml (labels, task) {
-    for (let i = 0;i < labels.length;i++) {
-      var parser = new xml2js.Parser()
-      let path = __dirname.replace(/\/api\/mark\/contentLabelGroup/, `/static/labels/${labels[i]}`)
-      fs.readFile(path, async (err, data) => {
-        await parser.parseString(data, async (err, result) => {
-          if (result.classes) {
-            let labels = this.flatten(result.classes.class, null)
-            console.log(labels)
-            // await labels.map(async item => {
-            // })
-            this.res = []
-          } else {
-            return {
-              code: 10002,
-              msg: `${labels[i]}无法解析!`
-            }
-          }
-        })
-      })
-    }
-  }
-
   res = []
 
   flatten (classes, parentId) {
@@ -118,26 +123,4 @@ export class ContentLabelGroupService {
     return this.res
   }
 }
-
-// { classes:
-//   { class: [ 
-//     { 
-//       '$': { name: '分类名称', id: '001' },
-//       class: [ 
-//           { '$': { name: '分类名称', id: '001_001' } },
-//           { '$': { name: '分类名称', id: '001_002' } } 
-//       ]
-//     },
-//     { 
-//       '$': { name: '分类名称', id: '002' },
-//       class:
-//         [ { '$': { name: '分类名称', id: '002_001' },
-//         class: [  {'$': { name: '分类名称', id: '002_001_001' } } ] 
-//         },
-//         { '$': { name: '分类名称', id: '002_002' } } 
-//       ] 
-//     },
-//        { '$': { name: '分类名称', id: '003' } } ] 
-//     } 
-// }
         
