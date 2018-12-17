@@ -18,6 +18,7 @@
 #home .title {
   position: absolute;
   top: 21px;
+  left: 60px;
   color: white;
   font-family: 'Microsoft Yahei', Courier, monospace;
   font-size: 16px;

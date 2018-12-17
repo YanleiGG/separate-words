@@ -5,6 +5,7 @@ import { path } from '../../../config';
 import axios from 'axios';
 import store from '../../../state/store';
 import FooterBtn from './FooterBtn'
+import HeaderNav from './HeaderNav'
 
 const { Content, Footer } = Layout;
 const { TreeNode } = Tree;
@@ -24,8 +25,9 @@ class Main extends React.Component {
     });
 
     return (
-      <Layout style={{ minHeight: '100vh' }}>
-        <Content style={{ padding: '15px', fontSize: '20px', marginLeft: '200px'}}>
+      <Layout style={{ minHeight: '100vh', marginLeft: '200px' }}>
+        <HeaderNav/>
+        <Content style={{ padding: '15px', fontSize: '20px'}}>
           { articles.length ? 
             <Row>
               <Col span={16}>

@@ -22,7 +22,7 @@ class HeaderNav_UI extends React.Component {
           }}
         >
           {headerNavData.data.map((item, index) => {
-            return  <Menu.Item key={item.key} style={index === 0 ? { marginLeft: '30%' } : null}>
+            return  <Menu.Item key={item.key}>
               <Link to={ item.path }>
                 <Icon type="pie-chart" />
                 <span>{ item.name }</span>
@@ -36,7 +36,7 @@ class HeaderNav_UI extends React.Component {
               </Menu.Item>
             </Menu>
           }>
-            <Button icon='ellipsis' size='small' style={{position: 'relative', left: '30%'}}></Button>
+            <Button icon='ellipsis' size='small'></Button>
           </Dropdown>
         </Menu>
       </Header>

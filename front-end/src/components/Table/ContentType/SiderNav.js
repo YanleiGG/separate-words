@@ -16,7 +16,7 @@ class SiderNav_UI extends React.Component {
   render () {
     let { siderNavData, selectedKeys, handleClick, totalCount, pageChange, filterChange, page } = this.props
     return (
-      <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100%', position: 'fixed', left: 0 }}>
+      <Sider width={200} style={{ background: '#fff',  overflow: 'auto', height: '100%', position: 'fixed', left: 0, zIndex: '99' }}>
         <Select defaultValue="all" style={{ width: 150, margin: '15px' }} onChange={filterChange}>
           <Option value="all">全部</Option>
           <Option value="marking">标注中</Option>

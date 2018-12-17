@@ -17,7 +17,7 @@ class CreateTask extends React.Component {
             <div style={{ marginBottom: '10px' }}>标签类型：</div>
             <Select style={{ width: '100%' }} onChange={typeChange}>
               <Option value="separateWordsProperty">分词及词性标注</Option>
-              <Option value="contentType">文本内容分类</Option>
+              {/* <Option value="contentType">文本内容分类</Option> */}
               <Option value="markEntity">实体标注</Option>
               <Option value="emotion">情感标注</Option>
             </Select>
@@ -87,11 +87,19 @@ let mapDispatchToProps = dispatch => {
       let state = store.getState(), url = ''
       let { createLabel } = store.getState()
       let { type, symbol, name } = createLabel
+
+      name = name.replace(/；/g, ';')
+      symbol = symbol.replace(/；/g, ';')
+      if (name[name.length-1] === ';') name = name.slice(0, name.length-1) // 过滤尾部的';'号
+      if (symbol[symbol.length-1] === ';') symbol = symbol.slice(0, symbol.length-1) // 过滤尾部的';'号
+
       if (!type || !symbol || !name) return message.info('请将所有内容填写完整!', 1.5)
       if (type === 'separateWordsProperty') url = `${path}/api/words_property`
       if (type === 'markEntity') url = `${path}/api/entities`
+      if (type === 'emotion') url = `${path}/api/emotionType`
       let tips = message.loading('创建中...')
       let res = await axios.post(url, { symbol, name })
+      
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('创建成功!', 1.5)

@@ -23,7 +23,7 @@ class Home extends React.Component {
           collapsed={collapsed}
         >
           <div>
-            {/* <img style={{height: '32px',margin: '16px'}} src={ictImg}/> */}
+            <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
             {collapsed ? null : <span className="title">自然语言标注系统</span>}
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['6']}>
@@ -67,6 +67,9 @@ class Home extends React.Component {
             }>
               <Menu.Item key="31">
                 <Link to='/manage/label/labels'>标签总览</Link>
+              </Menu.Item>
+              <Menu.Item key="33">
+                <Link to='/manage/label/createLabel'>创建标签</Link>
               </Menu.Item>
               <Menu.Item key="32">
                 <Link to='/manage/label/createLabels'>创建标签集合</Link>
