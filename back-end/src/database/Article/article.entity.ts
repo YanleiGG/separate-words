@@ -27,6 +27,12 @@ export class Article {
     @UpdateDateColumn()
     updatedAt: Date
 
+    @Column({
+        nullable: true,
+        type: "longtext"
+    })
+    contentType: string;
+
     @ManyToOne(type => Task, task => task.articles)
     task: Task;
 

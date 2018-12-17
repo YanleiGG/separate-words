@@ -7,6 +7,7 @@ import { User } from '../../../database/user/user.entity'
 import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity'
 import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity'
 import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity'
+import { ContentLabelGroup } from '../../../database/contentLabelGroup/contentLabelGroup.entity'
 import { readAndParseXML } from 'tools';
 var fs = require('fs')
 var xml2js = require('xml2js')
@@ -28,6 +29,8 @@ export class TaskService {
     private readonly EntitiesGroupRepository: Repository<EntitiesGroup>,
     @Inject('EmotionTypeGroupRepositoryToken')
     private readonly EmotionTypeGroupRepository: Repository<EmotionTypeGroup>,
+    @Inject('ContentLabelGroupRepositoryToken')
+    private readonly ContentLabelGroup: Repository<ContentLabelGroup>,
   ) {}
 
   async find(offset: number, pageSize: number) {
@@ -96,6 +99,7 @@ export class TaskService {
       case "separateWordsProperty": relations.push('articles.sep_words_property', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys')
       case "markEntity": relations.push('articles.mark_entity', 'entitiesGroup', 'entitiesGroup.entities')
       case 'emotion': relations.push('articles.emotion', 'emotionTypeGroup', 'emotionTypeGroup.emotionTypes')
+      case 'contentType': relations.push('contentLabelGroup', 'contentLabelGroup.contentLabels')
       default: {}
     }
     let date1 = new Date().valueOf()
@@ -171,16 +175,20 @@ export class TaskService {
     }
     switch (type) {
       case 'separateWordsProperty': {
-        let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })
-        task.wordsPropertyGroup = wordsPropertyGroup
+        task.wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: selectedLabelsId })
+        break;
       }
       case 'markEntity': {
-        let entitiesGroup = await this.EntitiesGroupRepository.findOne({ id: selectedLabelsId })
-        task.entitiesGroup = entitiesGroup
+        task.entitiesGroup= await this.EntitiesGroupRepository.findOne({ id: selectedLabelsId })
+        break;
       }
       case 'emotion': {
-        let emotionTypeGroup = await this.EmotionTypeGroupRepository.findOne({ id: selectedLabelsId })
-        task.emotionTypeGroup = emotionTypeGroup
+        task.emotionTypeGroup = await this.EmotionTypeGroupRepository.findOne({ id: selectedLabelsId })
+        break;
+      }
+      case 'contentType': {
+        task.contentLabelGroup = await this.ContentLabelGroup.findOne({ id: selectedLabelsId })
+        break;
       }
       default: {}
     }

@@ -32,24 +32,29 @@ export class EmotionTypeService {
   
   async create (args) {
     let { name, symbol } = args
-    let sameName = await this.EmotionTypeRepository.find({ name })
-    let sameSymbol = await this.EmotionTypeRepository.find({ symbol })
-    if (sameName.length > 0 || sameSymbol.length > 0) {
+    let names = name.split(';')
+    let symbols = symbol.split(';')
+    if (names.length !== symbols.length) {
       return {
         code: 10001,
-        msg: '标签名称或代号已存在!',
+        msg: '创建失败，标签数量与代号数量不一致!',
         data: null        
       }
     }
-
-    let item = new EmotionType()
-    item.name = name
-    item.symbol = symbol
-    let wordsProperty = await this.EmotionTypeRepository.save(item)
+    for (let i = 0;i < names.length;i++) {
+      if (name[i]==='' || symbol[i] === '') continue;  // 过滤为''的标签
+      let sameName = await this.EmotionTypeRepository.find({ name: names[i] })
+      let sameSymbol = await this.EmotionTypeRepository.find({ symbol: symbols[i] })
+      if (sameName.length == 0 || sameSymbol.length == 0) {
+        let item = new EmotionType()
+        item.name = names[i]
+        item.symbol = symbols[i]
+        await this.EmotionTypeRepository.save(item) 
+      }
+    }
     return {
       code: 0,
       msg: 'successed!',
-      data: wordsProperty
     }
   }
 

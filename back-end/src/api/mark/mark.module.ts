@@ -17,14 +17,6 @@ import { wordsPropertyGroupProviders } from '../../database/words_property_group
 import { WordsPropertyGroupService } from './words_property_group/words_property_group.service'
 import { WordsPropertyGroupController } from './words_property_group/words_property_group.controller'
 
-import { classifyProviders } from '../../database/classify/classify.provider'
-import { ClassifyService } from './classify/classify.service'
-import { ClassifyController } from './classify/classify.controller'
-
-import { classifyGroupProviders } from '../../database/classify_group/classify_group.provider'
-import { ClassifyGroupService } from './classify_group/classify_group.service'
-import { ClassifyGroupController } from './classify_group/classify_group.controller'
-
 import { entitiesProviders } from '../../database/entities/entities.provider'
 import { EntitiesService } from './entities/entities.service'
 import { EntitiesController } from './entities/entities.controller'
@@ -76,8 +68,6 @@ import { userProviders } from '../../database/user/user.provider'
     ...wordsPropertyProviders,
     ...emotionProviders,
     ...wordsPropertyGroupProviders,
-    ...classifyProviders,
-    ...classifyGroupProviders,
     ...entitiesProviders,
     ...entitiesGroupProviders,
     ...markEntityProviders,
@@ -92,8 +82,6 @@ import { userProviders } from '../../database/user/user.provider'
     WordsPropertyService,
     EmotionService,
     WordsPropertyGroupService,
-    ClassifyService,
-    ClassifyGroupService,
     EntitiesService,
     EntitiesGroupService,
     MarkEntityService,
@@ -110,8 +98,6 @@ import { userProviders } from '../../database/user/user.provider'
     WordsPropertyController,
     EmotionController,
     WordsPropertyGroupController,
-    ClassifyController,
-    ClassifyGroupController,
     EntitiesController,
     EntitiesGroupController,
     MarkEntityController,

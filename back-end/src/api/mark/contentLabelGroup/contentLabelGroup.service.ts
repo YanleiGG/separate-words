@@ -32,7 +32,13 @@ export class ContentLabelGroupService {
   }
 
   async findAll () {
-    let data = await this.ContentLabelGroupRepository.find({relations: ["contentLabel"]})
+    let data = await this.ContentLabelGroupRepository.find({relations: ["contentLabels"]})
+    data = data.map(item => {
+      return {
+        ...item,
+        treeData: getContentLabelsTree(item.contentLabels)
+      }
+    })
     return {
       code: 0,
       msg: 'successed!',

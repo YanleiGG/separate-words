@@ -29,24 +29,29 @@ export class WordsPropertyService {
   
   async create (args) {
     let { name, symbol } = args
-    let sameName = await this.WordsPropertyRepository.find({ name })
-    let sameSymbol = await this.WordsPropertyRepository.find({ symbol })
-    if (sameName.length > 0 || sameSymbol.length > 0) {
+    let names = name.split(';')
+    let symbols = symbol.split(';')
+    if (names.length !== symbols.length) {
       return {
         code: 10001,
-        msg: '标签名称或代号已存在!',
+        msg: '创建失败，标签数量与代号数量不一致!',
         data: null        
       }
     }
-
-    let item = new WordsProperty()
-    item.name = name
-    item.symbol = symbol
-    let wordsProperty = await this.WordsPropertyRepository.save(item)
+    for (let i = 0;i < names.length;i++) {
+      if (name[i]==='' || symbol[i] === '') continue;  // 过滤为''的标签
+      let sameName = await this.WordsPropertyRepository.find({ name: names[i] })
+      let sameSymbol = await this.WordsPropertyRepository.find({ symbol: symbols[i] })
+      if (sameName.length == 0 || sameSymbol.length == 0) {
+        let item = new WordsProperty()
+        item.name = names[i]
+        item.symbol = symbols[i]
+        await this.WordsPropertyRepository.save(item) 
+      }
+    }
     return {
       code: 0,
       msg: 'successed!',
-      data: wordsProperty
     }
   }
 

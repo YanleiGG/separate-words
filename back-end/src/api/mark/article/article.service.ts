@@ -67,6 +67,7 @@ export class ArticleService {
     article.title = args.title
     article.text = args.text
     article.state = args.state
+    article.contentType = args.contentType
     await this.ArticleRepository.save(article)
     return {
       code: 0,
