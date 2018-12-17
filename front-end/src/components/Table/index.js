@@ -5,6 +5,7 @@ import { Route, Switch } from "react-router-dom";
 import Emotion from './Emotion'
 import SepWordsPro from './SepWordsPro'
 import MarkEntity from './MarkEntity'
+import ContentType from './ContentType'
 
 const { Content } = Layout;
 
@@ -19,6 +20,7 @@ class App extends React.Component {
                 <Route path='/table/emotion' component={ Emotion }></Route>
                 <Route path='/table/sepWordsPro' component={ SepWordsPro }></Route>
                 <Route path='/table/markEntity' component={ MarkEntity }></Route>
+                <Route path='/table/ContentType' component={ ContentType }></Route>
               </Switch>
             </Layout>
           </Layout>

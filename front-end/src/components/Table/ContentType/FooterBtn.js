@@ -1,10 +1,10 @@
 import React from 'react'
-import store from '../../../../state/store'
+import store from '../../../state/store'
 import { connect } from "react-redux";
-import { formatWithProperty } from '../../../../util'
+import { formatWithProperty } from '../../../util'
 import axios from 'axios'
 import { message, Button, Popconfirm } from 'antd'
-import { path } from '../../../../config'
+import { path } from '../../../config'
 
 class FooterBtn_UI extends React.Component {
   render () {
@@ -28,7 +28,7 @@ let mapDispatchToProps = dispatch => {
   return {
     complete: async () => {
       let state = store.getState()
-      let { showIndex, articles } = state.emotion
+      let { showIndex, articles } = state.contentType
       let article = articles[showIndex]
       article.state = 'completed'
       let tips = message.loading('提交中...')
@@ -44,9 +44,9 @@ let mapDispatchToProps = dispatch => {
       if (res.data.code == 0) {
         articles[showIndex] = article
         dispatch({
-          type: "SET_EMOTION",
-          emotion: {
-            ...state.emotion,
+          type: "SET_CONTENT_TYPE",
+          contentType: {
+            ...state.contentType,
             articles,
             siderNavData
           }
@@ -58,12 +58,11 @@ let mapDispatchToProps = dispatch => {
     },   
     save: async () => {
       let state = store.getState()
-      let {showIndex, articles} = state.emotion
+      let {showIndex, articles} = state.contentType
       let article = articles[showIndex]
-      article.emotion.markEntity = formatWithProperty(article.showPro)
+      article.contentType = article.treeSelectedKeys.join('::')
       let tips = message.loading('保存中...')
-      let res = await axios.post(`${state.path}/api/emotion`, { ...article })
-      console.log(res)
+      let res = await axios.put(`${state.path}/api/article`, { ...article })
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)

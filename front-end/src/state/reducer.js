@@ -2,7 +2,7 @@ import { initialState } from './initialState'
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "OPEN_MODAL": 
+    case "OPEN_MODAL":
       return Object.assign({}, state, {
         ...state, 
         property_visible: true
@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         selectedKeys: action.selectedKeys
-      })      
+      })   
     }
     case "SET_TOTAL_COUNT": {
       return Object.assign({}, state, {
@@ -82,7 +82,7 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         labelAndLabels: action.labelAndLabels
-      })      
+      })
     }
     case "SET_TASKS": {
       return Object.assign({}, state, {
@@ -106,6 +106,12 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         ...state,
         markEntity: action.markEntity
+      })
+    }
+    case "SET_CONTENT_TYPE": {
+      return Object.assign({}, state, {
+        ...state,
+        contentType: action.contentType
       })
     }
     case "SET_USERS": {

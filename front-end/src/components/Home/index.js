@@ -23,8 +23,8 @@ class Home extends React.Component {
           collapsed={collapsed}
         >
           <div>
-            <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
-            {collapsed ? null : <span className="title">分词系统</span>}
+            {/* <img style={{height: '32px',margin: '16px'}} src={ictImg}/> */}
+            {collapsed ? null : <span className="title">自然语言标注系统</span>}
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['6']}>
             <Menu.Item key="6">

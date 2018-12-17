@@ -123,6 +123,7 @@ let mapDispatchToProps = dispatch => {
       if (value === 'separateWordsProperty') url = `${path}/api/words_property_group`
       if (value === 'markEntity') url = `${path}/api/entities_group`
       if (value === 'emotion') url = `${path}/api/emotionTypeGroup`
+      if (value === 'contentType') url = `${path}/api/contentLabelGroup`
       let res = await axios.get(url), data = res.data.data
       console.log(data)
       dispatch({ 

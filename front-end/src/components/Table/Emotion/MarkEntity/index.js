@@ -23,10 +23,10 @@ class SepWords extends React.Component {
             { colors.map((item, index) => <Tag key={index} color={item}>{labels[index]}</Tag>) }
           </div>
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
-              {showPro.map((i, index) => {
-                let color = colors[labels.indexOf(i.label)]
-                return <span key={index} id={index} style={{color}}>{i.content}</span>
-              })}
+            {showPro.map((i, index) => {
+              let color = colors[labels.indexOf(i.label)]
+              return <span key={index} id={index} style={{color}}>{i.content}</span>
+            })}
           </Content>
           <Footer>
             <FooterBtn/>

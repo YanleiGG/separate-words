@@ -14,6 +14,7 @@ class TasksShow extends React.Component {
   }
   render() {
     let { taskTypeChange, data, tasksRefresh } = this.props
+    console.log(data, 'data')
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -34,12 +35,12 @@ class TasksShow extends React.Component {
           </Col>
           <Col span={20}>
             <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
-              <Column title="任务名称" key="name" dataIndex="name"/>
-              <Column title="任务说明" key="instruction" dataIndex="instruction"/>
-              <Column title="任务类别" key="type" dataIndex="type"/>
-              <Column title="任务状态" key="state" dataIndex="state"/>
-              <Column title="标签集合" key="labels" dataIndex="labels"/>
-              <Column title="标注人员" key="users" dataIndex="users"/>
+              <Column title="任务名称" rowKey={(record)=> record.id+"name"} dataIndex="name"/>
+              <Column title="任务说明" rowKey={(record)=> record.id+"instruction"} dataIndex="instruction"/>
+              <Column title="任务类别" rowKey={(record)=> record.id+"type"} dataIndex="type"/>
+              <Column title="任务状态" rowKey={(record)=> record.id+"state"} dataIndex="state"/>
+              <Column title="标签集合" rowKey={(record)=> record.id+"labels"} dataIndex="labels"/>
+              <Column title="标注人员" rowKey={(record)=> record.id+"users"} dataIndex="users"/>
             </Table>
           </Col>
         </Row>

@@ -51,6 +51,7 @@ class TasksShow extends React.Component {
                     <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
                     <Link to='/table/markEntity' id='toMarkEntity'/>
                     <Link to='/table/emotion/classify' id='toEmotion'/>
+                    <Link to='/table/contentType' id='toContentType'/>
                   </span>
                 )}
               />
@@ -95,6 +96,10 @@ let mapDispatchToProps = dispatch => {
         }
         case 'emotion': {
           document.getElementById('toEmotion').click()
+          break;
+        }
+        case 'contentType': {
+          document.getElementById('toContentType').click()
           break;
         }
         default: break;

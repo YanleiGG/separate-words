@@ -92,6 +92,25 @@ export const initialState = {
     filter: 'all',
     spinning: true
   },
+  contentType: {
+    articles: [],
+    SiderNavData: [],
+    totalCount: 1,
+    page: 1,
+    selectedKeys: [],
+    showIndex: 0,
+    headerNavData: {
+      title: '文本内容分类',
+      data: [
+        { name: '文本内容分类', path: '/table/contentType', key: '文本内容分类' }
+      ]
+    },
+    propertys: [],
+    visible: false,
+    filter: 'all',
+    spinning: true,
+    focusRender: false
+  },
   createTask: {
     name: '',
     instruction: '',
