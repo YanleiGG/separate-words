@@ -12,8 +12,25 @@ const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu
 
 class Home extends React.Component {
+  componentWillMount() {
+    let state = store.getState()
+    let pathname = window.location.pathname
+    let openKeys
+    if (pathname === '/manage/user/users' || pathname === '/manage/user/create') openKeys = ['userManage']
+    if (pathname === '/manage/task/tasks' || pathname === '/manage/task/createTask') openKeys = ['taskManage']
+    if (pathname === '/manage/label/labels' || pathname === '/manage/label/createLabel' || pathname === '/manage/label/createLabels') openKeys = ['labelManage']
+    store.dispatch({
+      type: "SET_HOME",
+      home: {
+        ...state.home,
+        selectedKeys: [pathname],
+        openKeys
+      }
+    })
+  }
+
   render() {
-    let { collapsed, toggle } = this.props
+    let { collapsed, toggle, selectedKeys, onSelect, openKeys, onOpenChange } = this.props
 
     return (
       <Layout id="home">
@@ -26,56 +43,61 @@ class Home extends React.Component {
             <img style={{height: '32px',margin: '16px'}} src={ictImg}/>
             {collapsed ? null : <span className="title">自然语言标注系统</span>}
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['6']}>
-            <Menu.Item key="6">
+          <Menu theme="dark" mode="inline" 
+            openKeys={openKeys} 
+            selectedKeys={selectedKeys} 
+            onSelect={onSelect} 
+            onOpenChange={onOpenChange}
+          >
+            <Menu.Item key="/user/myTasks">
               <Link to='/user/myTasks'>
                 <Icon type="bars" theme="outlined" />
                 <span>我的任务</span>
               </Link>
             </Menu.Item>
-            <SubMenu key="sub1" title={
+            <SubMenu key="userManage" title={
               <span>
                 <Icon type="user" theme="outlined" />
                 <span>用户管理</span>
               </span>
             }>
-              <Menu.Item key="11">
+              <Menu.Item key="/manage/user/users">
                 <Link to="/manage/user/users">用户总览</Link>
               </Menu.Item>
-              <Menu.Item key="12">
+              <Menu.Item key="/manage/user/create">
                 <Link to="/manage/user/create">创建用户</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" title={
+            <SubMenu key="taskManage" title={
                 <span>
                   <Icon type="solution" theme="outlined" />
                   <span>任务管理</span>
                 </span>
             }>
-              <Menu.Item key="21">
+              <Menu.Item key="/manage/task/tasks">
                 <Link to="/manage/task/tasks">任务总览</Link>
               </Menu.Item>
-              <Menu.Item key="22">
+              <Menu.Item key="/manage/task/createTask">
                 <Link to="/manage/task/createTask">创建任务</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="sub3" title={
+            <SubMenu key="labelManage" title={
                 <span>
                   <Icon type="tags" theme="outlined" />
                   <span>标签管理</span>
                 </span>
             }>
-              <Menu.Item key="31">
+              <Menu.Item key="/manage/label/labels">
                 <Link to='/manage/label/labels'>标签总览</Link>
               </Menu.Item>
-              <Menu.Item key="33">
+              <Menu.Item key="/manage/label/createLabel">
                 <Link to='/manage/label/createLabel'>创建标签</Link>
               </Menu.Item>
-              <Menu.Item key="32">
+              <Menu.Item key="/manage/label/createLabels">
                 <Link to='/manage/label/createLabels'>创建标签集合</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key="5">
+            <Menu.Item key="/manage/data">
               <Link to='/manage/data'>
                 <Icon type="database" theme="outlined" />
                 <span>数据管理</span>
@@ -117,6 +139,26 @@ let mapDispatchToApp = dispatch => {
         home: {
           ...state.home,
           collapsed: !state.home.collapsed
+        }
+      })
+    },
+    onSelect: (item) => {
+      let state = store.getState()
+      store.dispatch({
+        type: "SET_HOME",
+        home: {
+          ...state.home,
+          selectedKeys: [item.key]
+        }
+      })
+    },
+    onOpenChange: (openKeys) => {
+      let state = store.getState()
+      store.dispatch({
+        type: "SET_HOME",
+        home: {
+          ...state.home,
+          openKeys: openKeys
         }
       })
     }

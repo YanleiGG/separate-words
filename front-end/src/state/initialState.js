@@ -165,6 +165,8 @@ export const initialState = {
     auths: []
   },
   home: {
-    collapsed: false
+    collapsed: false,
+    selectedKeys: [],
+    openKeys: []
   }
 };
