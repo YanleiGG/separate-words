@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout } from "antd";
+import { Layout, Pagination } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import HeaderNav from '../HeaderNav'
@@ -9,7 +9,7 @@ const { Content, Footer } = Layout;
 
 class SepWords extends React.Component {
   render() {
-    let { pickWords, articles, showIndex } = this.props
+    let { pickWords, articles, showIndex, mainSepPage, mainPageChange } = this.props
     let showContent = articles.length > 0 ? articles[showIndex].showContent : []
     return (
       <Layout style={{marginLeft: '200px'}}>
@@ -37,10 +37,11 @@ let mapStateToProps = state => {
 let mapDispatchToProps = dispatch => {
   return {
     pickWords: () => {
+      let { mainSepPage } = store.getState().sepWordsPro
       if (window.getSelection().toString()) {
         let state = store.getState()
         let articles = state.sepWordsPro.articles
-        let start = window.getSelection().getRangeAt(0).startContainer.parentElement.id
+        let start = + window.getSelection().getRangeAt(0).startContainer.parentElement.id
         let end = + window.getSelection().getRangeAt(0).endContainer.parentElement.id + 1
         let showContent = articles[state.sepWordsPro.showIndex].showContent
         if (showContent[start].content == '|' && start == end-1) return
@@ -65,6 +66,16 @@ let mapDispatchToProps = dispatch => {
         })
         window.getSelection().removeAllRanges()
       }
+    },
+    mainPageChange: page => {
+        let state = store.getState()
+        dispatch({
+        type: "SET_SEP_WORDS_PRO",
+        sepWordsPro: {
+          ...state.sepWordsPro,
+          mainSepPage: page
+        }
+      })
     }
   }
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Tag, Modal, Radio, Row, Col } from "antd";
+import { Layout, Tag, Modal, Radio, Row, Col, Pagination } from "antd";
 import { connect } from "react-redux";
 import HeaderNav from '../HeaderNav'
 import FooterBtn from './FooterBtn'
@@ -13,13 +13,13 @@ class MarkPro extends React.Component {
     this.props.created()
   }
   render() {
-    let { articles, showIndex, visible, modalOk, modalCancel, radioValue, radioChange, openModal, propertys} = this.props
+    let { articles, showIndex, visible, modalOk, modalCancel, radioValue, radioChange, openModal, propertys, mainMarkPage, mainPageChange} = this.props
     let showPro = articles.length > 0 ? articles[showIndex].showPro : []
     return (
       <Layout style={{marginLeft: '200px'}}>
         <HeaderNav/>
         <Content style={{ padding: '15px', fontSize: '20px' }}>
-          {showPro.map((item, index) => {
+          {showPro.slice(500*(mainMarkPage-1), 500*mainMarkPage).map((item, index) => {
             return  <div key={index+'content'} style={{
                 display: 'inline-block',
                 textAlign: 'center'                      
@@ -48,7 +48,15 @@ class MarkPro extends React.Component {
             </Row>
           </RadioGroup>    
         </Modal>
-        <Footer>
+        <Footer style={{textAlign: 'center'}}>
+          <Pagination 
+            current={mainMarkPage} 
+            onChange={ mainPageChange } 
+            defaultCurrent={1} 
+            total={showPro.length/50} 
+            simple
+            style={{marginBottom: '20px'}}
+          />
           <FooterBtn/>
         </Footer>
       </Layout>
@@ -68,7 +76,8 @@ let mapDispatchToProps = dispatch => {
     },
     modalOk: async () => {
       let state = store.getState()
-      let {articles, showIndex, wordIndex, radioValue, propertys} = state.sepWordsPro
+      let {articles, showIndex, wordIndex, radioValue, propertys, mainMarkPage} = state.sepWordsPro
+      wordIndex = wordIndex+(mainMarkPage-1)*500
       articles[showIndex].showPro[wordIndex].type = radioValue
       articles[showIndex].showPro[wordIndex].label = propertys.find(item => item.value === radioValue).label
       dispatch({
@@ -110,6 +119,16 @@ let mapDispatchToProps = dispatch => {
           visible: true,
           radioValue: articles[showIndex].showPro[index].type,
           wordIndex: index
+        }
+      })
+    },
+    mainPageChange: page => {
+        let state = store.getState()
+        dispatch({
+        type: "SET_SEP_WORDS_PRO",
+        sepWordsPro: {
+          ...state.sepWordsPro,
+          mainMarkPage: page
         }
       })
     }

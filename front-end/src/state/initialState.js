@@ -53,6 +53,8 @@ export const initialState = {
     SiderNavData: [],
     totalCount: 1,
     page: 1,
+    mainSepPage: 1,
+    mainMarkPage: 1,
     selectedKeys: [],
     showIndex: 0,
     headerNavData: {
