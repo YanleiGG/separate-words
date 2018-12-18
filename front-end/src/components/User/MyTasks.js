@@ -4,7 +4,6 @@ import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
 import store from '../../state/store'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 
 const Option = Select.Option;
 const { Column } = Table;
@@ -47,11 +46,7 @@ class TasksShow extends React.Component {
                 dataIndex="action"
                 render={(text, record) => (
                   <span>
-                    <a onClick={() => startTask(record.id, record.types[0].symbol)}>开始任务</a>
-                    <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
-                    <Link to='/table/markEntity' id='toMarkEntity'/>
-                    <Link to='/table/emotion/classify' id='toEmotion'/>
-                    <Link to='/table/contentType' id='toContentType'/>
+                    <a onClick={() => startTask(record.id, record.types[0].symbol, this.props.history)}>开始任务</a>
                   </span>
                 )}
               />
@@ -79,27 +74,26 @@ let mapDispatchToProps = dispatch => {
     taskTypeChange: async value => {
       refresh(value)
     },
-    startTask: async (id, type) => {
-      console.log(id, type)
+    startTask: async (id, type, history) => {
       await store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
       })
       switch(type){
         case 'separateWordsProperty': {
-          document.getElementById('toSepWordsPro').click()
+          history.push('/table/sepWordsPro/sepWords/'+id)
           break;
         }
         case 'markEntity': {
-          document.getElementById('toMarkEntity').click()
+          history.push('/table/markEntity/'+id)
           break;
         }
         case 'emotion': {
-          document.getElementById('toEmotion').click()
+          history.push('/table/emotion/classify/'+id)
           break;
         }
         case 'contentType': {
-          document.getElementById('toContentType').click()
+          history.push('/table/contentType/'+id)
           break;
         }
         default: break;

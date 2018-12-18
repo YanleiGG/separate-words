@@ -94,37 +94,50 @@ export class TaskService {
   }
 
   async findATaskWithArticles(taskId, offset, pageSize, type, filter) {
-    let relations = ['articles','users', 'types'] 
+    let taskRelations = ['users', 'types']
+    let articleRelations = []
     switch(type){
-      case "separateWordsProperty": relations.push('articles.sep_words_property', 'wordsPropertyGroup', 'wordsPropertyGroup.words_propertys')
-      case "markEntity": relations.push('articles.mark_entity', 'entitiesGroup', 'entitiesGroup.entities')
-      case 'emotion': relations.push('articles.emotion', 'emotionTypeGroup', 'emotionTypeGroup.emotionTypes')
-      case 'contentType': relations.push('contentLabelGroup', 'contentLabelGroup.contentLabels')
+      case "separateWordsProperty": 
+        taskRelations.push('wordsPropertyGroup')
+        articleRelations.push('sep_words_property')
+        break;
+      case "markEntity": 
+        taskRelations.push('entitiesGroup', 'entitiesGroup.entities')
+        articleRelations.push('mark_entity')
+        break;
+      case 'emotion': 
+        taskRelations.push('emotionTypeGroup', 'emotionTypeGroup.emotionTypes')
+        articleRelations.push('emotion')
+        break;
+      case 'contentType': 
+        taskRelations.push('contentLabelGroup', 'contentLabelGroup.contentLabels')
+        break;
       default: {}
     }
     let date1 = new Date().valueOf()
     let task =  await this.TaskRepository.findOne({ 
       where: { id: taskId },
-      relations,
+      relations: taskRelations
     })
+    let articleWithFilterOptions = {
+      task: taskId,
+      state: filter
+    }
+    let articleWithoutFilterOptions = {
+      task: taskId
+    }
+    let articles = await this.ArticleRepository.find({
+      where: filter !== 'all' ? articleWithFilterOptions : articleWithoutFilterOptions,
+      skip: offset,
+      take: pageSize,
+      relations: articleRelations
+    })
+    const totalCount = await this.ArticleRepository.count({ 
+      where: { task: taskId }
+    })
+    task.articles = articles
     let date2 = new Date().valueOf()
     console.log('date2-date1:', date2-date1)
-    // let task =  await this.TaskRepository
-    // .createQueryBuilder("task")
-    // .innerJoinAndSelect("photo.metadata", "metadata")
-    // .leftJoinAndSelect("photo.albums", "album")
-    // .where(`task.id = ${taskId}`)
-    // .andWhere(`task.articles.state = ${filter}`)
-    // .andWhere("(photo.name = :photoName OR photo.name = :bearName)")
-    // .orderBy("photo.id", "DESC")
-    // .skip(offset)
-    // .take(pageSize)
-    // .getMany();
-    if (filter === 'completed' || filter === 'marking') {
-      task.articles = task.articles.filter(item => item.state === filter)
-    }
-    let totalCount = task.articles.length
-    task.articles = task.articles.splice(offset, pageSize)
     return {
       code: 0,
       msg: 'find successed!',

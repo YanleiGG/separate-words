@@ -16,7 +16,10 @@ export class WordsPropertyGroupService {
   ) {}
 
   async findOne (id: number) {
-    return this.WordsPropertyGroupRepository.findOne({ id })
+    return this.WordsPropertyGroupRepository.findOne({
+      where: { id },
+      relations: ["words_propertys"]
+    })
   }
 
   async findAll () {

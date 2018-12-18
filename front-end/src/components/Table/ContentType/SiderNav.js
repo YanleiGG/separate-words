@@ -59,7 +59,7 @@ let refresh = async () => {
       spinning: true
     }
   })
-  let {taskId} = state
+  let taskId = window.location.pathname.split('/').pop()
   let {filter, page} = state.contentType
   let res = await axios.get(`${path}/api/task/${taskId}/articles/contentType/${filter}?offset=${(page-1)*10}&pageSize=10`)
   let {articles, contentLabelGroup} = res.data.data.task

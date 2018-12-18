@@ -138,7 +138,8 @@ let mapDispatchToApp = dispatch => {
         type: "SET_HOME",
         home: {
           ...state.home,
-          collapsed: !state.home.collapsed
+          collapsed: !state.home.collapsed,
+          openKeys: []
         }
       })
     },

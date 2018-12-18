@@ -14,7 +14,6 @@ class TasksShow extends React.Component {
   }
   render() {
     let { taskTypeChange, data, tasksRefresh } = this.props
-    console.log(data, 'data')
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -107,7 +106,6 @@ async function refresh(value) {
 function format (res) {
   let data = res.data.tasks
   data.forEach(item => {
-    console.log(item)
     let type = ''
     let users = ''
     let labels = ''
@@ -132,7 +130,6 @@ function format (res) {
     item.users = users
     item.labels = labels
   })
-  console.log(data)
   return data
 }
 

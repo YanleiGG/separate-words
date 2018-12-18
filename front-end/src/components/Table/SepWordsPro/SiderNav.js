@@ -66,12 +66,14 @@ let refresh = async dispatch => {
       spinning: true
     }
   })
-  let {page, filter} = state.sepWordsPro, taskId = state.taskId
+  let {page, filter} = state.sepWordsPro, taskId = window.location.pathname.split('/').pop()
   let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty/${filter}?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
-  console.log(res)
   let task = res.data.data.task
   let articles = task.articles
+  console.log(task)
+  let res2 = await axios.get(`${path}/api/words_property_group/${task.wordsPropertyGroup.id}`)
+  let { words_propertys } = res2.data
   let siderNavData = articles.map((item, index) => {
     let { sep_words_property } = item
     if (sep_words_property === null) sep_words_property = {}
@@ -84,7 +86,7 @@ let refresh = async dispatch => {
     if (!sep_words_property || !sep_words_property.separateWordsProperty) {
       articles[index].showPro = showContentToShowPro(articles[index].showContent)
     } else {
-      articles[index].showPro = unformatWithProperty(articles[index].sep_words_property.separateWordsProperty, task.wordsPropertyGroup.words_propertys)
+      articles[index].showPro = unformatWithProperty(articles[index].sep_words_property.separateWordsProperty, words_propertys)
     }
     return {
       id: item.id,
@@ -92,7 +94,7 @@ let refresh = async dispatch => {
       state: item.state
     }
   })
-  let propertys = task.wordsPropertyGroup.words_propertys.map(item => {
+  let propertys = words_propertys.map(item => {
     return { label: item.name, value: item.symbol }
   })
   propertys.unshift({label: '无', value: ''})
