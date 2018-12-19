@@ -45,8 +45,15 @@ class Home extends React.Component {
   }
 
   render() {
-    let { collapsed, toggle, selectedKeys, onSelect, openKeys, onOpenChange } = this.props
-
+    let { collapsed, toggle, selectedKeys, onSelect, openKeys, onOpenChange, roles } = this.props
+    let markPermission, userManagePermission, dataManagePermission, taskAndLabelManagePermission
+    if (roles) {
+      markPermission = roles.some(item => item.name === '任务标注')
+      userManagePermission = roles.some(item => item.name === '用户管理')
+      dataManagePermission = roles.some(item => item.name === '数据管理')
+      taskAndLabelManagePermission = roles.some(item => item.name === '任务及标签管理')
+    }
+    
     return (
       <Layout id="home">
         <Sider
@@ -64,60 +71,70 @@ class Home extends React.Component {
             onSelect={onSelect} 
             onOpenChange={onOpenChange}
           >
-            <Menu.Item key="/user/myTasks">
-              <Link to='/user/myTasks'>
-                <Icon type="bars" theme="outlined" />
-                <span>我的任务</span>
-              </Link>
-            </Menu.Item>
-            <SubMenu key="userManage" title={
-              <span>
-                <Icon type="user" theme="outlined" />
-                <span>用户管理</span>
-              </span>
-            }>
-              <Menu.Item key="/manage/user/users">
-                <Link to="/manage/user/users">用户总览</Link>
-              </Menu.Item>
-              <Menu.Item key="/manage/user/create">
-                <Link to="/manage/user/create">创建用户</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu key="taskManage" title={
+            { markPermission ? 
+              <Menu.Item key="/user/myTasks">
+                <Link to='/user/myTasks'>
+                  <Icon type="bars" theme="outlined" />
+                  <span>我的任务</span>
+                </Link>
+              </Menu.Item> 
+            : null }
+            { userManagePermission ? 
+              <SubMenu key="userManage" title={
                 <span>
-                  <Icon type="solution" theme="outlined" />
-                  <span>任务管理</span>
+                  <Icon type="user" theme="outlined" />
+                  <span>用户管理</span>
                 </span>
-            }>
-              <Menu.Item key="/manage/task/tasks">
-                <Link to="/manage/task/tasks">任务总览</Link>
-              </Menu.Item>
-              <Menu.Item key="/manage/task/createTask">
-                <Link to="/manage/task/createTask">创建任务</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu key="labelManage" title={
-                <span>
-                  <Icon type="tags" theme="outlined" />
-                  <span>标签管理</span>
-                </span>
-            }>
-              <Menu.Item key="/manage/label/labels">
-                <Link to='/manage/label/labels'>标签总览</Link>
-              </Menu.Item>
-              <Menu.Item key="/manage/label/createLabel">
-                <Link to='/manage/label/createLabel'>创建标签</Link>
-              </Menu.Item>
-              <Menu.Item key="/manage/label/createLabels">
-                <Link to='/manage/label/createLabels'>创建标签集合</Link>
-              </Menu.Item>
-            </SubMenu>
-            <Menu.Item key="/manage/data">
-              <Link to='/manage/data'>
-                <Icon type="database" theme="outlined" />
-                <span>数据管理</span>
-              </Link>
-            </Menu.Item>
+              }>
+                <Menu.Item key="/manage/user/users">
+                  <Link to="/manage/user/users">用户总览</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/user/create">
+                  <Link to="/manage/user/create">创建用户</Link>
+                </Menu.Item>
+              </SubMenu>
+            : null }
+            { taskAndLabelManagePermission ? 
+              <SubMenu key="taskManage" title={
+                  <span>
+                    <Icon type="solution" theme="outlined" />
+                    <span>任务管理</span>
+                  </span>
+              }>
+                <Menu.Item key="/manage/task/tasks">
+                  <Link to="/manage/task/tasks">任务总览</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/task/createTask">
+                  <Link to="/manage/task/createTask">创建任务</Link>
+                </Menu.Item>
+              </SubMenu>
+            : null}
+            { taskAndLabelManagePermission ? 
+              <SubMenu key="labelManage" title={
+                  <span>
+                    <Icon type="tags" theme="outlined" />
+                    <span>标签管理</span>
+                  </span>
+              }>
+                <Menu.Item key="/manage/label/labels">
+                  <Link to='/manage/label/labels'>标签总览</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/label/createLabel">
+                  <Link to='/manage/label/createLabel'>创建标签</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/label/createLabels">
+                  <Link to='/manage/label/createLabels'>创建标签集合</Link>
+                </Menu.Item>
+              </SubMenu> 
+            : null }
+            { dataManagePermission ? 
+              <Menu.Item key="/manage/data">
+                <Link to='/manage/data'>
+                  <Icon type="database" theme="outlined" />
+                  <span>数据管理</span>
+                </Link>
+              </Menu.Item> 
+            : null }
           </Menu>
         </Sider>
         <Layout>
@@ -143,7 +160,10 @@ class Home extends React.Component {
 }
 
 let mapAllStateToProps = state => {
-  return state.home
+  return {
+    ...state.home,
+    ...state.user
+  }
 }
 let mapDispatchToApp = dispatch => {
   return {
