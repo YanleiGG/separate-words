@@ -75,29 +75,33 @@ let mapDispatchToProps = dispatch => {
       refresh(value)
     },
     startTask: async (id, type, history) => {
-      await store.dispatch({
+      store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
       })
-      switch(type){
-        case 'separateWordsProperty': {
-          history.push('/table/sepWordsPro/sepWords/'+id)
-          break;
+      // 等待20ms, taskId完成修改后再跳转
+      setTimeout(() => {
+        switch(type){
+          case 'separateWordsProperty': {
+            history.push('/table/sepWordsPro/sepWords/'+id)
+            break;
+          }
+          case 'markEntity': {
+            history.push('/table/markEntity/'+id)
+            break;
+          }
+          case 'emotion': {
+            history.push('/table/emotion/classify/'+id)
+            break;
+          }
+          case 'contentType': {
+            history.push('/table/contentType/'+id)
+            break;
+          }
+          default: break;
         }
-        case 'markEntity': {
-          history.push('/table/markEntity/'+id)
-          break;
-        }
-        case 'emotion': {
-          history.push('/table/emotion/classify/'+id)
-          break;
-        }
-        case 'contentType': {
-          history.push('/table/contentType/'+id)
-          break;
-        }
-        default: break;
-      }
+      }, 20);
+
     }
   }
 }
@@ -157,7 +161,6 @@ function format (res) {
     item.users = users
     item.labels = labels
   })
-  console.log(data)
   return data
 }
 

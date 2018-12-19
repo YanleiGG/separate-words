@@ -9,7 +9,7 @@ const { Content, Footer } = Layout;
 
 class SepWords extends React.Component {
   render() {
-    let { pickWords, articles, showIndex, mainSepPage, mainPageChange } = this.props
+    let { pickWords, articles, showIndex } = this.props
     let showContent = articles.length > 0 ? articles[showIndex].showContent : []
     return (
       <Layout style={{marginLeft: '200px'}}>

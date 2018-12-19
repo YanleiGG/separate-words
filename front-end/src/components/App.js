@@ -9,8 +9,6 @@ import Login from './Login'
 import Home from './Home'
 
 class App extends React.Component {
-
-
   render () {
     return (
       <BrowserRouter>

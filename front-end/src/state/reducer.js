@@ -132,6 +132,42 @@ const reducer = (state = initialState, action) => {
         home: action.home
       })
     }
+    case "SET_SEP_HEADER_NAV": {
+      return Object.assign({}, state, {
+        ...state,
+        sepWordsPro: {
+          ...state.sepWordsPro,
+          headerNavData: action.headerNavData
+        }
+      })
+    }
+    case "SET_MARK_ENTITY_HEADER_NAV": {
+      return Object.assign({}, state, {
+        ...state,
+        markEntity: {
+          ...state.markEntity,
+          headerNavData: action.headerNavData
+        }
+      })
+    }
+    case "SET_EMOTION_HEADER_NAV": {
+      return Object.assign({}, state, {
+        ...state,
+        emotion: {
+          ...state.emotion,
+          headerNavData: action.headerNavData
+        }
+      })
+    }
+    case "SET_CONTENT_TYPE_HEADER_NAV": {
+      return Object.assign({}, state, {
+        ...state,
+        emotion: {
+          ...state.emotion,
+          headerNavData: action.headerNavData
+        }
+      })
+    }
     default:
       return state;
   }

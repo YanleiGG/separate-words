@@ -15,7 +15,6 @@ class SepWords extends React.Component {
       modalCancel, modalOk, radioChange, radioValue, 
       propertys, labels, colors } = this.props
     let showPro = articles.length > 0 ? articles[showIndex].showPro : []
-    console.log(showPro)
     return (
       <Layout>
         <Layout style={{ marginLeft: '200px' }}>

@@ -100,10 +100,10 @@ let refresh = async dispatch => {
       spinning: true
     }
   })
+  console.log(page, filter)
   let {page, filter} = state.markEntity, taskId = window.location.pathname.split('/').pop()
   let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10`)
   let totalCount = res.data.data.totalCount
-  console.log(res)
   let task = res.data.data.task
   let articles = task.articles
   let siderNavData = articles.map((item, index) => {
