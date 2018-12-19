@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Modal, Radio, Tag } from "antd";
+import { Layout, Modal, Radio, Tag, Tooltip } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import FooterBtn from './FooterBtn'
@@ -15,6 +15,7 @@ class SepWords extends React.Component {
       modalCancel, modalOk, radioChange, radioValue, 
       propertys, labels, colors } = this.props
     let showPro = articles.length > 0 ? articles[showIndex].showPro : []
+    console.log(showPro)
     return (
       <Layout>
         <Layout style={{ marginLeft: '200px' }}>
@@ -25,7 +26,16 @@ class SepWords extends React.Component {
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
               {showPro.map((i, index) => {
                 let color = colors[propertys.findIndex(item => item.label === i.label)]
-                return <span key={index} id={index} style={{color}}>{i.content}</span>
+                // let showTip = !Boolean(i.type && showPro[index-1] && showPro[index-1].type != '')  
+                return (
+                  <span key={index+'content'} style={{display: 'inline-block'}}>
+                    { i.type ?
+                      <Tooltip title={i.label}>
+                        <span id={index} style={{color}}>{i.content}</span>
+                      </Tooltip>
+                      : <span id={index} style={{color}}>{i.content}</span> }
+                  </span>
+                )
               })}
           </Content>
           <Footer>

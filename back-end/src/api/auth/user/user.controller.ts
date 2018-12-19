@@ -1,9 +1,14 @@
-import { Get, Req, Post, Put, Body, Controller, Delete } from '@nestjs/common';
+import { Get, Req, Post, Put, Body, Controller, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('api/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
+
+  @Get(':id')
+  findOne(@Param() param) {
+    return this.UserService.findOne(param.id)
+  }
 
   @Get()
   findAll() {

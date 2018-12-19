@@ -43,7 +43,7 @@ export const initialState = {
     end: 0,
     radioValue: '',
     labels: ['无', '观点对象', '观点持有者', '观点发布时间'],
-    colors: ['black', '#f50', '#389e0d', '#108ee9'],
+    colors: ['black', '#D50000', '#C51162', '#AA00FF'],
     emotionTypes: [
       { name: '无', symbol: 'disabled' }
     ]
@@ -90,7 +90,7 @@ export const initialState = {
     end: 0,
     radioValue: '',
     labels: ['无', '人名', '地名', '组织机构名'],
-    colors: ['black', '#f50', '#389e0d', '#108ee9'],
+    colors: ['black', '#D50000', '#C51162', '#AA00FF', '#311B92', '#6200EA', '#2962FF', '#0091EA', '#00E5FF', '#1DE9B6', '#388E3C', '#C0CA33', '#F9A825', '#FF3D00', '#3E2723', '#546E7A'],
     filter: 'all',
     spinning: true
   },

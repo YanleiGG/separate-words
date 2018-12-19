@@ -1,12 +1,16 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import store from '../state/store'
+import axios from 'axios'
+import { path } from '../config'
 
 import Table from './Table'
 import Login from './Login'
 import Home from './Home'
 
 class App extends React.Component {
+
+
   render () {
     return (
       <BrowserRouter>

@@ -13,8 +13,13 @@ export class UserService {
     private readonly RoleRepository: Repository<Role>
   ) {}
 
-  async findOne (username: string) {
-    let user = await this.UserRepository.findOne({ name: username })
+  async findOne (id: number) {
+    let user = await this.UserRepository.findOne({
+      where: {
+        id
+      },
+      relations: ['roles']
+    })
     return user
   }
 

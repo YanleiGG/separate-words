@@ -7,13 +7,28 @@ import Manage from '../Manage'
 import User from '../User'
 import ictImg from '../../assets/ict.png'
 import './home.css'
+import axios from 'axios'
+import { path } from '../../config'
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu
 
 class Home extends React.Component {
-  componentWillMount() {
+  async componentWillMount() {
     let state = store.getState()
+    // 获取用户信息
+    let {id} = state.user
+    let res = await axios.get(`${path}/api/user/${id}`)
+    store.dispatch({
+      type: 'SET_USER',
+      user: {
+        id: res.data.id,
+        name: res.data.name,
+        roles: res.data.roles
+      }
+    })
+    console.log('userInfo' ,res)
+    // 设置左侧菜单栏展出样式
     let pathname = window.location.pathname
     let openKeys
     if (pathname === '/manage/user/users' || pathname === '/manage/user/create') openKeys = ['userManage']

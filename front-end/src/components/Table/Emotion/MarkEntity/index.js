@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Modal, Radio, Tag } from "antd";
+import { Layout, Modal, Radio, Tag, Tooltip } from "antd";
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import FooterBtn from './FooterBtn'
@@ -25,7 +25,15 @@ class SepWords extends React.Component {
           <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
             {showPro.map((i, index) => {
               let color = colors[labels.indexOf(i.label)]
-              return <span key={index} id={index} style={{color}}>{i.content}</span>
+              return (
+                <span key={index+'content'} style={{display: 'inline-block'}}>
+                  { i.type ?
+                    <Tooltip title={i.label}>
+                      <span key={index+'tips'} id={index} style={{color}}>{i.content}</span>
+                    </Tooltip>
+                    : <span key={index+'tips'} id={index} style={{color}}>{i.content}</span> }
+                </span>
+              )
             })}
           </Content>
           <Footer>
