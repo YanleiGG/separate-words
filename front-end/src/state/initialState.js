@@ -1,5 +1,5 @@
 export const initialState = {
-  isLogin: true,
+  isLogin: false,
   page: 1,
   path: 'http://localhost:3000',
   selection: {

@@ -17,7 +17,7 @@ class TasksShow extends React.Component {
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
-          <Col span={20}>
+          <Col span={22}>
             <Select 
               style={{ width: '20%', marginBottom: '15px' }} 
               onChange={taskTypeChange} 
@@ -32,7 +32,7 @@ class TasksShow extends React.Component {
             </Select>
             <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
-          <Col span={20}>
+          <Col span={22}>
             <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
               <Column title="任务名称" key="name" dataIndex="name"/>
               <Column title="任务说明" key="instruction" dataIndex="instruction"/>
@@ -109,14 +109,13 @@ let mapDispatchToProps = dispatch => {
 async function refresh(value) {
   let state = store.getState()
   let userId = state.user.id
-  let tips = message.loading('获取数据中...')
+  let tips = message.loading('获取数据中...', 10)
   let res
   if (value === 'all') {
     res = await axios.get(`${path}/api/task/user/${userId}`)
   } else {
     res = await axios.get(`${path}/api/task/${value}/user/${userId}`)
   }
-  console.log(res)
   message.destroy(tips)
   if (res.data.code === 0) {
     let data = format(res)

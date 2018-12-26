@@ -138,3 +138,9 @@ export function getContentLabelsTree (data, parentId = null) {
   }
   return res
 }
+
+export function sleep(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), ms)
+  })
+}

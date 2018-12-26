@@ -1,4 +1,4 @@
-import { Get, Post, Body, Controller, Session, Req, Res, HttpStatus } from '@nestjs/common';
+import { Get, Post, Body, Controller, Session, Req, Res, HttpStatus, Delete } from '@nestjs/common';
 import { LoginService } from './login.service';
 
 class IPost {
@@ -9,15 +9,15 @@ class IPost {
 @Controller('api/login')
 export class LoginController {
   constructor(private readonly LoginService: LoginService) {}
-  @Get()
-  get(@Session() session){
-    return session
-  }
 
   @Post()
-  async post(@Res() res, @Req() req, @Body() body: IPost, @Session() session: any) {
-    let data = await this.LoginService.login(body.username, body.password)
-    session = { id: 1 }
+  async post(@Res() res, @Req() req, @Body() body: IPost) {
+    let data = await this.LoginService.login(body.username, body.password, req)
     res.status(HttpStatus.OK).json(data);
+  }
+
+  @Delete()
+  async delete(@Req() req){
+    return await this.LoginService.delete(req)
   }
 }

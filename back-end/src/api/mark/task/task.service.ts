@@ -114,7 +114,6 @@ export class TaskService {
         break;
       default: {}
     }
-    let date1 = new Date().valueOf()
     let task =  await this.TaskRepository.findOne({ 
       where: { id: taskId },
       relations: taskRelations
@@ -136,8 +135,6 @@ export class TaskService {
       where: { task: taskId }
     })
     task.articles = articles
-    let date2 = new Date().valueOf()
-    console.log('date2-date1:', date2-date1)
     return {
       code: 0,
       msg: 'find successed!',
@@ -216,11 +213,15 @@ export class TaskService {
       let docs = result.docs.doc
       docs.map(async item => {
         let article = new Article()
-        article.title = item.title ? item.title[0] : null
-        article.text = item.text ? item.text[0] : null
+        article.title = item.title ? item.title[0] : ''
+        article.text = item.text ? item.text[0] : ''
         article.state = 'marking'
         article.task = task
-        await this.ArticleRepository.save(article)
+        try{
+          await this.ArticleRepository.save(article)
+        } catch(err) {
+          console.log(err)
+        }
       })
       await this.TaskRepository.save(task)
       return {

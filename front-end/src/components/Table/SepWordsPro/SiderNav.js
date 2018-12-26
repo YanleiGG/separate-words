@@ -36,7 +36,7 @@ class SiderNav_UI extends React.Component {
           >
             {siderNavData.map(i => {
               return <Menu.Item onClick={() => handleClick(i.id)} key={i.id} >
-                      { i.title }
+                      { i.title.length > 8 ? i.title.slice(0,7) + '...' : i.title }
                       { i.state === 'completed' ? <Icon 
                         style={{color: 'green', float: 'right', marginTop: '15px'}} 
                         type="check" 

@@ -18,7 +18,7 @@ class TasksShow extends React.Component {
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
-          <Col span={20}>
+          <Col span={22}>
             <Select 
               style={{ width: '20%', marginBottom: '15px' }} 
               onChange={taskTypeChange} 
@@ -33,7 +33,7 @@ class TasksShow extends React.Component {
             </Select>
             <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
-          <Col span={20}>
+          <Col span={22}>
             <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
               <Column title="任务名称" key="name" dataIndex="name"/>
               <Column title="任务说明" key="instruction" dataIndex="instruction"/>

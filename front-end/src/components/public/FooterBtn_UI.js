@@ -8,7 +8,7 @@ class FooterBtn extends React.Component {
   return (
       <div style={{textAlign: 'center'}}>
         <Button onClick={ save } type="primary">保存</Button>
-        <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
+        {/* <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button> */}
       </div>
     )
   }

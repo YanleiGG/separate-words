@@ -15,7 +15,7 @@ class FooterBtn_UI extends React.Component {
           <Button type="primary">完成标注</Button>
         </Popconfirm>
         <Button onClick= { save } type="primary" style={{ marginLeft: '20px'}}>保存</Button>
-        <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
+        {/* <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button> */}
       </div>
     )
   }

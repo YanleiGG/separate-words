@@ -3,16 +3,16 @@ import { Input, Icon, Layout, Button, message, Tabs } from 'antd';
 import { connect } from "react-redux";
 import store from '../../state/store'
 import axios from 'axios'
-import { Link } from "react-router-dom";
 import ictImg from '../../assets/ict.png'
 import background from '../../assets/background.png'
+import { path } from '../../config'
 
 const { Header, Content } = Layout;
 const TabPane = Tabs.TabPane
 
 class Login extends React.Component {
   render () {
-    const { login, username, password, usernameChange, passwordChange} = this.props
+    const { login, username, password, usernameChange, passwordChange, history} = this.props
     return (
       <Layout style={{minHeight: '100vh'}}>
         <Header>
@@ -50,8 +50,7 @@ class Login extends React.Component {
                 value={password}
                 onChange={passwordChange}
               />
-              <Button type="primary" style={{width: '100%'}} onClick={login}>登录</Button>
-              <Link to='/user/myTasks' id="login"></Link>
+              <Button type="primary" style={{width: '100%'}} onClick={() => login(history)}>登录</Button>
             </TabPane>
           </Tabs>
         </Content>
@@ -66,14 +65,14 @@ let mapStateToProps = state => {
 
 let mapDispatchToProps = dispatch => {
   return {
-    login: async () => {
+    login: async (history) => {
       let state = store.getState()
       let { username, password } = state
       if (username == '' || password == '') return message.error('账号和密码不能为空！')
       let tips = message.loading('登录中...')
       let res = await axios({
         method: 'post',
-        url: `${state.path}/api/login`,
+        url: `${path}/api/login`,
         data: { username, password },
         withCredentials: true
       })
@@ -81,7 +80,7 @@ let mapDispatchToProps = dispatch => {
       if (res.data.code != 0) return message.error('登录失败，账号或密码错误！')
       dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
       dispatch({ type: 'SET_USER', user: res.data.user })
-      document.getElementById('login').click()
+      history.push('/user/myTasks')
     },
     usernameChange: e => dispatch({ type: "SET_USERNAME", username: e.target.value }),
     passwordChange: e => dispatch({ type: "SET_PASSWORD", password: e.target.value })

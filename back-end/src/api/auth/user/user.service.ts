@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { User } from '../../../database/user/user.entity';
 import { Role } from '../../../database/role/role.entity';
 
-
 @Injectable()
 export class UserService {
   constructor(

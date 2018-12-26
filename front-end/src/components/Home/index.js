@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Button } from 'antd';
 import { connect } from "react-redux";
 import store from '../../state/store'
 import { Link, Route, Redirect } from "react-router-dom";
@@ -45,7 +45,7 @@ class Home extends React.Component {
   }
 
   render() {
-    let { collapsed, toggle, selectedKeys, onSelect, openKeys, onOpenChange, roles } = this.props
+    let { collapsed, toggle, selectedKeys, onSelect, openKeys, onOpenChange, roles, logout, history } = this.props
     let markPermission, userManagePermission, dataManagePermission, taskAndLabelManagePermission
     if (roles) {
       markPermission = roles.some(item => item.name === '任务标注')
@@ -144,6 +144,7 @@ class Home extends React.Component {
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={toggle}
             />
+            <Button style={{ marginLeft: '85%' }} onClick={() => logout(history)}>注销</Button>
           </Header>
           <Content style={{ margin: '24px 16px', background: '#fff', minHeight: 280 }}>
             <Route path='/manage' render={props => {
@@ -197,6 +198,15 @@ let mapDispatchToApp = dispatch => {
           openKeys: openKeys
         }
       })
+    },
+    logout: async (history) => {
+      let res = await axios({
+        method: 'delete',
+        url: `${path}/api/login`,
+        withCredentials: true
+      })
+      history.push('/login')
+      console.log(res)
     }
   }
 }

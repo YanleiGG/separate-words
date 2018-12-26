@@ -15,7 +15,7 @@ class FooterBtn_UI extends React.Component {
           <Button type="primary">完成标注</Button>
         </Popconfirm>
         <Button onClick= { save } type="primary" style={{ marginLeft: '20px'}}>保存</Button>
-        <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
+        {/* <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button> */}
       </div>
     )
   }
@@ -81,43 +81,43 @@ let mapDispatchToProps = dispatch => {
         message.error('保存失败!', 1.5)
       }
     },
-    cancel: async () => {
-      let state = store.getState()
-      let { showIndex, articles, propertys } = state.sepWordsPro
-      let id = articles[showIndex].id
-      let res = await axios.get(`${path}/api/article/separateWordsProperty/${id}`)
-      let sep_words_property = res.data.article.sep_words_property
-      if (!sep_words_property) {
-        sep_words_property = {}
-        articles[showIndex].sep_words_property = {}
-        res.data.article.text = res.data.article.text.replace(' ', '')
-        let tempArr = res.data.article.text.split('').map((item, index) => {
-          return {
-            id: index,
-            content: item,
-            type: '',
-            label: ''
-          }
-        })
-        sep_words_property.separateWordsProperty = formatWithProperty(tempArr)
-      }
-      let separateWordsProperty = sep_words_property.separateWordsProperty
-      articles[showIndex].sep_words_property.separateWordsProperty = separateWordsProperty
-      propertys = propertys.map(item => {
-        return {
-          name: item.label,
-          symbol: item.value
-        }
-      })
-      articles[showIndex].showPro = unformatWithProperty(separateWordsProperty, propertys)
-      dispatch({
-        type: "SET_SEP_WORDS_PRO",
-        sepWordsPro: {
-          ...state.sepWordsPro,
-          articles
-        }
-      })
-    }
+    // cancel: async () => {
+    //   let state = store.getState()
+    //   let { showIndex, articles, propertys } = state.sepWordsPro
+    //   let id = articles[showIndex].id
+    //   let res = await axios.get(`${path}/api/article/separateWordsProperty/${id}`)
+    //   let sep_words_property = res.data.article.sep_words_property
+    //   if (!sep_words_property) {
+    //     sep_words_property = {}
+    //     articles[showIndex].sep_words_property = {}
+    //     res.data.article.text = res.data.article.text.replace(' ', '')
+    //     let tempArr = res.data.article.text.split('').map((item, index) => {
+    //       return {
+    //         id: index,
+    //         content: item,
+    //         type: '',
+    //         label: ''
+    //       }
+    //     })
+    //     sep_words_property.separateWordsProperty = formatWithProperty(tempArr)
+    //   }
+    //   let separateWordsProperty = sep_words_property.separateWordsProperty
+    //   articles[showIndex].sep_words_property.separateWordsProperty = separateWordsProperty
+    //   propertys = propertys.map(item => {
+    //     return {
+    //       name: item.label,
+    //       symbol: item.value
+    //     }
+    //   })
+    //   articles[showIndex].showPro = unformatWithProperty(separateWordsProperty, propertys)
+    //   dispatch({
+    //     type: "SET_SEP_WORDS_PRO",
+    //     sepWordsPro: {
+    //       ...state.sepWordsPro,
+    //       articles
+    //     }
+    //   })
+    // }
   }
 }
 
