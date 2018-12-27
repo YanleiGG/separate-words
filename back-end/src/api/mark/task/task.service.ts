@@ -9,8 +9,6 @@ import { EntitiesGroup } from '../../../database/entities_group/entities_group.e
 import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity'
 import { ContentLabelGroup } from '../../../database/contentLabelGroup/contentLabelGroup.entity'
 import { readAndParseXML } from 'tools';
-var fs = require('fs')
-var xml2js = require('xml2js')
 
 interface ArticleOptions{
   task: number,

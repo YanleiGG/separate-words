@@ -22,6 +22,7 @@ class Home extends React.Component {
     if (pathname === '/manage/user/users' || pathname === '/manage/user/create') openKeys = ['userManage']
     if (pathname === '/manage/task/tasks' || pathname === '/manage/task/createTask') openKeys = ['taskManage']
     if (pathname === '/manage/label/labels' || pathname === '/manage/label/createLabel' || pathname === '/manage/label/createLabels') openKeys = ['labelManage']
+    if (pathname === '/manage/data/tasks' || pathname === '/manage/data/uploadDocs' || pathname === '/manage/data/docs') openKeys = ['dataManage']
     store.dispatch({
       type: "SET_HOME",
       home: {
@@ -116,12 +117,22 @@ class Home extends React.Component {
               </SubMenu> 
             : null }
             { dataManagePermission ? 
-              <Menu.Item key="/manage/data">
-                <Link to='/manage/data'>
-                  <Icon type="database" theme="outlined" />
-                  <span>数据管理</span>
-                </Link>
-              </Menu.Item> 
+              <SubMenu key="dataManage" title={
+                  <span>
+                    <Icon type="database" theme="outlined" />
+                    <span>数据管理</span>
+                  </span>
+              }>
+                <Menu.Item key="/manage/data/tasks">
+                  <Link to='/manage/data/tasks'>任务总览</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/data/uploadDocs">
+                  <Link to='/manage/data/uploadDocs'>创建语料</Link>
+                </Menu.Item>
+                <Menu.Item key="/manage/data/docs">
+                  <Link to='/manage/data/docs'>语料管理</Link>
+                </Menu.Item>
+              </SubMenu> 
             : null }
           </Menu>
         </Sider>

@@ -170,5 +170,14 @@ export const initialState = {
     collapsed: false,
     selectedKeys: [],
     openKeys: []
+  },
+  createDocs: {
+    docsName: '',
+    docsPathName: '',
+    docsType: ''
+  },
+  docsManage: {
+    type: 'all',
+    data: []
   }
 };

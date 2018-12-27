@@ -168,6 +168,24 @@ const reducer = (state = initialState, action) => {
         }
       })
     }
+    case "SET_CREATE_DOCS": {
+      return Object.assign({}, state, {
+        ...state,
+        createDocs: {
+          ...state.createDocs,
+          ...action.createDocs
+        }
+      })
+    }
+    case "SET_DOCS_MANAGE": {
+      return Object.assign({}, state, {
+        ...state,
+        docsManage: {
+          ...state.docsManage,
+          ...action.docsManage
+        }
+      })
+    }
     default:
       return state;
   }

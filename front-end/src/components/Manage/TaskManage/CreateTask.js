@@ -72,7 +72,7 @@ class CreateTask extends React.Component {
             <Button onClick={ create } type="primary">创建</Button>
             <Button onClick= { cancel } type="primary" style={{ marginLeft: '20px'}}>取消</Button>
           </Col>
-        </Row>   
+        </Row>
       </div>
     )
   }

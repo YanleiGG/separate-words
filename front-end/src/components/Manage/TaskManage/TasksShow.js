@@ -30,7 +30,6 @@ class TasksShow extends React.Component {
               <Option value="markEntity">实体标注</Option>
               <Option value="emotion">情感标注</Option>
             </Select>
-            <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
           <Col span={20}>
             <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>

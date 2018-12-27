@@ -9,6 +9,7 @@ import { WordsPropertyGroup } from '../words_property_group/words_property_group
 import { EntitiesGroup } from '../entities_group/entities_group.entity'
 import { EmotionTypeGroup } from '../emotionTypeGroup/emotionTypeGroup.entity'
 import { ContentLabelGroup } from '../contentLabelGroup/contentLabelGroup.entity'
+import { Docs } from '../docs/docs.entity'
 
 @Entity()
 export class Task {
@@ -48,6 +49,9 @@ export class Task {
 
     @ManyToOne(type => ContentLabelGroup, contentLabelGroup => contentLabelGroup.tasks)
     contentLabelGroup: ContentLabelGroup;
+
+    @ManyToOne(type => Docs, docs => docs.tasks)
+    docs: Docs;
 
     @ManyToMany(type => Type, type => type.tasks)
     @JoinTable()

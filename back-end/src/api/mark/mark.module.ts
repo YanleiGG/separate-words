@@ -60,6 +60,10 @@ import { typeProviders } from '../../database/type/type.provider'
 
 import { userProviders } from '../../database/user/user.provider'
 
+import { DocsProviders } from 'database/docs/docs.provider';
+import { DocsService } from './docs/docs.service';
+import { DocsController } from './docs/docs.controller';
+
 @Module({
   imports: [DatabaseModule],
   providers: [
@@ -78,6 +82,7 @@ import { userProviders } from '../../database/user/user.provider'
     ...emotionTypeGroupProviders,
     ...contentLabelGroupProviders,
     ...contentLabelProviders,
+    ...DocsProviders,
     ArticleService,
     WordsPropertyService,
     EmotionService,
@@ -91,7 +96,8 @@ import { userProviders } from '../../database/user/user.provider'
     EmotionTypeService,
     EmotionTypeGroupService,
     ContentLabelGroupService,
-    ContentLabelService
+    ContentLabelService,
+    DocsService
   ],
   controllers: [
     ArticleController,
@@ -107,7 +113,8 @@ import { userProviders } from '../../database/user/user.provider'
     EmotionTypeController,
     EmotionTypeGroupController,
     ContentLabelGroupController,
-    ContentLabelController
+    ContentLabelController,
+    DocsController
   ]
 })
 export class MarkModule {}
