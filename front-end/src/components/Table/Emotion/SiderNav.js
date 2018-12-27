@@ -61,8 +61,8 @@ let refresh = async () => {
   })
   let taskId = window.location.pathname.split('/').pop()
   let {filter, page, tempPropertys, emotionTypes} = state.emotion
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/emotion/${filter}?offset=${(page-1)*10}&pageSize=10`)
-  console.log(res)
+  let {id, name} = state.user
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/emotion/${filter}?offset=${(page-1)*10}&pageSize=10${name!='admin'?`&userId=${id}`:''}`)
   let {articles, emotionTypeGroup} = res.data.data.task
   let totalCount = res.data.data.totalCount
   let siderNavData = articles.map((item, index) => {

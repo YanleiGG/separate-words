@@ -67,11 +67,11 @@ let refresh = async dispatch => {
     }
   })
   let {page, filter} = state.sepWordsPro, taskId = window.location.pathname.split('/').pop()
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty/${filter}?offset=${(page-1)*10}&pageSize=10`)
+  let {id, name} = state.user
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/separateWordsProperty/${filter}?offset=${(page-1)*10}&pageSize=10${name!='admin'?`&userId=${id}`:''}`)
   let totalCount = res.data.data.totalCount
   let task = res.data.data.task
   let articles = task.articles
-  console.log(task)
   let res2 = await axios.get(`${path}/api/words_property_group/${task.wordsPropertyGroup.id}`)
   let { words_propertys } = res2.data
   let siderNavData = articles.map((item, index) => {

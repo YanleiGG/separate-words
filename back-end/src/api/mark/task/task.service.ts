@@ -12,6 +12,16 @@ import { readAndParseXML } from 'tools';
 var fs = require('fs')
 var xml2js = require('xml2js')
 
+interface ArticleOptions{
+  task: number,
+  state?: string,
+  user?: number
+}
+interface CountOptions{
+  task: number,
+  user?: number
+}
+
 @Injectable()
 export class TaskService {
   constructor(
@@ -36,7 +46,6 @@ export class TaskService {
   async find(offset: number, pageSize: number) {
     let tasks =  await this.TaskRepository.find({ relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] });
     let totalCount = tasks.length
-    // let data = tasks.reverse().splice(offset, pageSize)
     let data = tasks.reverse()
     return {
       code: 0,
@@ -93,7 +102,7 @@ export class TaskService {
     }
   }
 
-  async findATaskWithArticles(taskId, offset, pageSize, type, filter) {
+  async findATaskWithArticles(taskId, offset, pageSize, type, filter, userId) {
     let taskRelations = ['users', 'types']
     let articleRelations = []
     switch(type){
@@ -118,21 +127,21 @@ export class TaskService {
       where: { id: taskId },
       relations: taskRelations
     })
-    let articleWithFilterOptions = {
-      task: taskId,
-      state: filter
-    }
-    let articleWithoutFilterOptions = {
-      task: taskId
+    let articleOptions: ArticleOptions = { task: taskId }
+    let countOptions: CountOptions = { task: taskId }
+    if (filter !== 'all') articleOptions.state = filter
+    if (userId) {
+      articleOptions.user = userId
+      countOptions.user = userId
     }
     let articles = await this.ArticleRepository.find({
-      where: filter !== 'all' ? articleWithFilterOptions : articleWithoutFilterOptions,
+      where: articleOptions,
       skip: offset,
       take: pageSize,
       relations: articleRelations
     })
     const totalCount = await this.ArticleRepository.count({ 
-      where: { task: taskId }
+      where: countOptions
     })
     task.articles = articles
     return {
@@ -166,22 +175,22 @@ export class TaskService {
     }
 
     let task = new Task()
+    let taskUsers = []
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
     if (selectedUsers[0]==='all') {
-      let users = await this.UserRepository.find({relations: ['roles']})
-      users = users.filter(item => {
+      taskUsers = await this.UserRepository.find({relations: ['roles']})
+      taskUsers = taskUsers.filter(item => {
         return item.roles.some(i => {
           return i.name === '任务标注'
         })
       })
-      task.users = users
+      task.users = taskUsers
     } else {
-      let users = []
       await selectedUsers.map(async item => {
         let user = await this.UserRepository.findOne({ id: item })
-        users.push(user)
+        taskUsers.push(user)
       })
-      task.users = users
+      task.users = taskUsers
     }
     switch (type) {
       case 'separateWordsProperty': {
@@ -206,13 +215,20 @@ export class TaskService {
     task.instruction = args.instruction
     task.types = [type_1]
     task.state = '进行中'
+    // 过滤掉admin账号，将文章进行均分至选择的标注人员上
+    let articleUsers = task.users.filter(item => item.name != 'admin')
+    let articleUsersIndex = 0
+
     let path = __dirname.replace(/\/api\/mark\/task/, `/static/docs/${docs[0]}`)
     let result = await readAndParseXML(path)
     if (result.docs) {
       await this.TaskRepository.save(task)
       let docs = result.docs.doc
-      docs.map(async item => {
+      let per = docs.length/articleUsers.length
+      docs.map(async (item, index) => {
         let article = new Article()
+        if (index > per*(articleUsersIndex+1)) articleUsersIndex++
+        article.user = articleUsers[articleUsersIndex]
         article.title = item.title ? item.title[0] : ''
         article.text = item.text ? item.text[0] : ''
         article.state = 'marking'

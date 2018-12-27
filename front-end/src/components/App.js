@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import store from '../state/store'
 import axios from 'axios'
-import { sleep } from '../util'
 import { connect } from "react-redux";
 
 import Table from './Table'
@@ -17,7 +16,7 @@ class App extends React.Component {
       url: `${state.path}/api/login`,
       withCredentials: true
     })
-    if (res.data.code != 0) return this.props.history 
+    if (res.data.code != 0) return this.props.history  // 跳转回登录页，待完成
     store.dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
     store.dispatch({ type: 'SET_USER', user: res.data.user })
   }

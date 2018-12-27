@@ -10,11 +10,19 @@ export class LoginService {
   ) {}
 
   async login (username: string, password: string, req) {
-    let user
+    let user, name
     if (req.session.user && !username) {
-      user = await this.UserRepository.findOne({ name: req.session.user.username, password: req.session.user.password })
+      name = req.session.user.username
+      user = await this.UserRepository.findOne({
+        where: { name, password: req.session.user.password },
+        relations: ['roles']
+      })
     } else {
-      user = await this.UserRepository.findOne({ name: username, password })
+      name = username
+      user = await this.UserRepository.findOne({
+        where: { name, password },
+        relations: ['roles']
+      })
     }
 
     if (user) {
@@ -27,7 +35,8 @@ export class LoginService {
         msg: 'login successed!',
         user: {
           id: user.id,
-          name: username
+          name,
+          roles: user.roles
         }
       }
     } else {

@@ -97,7 +97,7 @@ const reducer = (state = initialState, action) => {
       }) 
     }
     case "SET_USER": {
-      return Object.assign({}, state, {
+        return Object.assign({}, state, {
         ...state,
         user: action.user
       })

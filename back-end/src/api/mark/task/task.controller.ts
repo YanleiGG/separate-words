@@ -26,7 +26,7 @@ export class TaskController {
 
   @Get(':id/articles/:type/:filter')
   findATaskWithArticles(@Req() req, @Param() param){
-    return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type, param.filter);
+    return this.TaskService.findATaskWithArticles(param.id, req.query.offset, req.query.pageSize, param.type, param.filter, req.query.userId);
   }
 
   // @Get(":id")

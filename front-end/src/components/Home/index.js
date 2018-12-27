@@ -16,18 +16,6 @@ const { SubMenu } = Menu
 class Home extends React.Component {
   async componentWillMount() {
     let state = store.getState()
-    // 获取用户信息
-    let {id} = state.user
-    let res = await axios.get(`${path}/api/user/${id}`)
-    store.dispatch({
-      type: 'SET_USER',
-      user: {
-        id: res.data.id,
-        name: res.data.name,
-        roles: res.data.roles
-      }
-    })
-    console.log('userInfo' ,res)
     // 设置左侧菜单栏展出样式
     let pathname = window.location.pathname
     let openKeys
@@ -200,12 +188,12 @@ let mapDispatchToApp = dispatch => {
       })
     },
     logout: async (history) => {
+      history.push('/login')
       let res = await axios({
         method: 'delete',
         url: `${path}/api/login`,
         withCredentials: true
       })
-      history.push('/login')
       console.log(res)
     }
   }

@@ -61,7 +61,8 @@ let refresh = async () => {
   })
   let taskId = window.location.pathname.split('/').pop()
   let {filter, page} = state.contentType
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/contentType/${filter}?offset=${(page-1)*10}&pageSize=10`)
+  let {id, name} = state.user
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/contentType/${filter}?offset=${(page-1)*10}&pageSize=10${name!='admin'?`&userId=${id}`:''}`)
   let {articles, contentLabelGroup} = res.data.data.task
   let treeData = getContentLabelsTree(contentLabelGroup.contentLabels)  // 分类体系树
   let totalCount = res.data.data.totalCount

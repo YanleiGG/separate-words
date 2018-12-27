@@ -29,7 +29,8 @@ class ContentType extends React.Component {
   }
 
   render () {
-    let {spinning} = this.props
+    let {spinning, user} = this.props
+    if (!user.name) return null
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Spin spinning={spinning} tip='加载数据中...' style={{marginTop: '10%'}}>
@@ -47,7 +48,8 @@ class ContentType extends React.Component {
 
 let mapStateToProps = state => {
   return {
-    ...state.contentType
+    ...state.contentType,
+    user: state.user
   }
 };
 

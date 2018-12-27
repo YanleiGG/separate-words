@@ -13,7 +13,8 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh, startTask } = this.props
+    let { taskTypeChange, data, tasksRefresh, startTask, user } = this.props
+    if (!user.name) return null
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -59,7 +60,10 @@ class TasksShow extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return state.tasks
+  return {
+    ...state.tasks,
+    user: state.user
+  }
 }
 
 let mapDispatchToProps = dispatch => {
@@ -107,30 +111,45 @@ let mapDispatchToProps = dispatch => {
 }
 
 async function refresh(value) {
-  let state = store.getState()
-  let userId = state.user.id
-  let tips = message.loading('获取数据中...', 10)
-  let res
-  if (value === 'all') {
-    res = await axios.get(`${path}/api/task/user/${userId}`)
-  } else {
-    res = await axios.get(`${path}/api/task/${value}/user/${userId}`)
-  }
-  message.destroy(tips)
-  if (res.data.code === 0) {
-    let data = format(res)
-    store.dispatch({
-      type: "SET_TASKS",
-      tasks: {
-        ...state.tasks,
-        data,
-        type: value
+  let timer
+  // id的更新可能有延时，设置一个interval来不断监听它
+  timer = setInterval(async ()=>{
+    let state = store.getState()
+    let {id, name} = state.user
+    if (!id) return
+    clearInterval(timer)
+    let tips = message.loading('获取数据中...', 10)
+    let res
+    // 管理员账号直接获取全部任务
+    if (name === 'admin') {
+      if (value === 'all') {
+        res = await axios.get(`${path}/api/task`)
+      } else {
+        res = await axios.get(`${path}/api/task/${value}`)
       }
-    })
-    message.success('数据获取成功！', 1.5)
-  } else {
-    message.error('获取任务信息失败！', 1.5)
-  }
+    } else {
+      if (value === 'all') {
+        res = await axios.get(`${path}/api/task/user/${id}`)
+      } else {
+        res = await axios.get(`${path}/api/task/${value}/user/${id}`)
+      }
+    }
+    message.destroy(tips)
+    if (res.data.code === 0) {
+      let data = format(res)
+      store.dispatch({
+        type: "SET_TASKS",
+        tasks: {
+          ...state.tasks,
+          data,
+          type: value
+        }
+      })
+      message.success('数据获取成功！', 1.5)
+    } else {
+      message.error('获取任务信息失败！', 1.5)
+    }
+  }, 50)
 }
 
 function format (res) {

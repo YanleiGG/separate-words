@@ -100,9 +100,9 @@ let refresh = async dispatch => {
       spinning: true
     }
   })
-  console.log(page, filter)
   let {page, filter} = state.markEntity, taskId = window.location.pathname.split('/').pop()
-  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10`)
+  let {id, name} = state.user
+  let res = await axios.get(`${path}/api/task/${taskId}/articles/markEntity/${filter}?offset=${(page-1)*10}&pageSize=10${name!='admin'?`&userId=${id}`:''}`)
   let totalCount = res.data.data.totalCount
   let task = res.data.data.task
   let articles = task.articles

@@ -154,7 +154,7 @@ export const initialState = {
   },
   taskId: null, //设一个默认值，方便调试，实际设为null
   user: {
-    id: 1,  //设一个默认值，方便调试，实际设为null
+    id: null,  //设一个默认值，方便调试，实际设为null
     name: ''
   },
   users: {
