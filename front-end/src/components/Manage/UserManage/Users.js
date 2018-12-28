@@ -56,7 +56,6 @@ let refresh = async () => {
       }
     })
   }
-  console.log(res.data.data)
 }
 
 let mapStateToProps = state => {

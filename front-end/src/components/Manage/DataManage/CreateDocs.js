@@ -78,7 +78,6 @@ let mapDispatchToProps = dispatch => {
       let name = state.createDocs.docsName, 
           pathName = state.createDocs.docsPathName, 
           type = state.createDocs.docsType
-      console.log(state.createDocs)
       if (!name || !pathName || !type) {
         message.error('请将所有内容填写完整!', 1.5)
         return
@@ -91,7 +90,6 @@ let mapDispatchToProps = dispatch => {
       } else {
         message.error(res.data.msg, 1.5)
       }
-      console.log(res)
     },
     cancel: () => {}
   }

@@ -15,10 +15,18 @@ export class DocsService {
   async find(offset: number, pageSize: number, type: string) {
     let docses
     if (!type || type === 'all') {
-      docses = await this.DocsRepository.find({ relations: ['type'] })
+      docses = await this.DocsRepository.find({ 
+        order: {
+          createdAt: 'DESC'
+        },
+        relations: ['type'] 
+      })
     } else {
       let _type = await this.TypeRepository.findOne({ symbol: type })
       docses = await this.DocsRepository.find({
+        order: {
+          createdAt: 'DESC'
+        },
         where: { type: _type.id },
         relations: ['type']
       })
@@ -53,6 +61,11 @@ export class DocsService {
   }
 
   async delete ( id: number ) {
-
+    let docs = await this.DocsRepository.findOne({ id })
+    await this.DocsRepository.remove(docs)
+    return {
+      code: 0,
+      msg: 'delete successed!'
+    }
   }
 }

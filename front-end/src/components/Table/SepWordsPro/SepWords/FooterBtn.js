@@ -37,7 +37,6 @@ let mapDispatchToProps = dispatch => {
       sep_words_property.separateWordsProperty = formatWithProperty(showPro)
       let tips = message.loading('保存中...')
       let res = await axios.post(`${state.path}/api/sep_words_property`, { ...sep_words_property, articleId: articles[showIndex].id })
-      console.log(res)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)

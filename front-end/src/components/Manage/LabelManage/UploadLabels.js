@@ -12,7 +12,7 @@ const uploadProps = {
   withCredentials: true,
   onChange(info) {
     if (info.file.status !== 'uploading') {
-      console.log(info.file)
+      // console.log(info.file)
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} 上传成功！`)

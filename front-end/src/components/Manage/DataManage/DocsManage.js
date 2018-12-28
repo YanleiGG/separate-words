@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Select, message, Table, Button } from 'antd'
+import { Row, Col, Select, message, Table, Button, Popconfirm } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
@@ -15,7 +15,7 @@ class DocsManage extends React.Component {
   }
 
   render() {
-    let { taskTypeChange, data, docsRefresh } = this.props
+    let { taskTypeChange, data, docsRefresh, deleteDocs } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -37,7 +37,16 @@ class DocsManage extends React.Component {
             <Table dataSource={data} locale={{ emptyText: '无语料' }}>
               <Column title="语料名称" rowKey={(record)=> record.id+"name"} dataIndex="name"/>
               <Column title="语料类别" rowKey={(record)=> record.id+"type"} dataIndex="showType"/>
-              <Column title="创建时间" rowKey={(record)=> record.id+"createTime"} dataIndex="createTime"/>
+              <Column title="创建时间" rowKey={(record)=> record.id+"createTime"} dataIndex="createTime"/>              <Column 
+                title="操作" 
+                key="action" 
+                dataIndex="action"
+                render={(text, record) => (
+                  <Popconfirm title="确认完成标注吗?" onConfirm={() => deleteDocs(record.id)} okText="确认" cancelText="取消">
+                    <a>删除</a>
+                  </Popconfirm>
+                )}
+              />
             </Table>
           </Col>
         </Row>
@@ -61,6 +70,19 @@ let mapDispatchToProps = dispatch => {
     },
     taskTypeChange: async value => {
       refresh(value)
+    },
+    deleteDocs: async id => {
+      let res = await axios({
+        url: `${path}/api/docs`,
+        method: 'delete',
+        data: { id }
+      })
+      if (res.data.code === 0) {
+        let {type} = store.getState().docsManage
+        refresh(type)
+      } else {
+        message.error('删除失败！')
+      }
     }
   }
 }
@@ -73,6 +95,7 @@ async function refresh(value) {
       type: "SET_DOCS_MANAGE",
       docsManage: {
         ...state.docsManage,
+        type: value,
         data: format(res.data.docs)
       }
     })

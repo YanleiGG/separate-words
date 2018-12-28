@@ -205,7 +205,6 @@ let mapDispatchToApp = dispatch => {
         url: `${path}/api/login`,
         withCredentials: true
       })
-      console.log(res)
     }
   }
 }

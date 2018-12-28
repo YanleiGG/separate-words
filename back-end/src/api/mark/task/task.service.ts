@@ -42,19 +42,28 @@ export class TaskService {
   ) {}
 
   async find(offset: number, pageSize: number) {
-    let tasks =  await this.TaskRepository.find({ relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] });
+    let tasks =  await this.TaskRepository.find({ 
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] 
+    });
     let totalCount = tasks.length
-    let data = tasks.reverse()
     return {
       code: 0,
       msg: 'find successed!',
       totalCount,
-      tasks: data
+      tasks
     }
   }
 
   async findByType(type) {
-    let tasks =  await this.TaskRepository.find({ relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] });
+    let tasks =  await this.TaskRepository.find({
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] 
+    });
     let totalCount = tasks.length
     tasks = tasks.filter(item => {
       return item.types.some(i => i.symbol === type)

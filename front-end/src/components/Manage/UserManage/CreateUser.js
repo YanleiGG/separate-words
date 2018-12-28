@@ -107,7 +107,6 @@ let mapDispatchToProps = dispatch => {
       let tips = message.loading('创建中...')
       let res = await axios.post(`${path}/api/user`, { username, password, selectAuthIds })
       message.destroy(tips)
-      console.log(res)
       if (res.data.code == 0) {
         message.success('创建成功!', 1.5)
       } else {

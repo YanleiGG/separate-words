@@ -93,7 +93,6 @@ let mapDispatchToProps = dispatch => {
         let property = propertys.find(item => item.value === radioValue)
         articles[showIndex].showPro[i].label = property ? property.label : '无'
       }
-      console.log(articles[showIndex].showPro)
       dispatch({
         type: "SET_MARK_ENTITY",
         markEntity: {

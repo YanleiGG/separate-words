@@ -131,7 +131,6 @@ let mapDispatchToProps = dispatch => {
       if (type === 'contentType') {
         url = `${path}/api/contentLabelGroup`
         labelsValue = createLabels.contentTypeLabels
-        console.log(labelsValue)
       }
       if (!type || !name || labelsValue.length == 0) return message.info('请将所有内容填写完整!', 1.5)
       let tips = message.loading('创建中...')

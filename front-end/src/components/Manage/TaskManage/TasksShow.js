@@ -98,7 +98,6 @@ async function refresh(value) {
       } else {
         message.error('获取任务信息失败！')
       }
-      console.log(res)
     }
 }
 

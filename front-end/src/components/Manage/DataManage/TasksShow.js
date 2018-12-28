@@ -79,7 +79,6 @@ let mapDispatchToProps = dispatch => {
       refresh(value)
     },
     startTask: async (id, type) => {
-      console.log(id, type)
       await store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
@@ -112,7 +111,6 @@ async function refresh(value) {
   } else {
     res = await axios.get(`${path}/api/task/${value}`)
   }
-  console.log(res)
   message.destroy(tips)
   if (res.data.code === 0) {
     let data = format(res)
@@ -128,7 +126,6 @@ async function refresh(value) {
   } else {
     message.error('获取任务信息失败！', 1.5)
   }
-  console.log(res)
 }
 
 function format (res) {
@@ -158,7 +155,6 @@ function format (res) {
     item.users = users
     item.labels = labels
   })
-  console.log(data)
   return data
 }
 

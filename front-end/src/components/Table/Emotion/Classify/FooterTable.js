@@ -133,7 +133,6 @@ let mapDispatchToProps = dispatch => {
       let article = articles[showIndex]
       let tips = message.loading('保存中...')
       let res = await axios.post(`${state.path}/api/emotion`, { ...article })
-      console.log(res)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)

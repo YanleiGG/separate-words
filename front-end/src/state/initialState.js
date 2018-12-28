@@ -119,6 +119,7 @@ export const initialState = {
     type: '',
     labels: [],
     selectedLabelsId: null,
+    selectedDocs: '',
     docs: [],
     markUsers: [],
     selectedUsers: []

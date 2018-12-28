@@ -66,7 +66,6 @@ let mapDispatchToProps = dispatch => {
       let tips = message.loading('保存中...')
       let res
       res = await axios.post(`${state.path}/api/mark_entity`, { ...mark_entity, articleId: articles[showIndex].id })
-      console.log(res)
       message.destroy(tips)
       if (res.data.code == 0) {
         message.success('保存成功!', 1.5)
