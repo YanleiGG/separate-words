@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../../config'
-import { Row, Col, Select, message, Table, Button } from 'antd'
+import { Row, Col, Select, message, Table, Button, Modal } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
@@ -13,16 +13,16 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh } = this.props
+    let { taskTypeChange, data, startTask, stateModalVisible, stateModalOk, stateModalCancel, stateCellClick, taskModalStateChange, modalTaskState, history, type } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
-          <Col span={20}>
+          <Col span={22}>
             <Select 
               style={{ width: '20%', marginBottom: '15px' }} 
               onChange={taskTypeChange} 
               placeholder="标签类型" 
-              defaultValue='all'
+              defaultValue={type}
             >
               <Option value="all">全部</Option>
               <Option value="separateWordsProperty">分词及词性标注</Option>
@@ -31,17 +31,49 @@ class TasksShow extends React.Component {
               <Option value="emotion">情感标注</Option>
             </Select>
           </Col>
-          <Col span={20}>
-            <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
+          <Col span={22}>
+            <Table dataSource={data} locale={{ emptyText: '暂无任务' }} bordered>
               <Column title="任务名称" rowKey={(record)=> record.id+"name"} dataIndex="name"/>
               <Column title="任务说明" rowKey={(record)=> record.id+"instruction"} dataIndex="instruction"/>
               <Column title="任务类别" rowKey={(record)=> record.id+"type"} dataIndex="type"/>
-              <Column title="任务状态" rowKey={(record)=> record.id+"state"} dataIndex="state"/>
+              <Column 
+                title="任务状态" 
+                rowKey={(record)=> record.id+"state"} 
+                dataIndex="state" onCellClick={(record) => stateCellClick(record.id, record.state)}
+                style={{ cursor: 'pointer' }}
+              />
               <Column title="标签集合" rowKey={(record)=> record.id+"labels"} dataIndex="labels"/>
               <Column title="标注人员" rowKey={(record)=> record.id+"users"} dataIndex="users"/>
+              <Column 
+                title="操作" 
+                key="action" 
+                dataIndex="action"
+                render={(text, record) => (
+                  <span>
+                    <a onClick={() => startTask(record.id, record.types[0].symbol, history)}>查看详情</a>
+                  </span>
+                )}
+              />
             </Table>
           </Col>
         </Row>
+        <Modal
+          title="设置任务状态"
+          visible={stateModalVisible}
+          onOk={stateModalOk}
+          onCancel={stateModalCancel}
+          defaultValue={modalTaskState}
+        >
+          <Select 
+            style={{ width: '20%', marginBottom: '15px' }} 
+            onChange={taskModalStateChange} 
+            placeholder="任务状态" 
+          >
+            <Option value="进行中">进行中</Option>
+            <Option value="已完成">已完成</Option>
+            <Option value="已终止">已终止</Option>
+          </Select>
+        </Modal>
       </div>
     )
   }
@@ -62,6 +94,86 @@ let mapDispatchToProps = dispatch => {
     },
     taskTypeChange: async value => {
       refresh(value)
+    },
+    stateModalOk: async () => {
+      let state = store.getState()
+      let { data, modalTaskId, modalTaskState, type } = state.tasks
+      if (!modalTaskState) return message.error('请选择任务状态！')
+      let task = data.find(item => item.id === modalTaskId)
+      task.state = modalTaskState
+      let res = await axios.put(`${path}/api/task`, { ...task })
+      if (res.data.code === 0) {
+        dispatch({
+          type: "SET_TASKS",
+          tasks: {
+            ...state.tasks,
+            stateModalVisible: false,
+          }
+        })
+        refresh(type)
+      } else {
+        message.error('修改失败，请重试！')
+      }
+    },
+    stateModalCancel: () => {
+      let state = store.getState()
+      dispatch({
+        type: "SET_TASKS",
+        tasks: {
+          ...state.tasks,
+          stateModalVisible: false,
+        }
+      })
+    },
+    stateCellClick: (id, taskState) => {
+      let state = store.getState()
+      dispatch({
+        type: "SET_TASKS",
+        tasks: {
+          ...state.tasks,
+          stateModalVisible: true,
+          modalTaskId: id,
+          modalTaskState: taskState
+        }
+      })
+    },
+    taskModalStateChange: (value) => {
+      let state = store.getState()
+      dispatch({
+        type: "SET_TASKS",
+        tasks: {
+          ...state.tasks,
+          modalTaskState: value
+        }
+      })
+    },
+    startTask: async (id, type, history) => {
+      store.dispatch({
+        type: 'SET_TASK_ID',
+        taskId: id
+      })
+      // 等待20ms, taskId完成修改后再跳转
+      setTimeout(() => {
+        switch(type){
+          case 'separateWordsProperty': {
+            history.push('/table/sepWordsPro/sepWords/'+id)
+            break;
+          }
+          case 'markEntity': {
+            history.push('/table/markEntity/'+id)
+            break;
+          }
+          case 'emotion': {
+            history.push('/table/emotion/classify/'+id)
+            break;
+          }
+          case 'contentType': {
+            history.push('/table/contentType/'+id)
+            break;
+          }
+          default: break;
+        }
+      }, 20);
     }
   }
 }
@@ -116,6 +228,14 @@ function format (res) {
         }
         case "markEntity": {
           labels += index === item.types.length-1 ? item.entitiesGroup.name : item.entitiesGroup.name + '、'
+          break;
+        }
+        case "emotion": {
+          labels += index === item.types.length-1 ? item.emotionTypeGroup.name : item.emotionTypeGroup.name + '、'
+          break;
+        }
+        case "contentType": {
+          labels += index === item.types.length-1 ? item.contentLabelGroup.name : item.contentLabelGroup.name + '、'
           break;
         }
         default: break;

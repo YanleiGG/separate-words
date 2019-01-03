@@ -46,7 +46,7 @@ export class TaskService {
       order: {
         createdAt: 'DESC'
       },
-      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] 
+      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup', 'emotionTypeGroup', 'contentLabelGroup'] 
     });
     let totalCount = tasks.length
     return {
@@ -62,7 +62,7 @@ export class TaskService {
       order: {
         createdAt: 'DESC'
       },
-      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup'] 
+      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup', 'emotionTypeGroup', 'contentLabelGroup'] 
     });
     let totalCount = tasks.length
     tasks = tasks.filter(item => {
@@ -79,7 +79,7 @@ export class TaskService {
   async findByUserId(userId) {
     let user = await this.UserRepository.findOne({ 
       where: {id: userId}, 
-      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup'] 
+      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup', 'tasks.emotionTypeGroup', 'tasks.contentLabelGroup'] 
     });
     let tasks = user.tasks.reverse()
     let totalCount = tasks.length
@@ -94,7 +94,7 @@ export class TaskService {
   async findByUserIdAndType(type, userId) {
     let user = await this.UserRepository.findOne({ 
       where: {id: userId}, 
-      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup'] 
+      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup', 'tasks.emotionTypeGroup', 'tasks.contentLabelGroup'] 
     });
     let tasks = user.tasks.reverse()
     let totalCount = tasks.length
@@ -232,20 +232,27 @@ export class TaskService {
       await this.TaskRepository.save(task)
       let docs = result.docs.doc
       let per = docs.length/articleUsers.length
+      let articles = []
       docs.map(async (item, index) => {
         let article = new Article()
         if (index > per*(articleUsersIndex+1)) articleUsersIndex++
         article.user = articleUsers[articleUsersIndex]
         article.title = item.title ? item.title[0] : ''
-        article.text = item.text ? item.text[0] : ''
+        // 适应一些xml不准确的特殊情况
+        if (item.text[0]['_']) {
+          article.text = item.text[0]['_']
+        } else {
+          article.text = item.text ? item.text[0] : ''
+        }
         article.state = 'marking'
         article.task = task
-        try{
-          await this.ArticleRepository.save(article)
-        } catch(err) {
-          console.log(err)
-        }
+        articles.push(article)
       })
+      try{
+        await this.ArticleRepository.save(articles)
+      } catch(err) {
+        console.log(err)
+      }
       await this.TaskRepository.save(task)
       return {
         code: 0,
@@ -262,6 +269,7 @@ export class TaskService {
 
   async update (args) {
     let task = await this.TaskRepository.findOne({ id: args.id })
+    task.state = args.state
     await this.TaskRepository.save(task)
     return {
       code: 0,

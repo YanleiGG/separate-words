@@ -15,7 +15,7 @@ class LabelAndLabels extends React.Component {
   }
 
   render() {
-    let { labels, label, labelTypeChange, refresh } = this.props
+    let { labels, label, labelTypeChange, refresh, selectType } = this.props
     const loop = data => data.map((item) => {
       if (item.child) {
         return (
@@ -31,26 +31,25 @@ class LabelAndLabels extends React.Component {
       <div>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
           <Col span={23}>
-            <Select style={{ width: '25%' }} onChange={labelTypeChange} placeholder="标签类型" defaultValue='separateWordsProperty'>
+            <Select style={{ width: '25%' }} onChange={labelTypeChange} placeholder="标签类型" defaultValue={selectType}>
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
               <Option value="markEntity">实体标注</Option>
               <Option value="emotion">情感标注</Option>
             </Select>
-            <Button style={{float: 'right'}} onClick={refresh}>刷新</Button>
           </Col>
         </Row>
         <Row type='flex' justify='space-around'>
          {label.type != 'contentType' ?           
           <Col span={8}>
-              <Table dataSource={label.data}>
+              <Table dataSource={label.data} bordered>
                 <Column title="标签名称" dataIndex="name" key="name"/>
                 <Column title="标签代号" dataIndex="symbol" key="symbol"/>
               </Table>
             </Col> 
           : null}
           <Col span={ label.type != 'contentType' ? 15 : 23}>
-            <Table dataSource={labels.data}>
+            <Table dataSource={labels.data} bordered>
               <Column title="标签集合名称" dataIndex="name" key="name" width={180}/>
               <Column title="所含标签" render={(text, record) => (
                 <div>
@@ -109,6 +108,7 @@ let mapDispatchToProps = dispatch => {
               type: value,
               data: labelsData,
             },
+            selectType: value
           }
         })
         return
@@ -135,6 +135,7 @@ let mapDispatchToProps = dispatch => {
             type: value,
             data: labelsData,
           },
+          selectType: value
         }
       })
     },
@@ -161,6 +162,7 @@ let mapDispatchToProps = dispatch => {
               type: value,
               data: labelsData,
             },
+            selectType: value
           }
         })
         return
@@ -187,6 +189,7 @@ let mapDispatchToProps = dispatch => {
             type: value,
             data: labelsData,
           },
+          selectType: value
         }
       })
     },

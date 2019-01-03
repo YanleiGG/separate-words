@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Inject } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
 
 import { articleProviders } from '../../database/article/article.provider';
@@ -63,6 +63,8 @@ import { userProviders } from '../../database/user/user.provider'
 import { DocsProviders } from 'database/docs/docs.provider';
 import { DocsService } from './docs/docs.service';
 import { DocsController } from './docs/docs.controller';
+import { Repository } from 'typeorm';
+import { Type } from 'database/type/type.entity';
 
 @Module({
   imports: [DatabaseModule],
@@ -117,4 +119,27 @@ import { DocsController } from './docs/docs.controller';
     DocsController
   ]
 })
-export class MarkModule {}
+export class MarkModule {
+  constructor(
+    @Inject('TypeRepositoryToken')
+    private readonly TypeRepository: Repository<Type>
+  ) {
+    this.TypeRepository.find().then(async types => {
+      if (types.length === 0) {
+        let separateWordsProperty = new Type()
+        let contentType = new Type()
+        let emotion = new Type()
+        let markEntity = new Type()
+        separateWordsProperty.symbol = 'separateWordsProperty'
+        separateWordsProperty.name = '分词与词性标注'
+        contentType.symbol = 'contentType'
+        contentType.name = '文本内容分类标注'
+        emotion.symbol = 'emotion'
+        emotion.name = '情感标注'
+        markEntity.symbol = 'markEntity'
+        markEntity.name = '实体标注'
+        await this.TypeRepository.save([separateWordsProperty, contentType, emotion, markEntity])
+      }
+    })
+  }
+}

@@ -4,7 +4,6 @@ import { Row, Col, Select, message, Table, Button } from 'antd'
 import { connect } from "react-redux"
 import store from '../../../state/store'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 
 const Option = Select.Option;
 const { Column } = Table;
@@ -14,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh, startTask } = this.props
+    let { taskTypeChange, data, tasksRefresh, startTask, history, type } = this.props
     return (
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
@@ -23,7 +22,7 @@ class TasksShow extends React.Component {
               style={{ width: '20%', marginBottom: '15px' }} 
               onChange={taskTypeChange} 
               placeholder="标签类型" 
-              defaultValue='all'
+              defaultValue={type}
             >
               <Option value="all">全部</Option>
               <Option value="separateWordsProperty">分词及词性标注</Option>
@@ -34,7 +33,7 @@ class TasksShow extends React.Component {
             <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
           <Col span={22}>
-            <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
+            <Table dataSource={data} locale={{ emptyText: '暂无任务' }} bordered>
               <Column title="任务名称" key="name" dataIndex="name"/>
               <Column title="任务说明" key="instruction" dataIndex="instruction"/>
               <Column title="任务类别" key="type" dataIndex="type"/>
@@ -47,10 +46,7 @@ class TasksShow extends React.Component {
                 dataIndex="action"
                 render={(text, record) => (
                   <span>
-                    <a onClick={() => startTask(record.id, record.types[0].symbol)}>查看详情</a>
-                    <Link to='/table/sepWordsPro/sepWords' id='toSepWordsPro'/>
-                    <Link to='/table/markEntity' id='toMarkEntity'/>
-                    <Link to='/table/emotion/classify' id='toEmotion'/>
+                    <a onClick={() => startTask(record.id, record.types[0].symbol, history)}>查看详情</a>
                   </span>
                 )}
               />
@@ -78,26 +74,33 @@ let mapDispatchToProps = dispatch => {
     taskTypeChange: async value => {
       refresh(value)
     },
-    startTask: async (id, type) => {
-      await store.dispatch({
+    startTask: async (id, type, history) => {
+      store.dispatch({
         type: 'SET_TASK_ID',
         taskId: id
       })
-      switch(type){
-        case 'separateWordsProperty': {
-          document.getElementById('toSepWordsPro').click()
-          break;
+      // 等待20ms, taskId完成修改后再跳转
+      setTimeout(() => {
+        switch(type){
+          case 'separateWordsProperty': {
+            history.push('/table/sepWordsPro/sepWords/'+id)
+            break;
+          }
+          case 'markEntity': {
+            history.push('/table/markEntity/'+id)
+            break;
+          }
+          case 'emotion': {
+            history.push('/table/emotion/classify/'+id)
+            break;
+          }
+          case 'contentType': {
+            history.push('/table/contentType/'+id)
+            break;
+          }
+          default: break;
         }
-        case 'markEntity': {
-          document.getElementById('toMarkEntity').click()
-          break;
-        }
-        case 'emotion': {
-          document.getElementById('toEmotion').click()
-          break;
-        }
-        default: break;
-      }
+      }, 20);
     }
   }
 }
@@ -143,6 +146,14 @@ function format (res) {
         }
         case "markEntity": {
           labels += index === item.types.length-1 ? item.entitiesGroup.name : item.entitiesGroup.name + '、'
+          break;
+        }
+        case "emotion": {
+          labels += index === item.types.length-1 ? item.emotionTypeGroup.name : item.emotionTypeGroup.name + '、'
+          break;
+        }
+        case "contentType": {
+          labels += index === item.types.length-1 ? item.contentLabelGroup.name : item.contentLabelGroup.name + '、'
           break;
         }
         default: break;

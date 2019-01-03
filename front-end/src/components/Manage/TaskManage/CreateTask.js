@@ -14,7 +14,7 @@ class CreateTask extends React.Component {
   render() {
     let { 
       nameChange, instructionChange, markUsers, docs, selectedDocs,
-      typeChange, labels, labelChange, create,
+      typeChange, labels, labelChange, create, name, instruction, type,
       cancel, selectedLabelsId, selectedUsers, userChange, docsChange
     } = this.props
     return (
@@ -22,19 +22,19 @@ class CreateTask extends React.Component {
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>任务名称：</div>
-            <Input onChange={nameChange}></Input>
+            <Input onChange={nameChange} value={name}></Input>
           </Col>
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>说明：</div>
-            <Input onChange={instructionChange}></Input>
+            <Input onChange={instructionChange} value={instruction}></Input>
           </Col>
         </Row>
         <Row style={{ marginBottom: '10px' }}>
           <Col span={8} push={8}>
             <div style={{ marginBottom: '10px' }}>任务类型：</div>
-            <Select style={{ width: '100%' }} onChange={typeChange}>
+            <Select style={{ width: '100%' }} onChange={typeChange} value={type}>
               {/* <Option value="separateWords">分词</Option> */}
               <Option value="separateWordsProperty">分词及词性标注</Option>
               <Option value="contentType">文本内容分类</Option>
@@ -192,11 +192,23 @@ let mapDispatchToProps = dispatch => {
         message.error('请将所有内容填写完整!', 1.5)
         return
       }
-      let tips = message.loading('创建中...')
+      let tips = message.loading('创建中...', 15)
       let res = await axios.post(`${path}/api/task`, createTask)
       message.destroy(tips)
       if (res.data.code === 0) {
         message.success('创建成功!', 1.5)
+        dispatch({
+          type: 'SET_CREATE_TASK',
+          createTask: {
+            ...createTask,
+            name: '',
+            instruction: '',
+            type: '',
+            selectedUsers: [],
+            selectedLabelsId: null,
+            selectedDocs: '',
+          }
+        })
       } else {
         message.error(res.data.msg, 1.5)
       }

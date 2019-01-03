@@ -1,3 +1,6 @@
+#home {
+  height: 100vh;
+}
 #home .trigger {
   font-size: 18px;
   line-height: 64px;

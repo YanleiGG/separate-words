@@ -34,7 +34,7 @@ class DocsManage extends React.Component {
             </Select>
           </Col>
           <Col span={20}>
-            <Table dataSource={data} locale={{ emptyText: '无语料' }}>
+            <Table dataSource={data} locale={{ emptyText: '无语料' }} bordered>
               <Column title="语料名称" rowKey={(record)=> record.id+"name"} dataIndex="name"/>
               <Column title="语料类别" rowKey={(record)=> record.id+"type"} dataIndex="showType"/>
               <Column title="创建时间" rowKey={(record)=> record.id+"createTime"} dataIndex="createTime"/>              <Column 

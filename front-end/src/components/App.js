@@ -16,7 +16,10 @@ class App extends React.Component {
       url: `${state.path}/api/login`,
       withCredentials: true
     })
-    if (res.data.code != 0) return this.props.history  // 跳转回登录页，待完成
+    if (res.data.code != 0) {
+      if (window.location.pathname != '/login') window.location.pathname = 'login'
+      return 
+    }
     store.dispatch({ type: 'SET_IS_LOGIN', isLogin: true })
     store.dispatch({ type: 'SET_USER', user: res.data.user })
   }
@@ -28,7 +31,7 @@ class App extends React.Component {
         <Switch>
           <Route path='/login' exact component={ Login }></Route>
           <Route path='/table' render={props => {
-            return isLogin ? <Table {...props}/> : null
+            return isLogin ? <Table bordered {...props}/> : null
           }}/>
           <Route path='/' render={props => {
             return isLogin ? <Home {...props}/> : null

@@ -1,7 +1,7 @@
 export const initialState = {
   isLogin: false,
   page: 1,
-  path: 'http://localhost:3000',
+  path: 'http://10.61.3.65:3000',
   selection: {
     content: '',
     start: 0,
@@ -147,11 +147,15 @@ export const initialState = {
       data: [],
       type: 'separateWordsProperty',
       page: 1
-    }
+    },
+    selectType: 'separateWordsProperty'
   },
   tasks: {
     data: [],
-    type: ''
+    type: 'all',
+    stateModalVisible: false,
+    modalTaskId: null,
+    modalTaskState: ''
   },
   taskId: null, //设一个默认值，方便调试，实际设为null
   user: {

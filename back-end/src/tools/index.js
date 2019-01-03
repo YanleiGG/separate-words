@@ -18,13 +18,18 @@ export function getContentLabelsTree (data, parentId = null) {
 }
 
 export async function readAndParseXML(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, (err, data) => {
-      if (err) return reject(err)
-      parser.parseString(data, (err, result) => {
+  try{
+    return new Promise((resolve, reject) => {
+      fs.readFile(path, (err, data) => {
         if (err) return reject(err)
-        resolve(result)
+        parser.parseString(data, (err, result) => {
+          if (err) return reject(err)
+          resolve(result)
+        })
       })
     })
-  })
+  }catch(err) {
+    console.log(err)
+  } 
+
 }

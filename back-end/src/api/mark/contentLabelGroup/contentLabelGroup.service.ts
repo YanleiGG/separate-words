@@ -61,32 +61,34 @@ export class ContentLabelGroupService {
         {labels} = args
     contentLabelGroup.name = name
     contentLabelGroup.contentLabels = []
-
-    let path = __dirname.replace(/\/api\/mark\/contentLabelGroup/, `/static/labels/${labels[0]}`)
-    let result = await readAndParseXML(path)
-    if (result.classes) {
-      await this.ContentLabelGroupRepository.save(contentLabelGroup)
-      let contentLabels = this.flatten(result.classes.class, null)
-      this.res = []
-      contentLabels.map(async item => {
-        let contentLabel = new ContentLabel()
-        contentLabel.mainId = item.mainId
-        contentLabel.name = item.name
-        contentLabel.parentId = item.parentId
-        contentLabel.contentLabelGroup = contentLabelGroup
-        await this.ContentLabelRepository.save(contentLabel)
-        contentLabelGroup.contentLabels.push(contentLabel)
-      })
-      await this.ContentLabelGroupRepository.save(contentLabelGroup)
+    try{
+      let path = __dirname.replace(/\/api\/mark\/contentLabelGroup/, `/static/labels/${labels[0]}`)
+      let result = await readAndParseXML(path)
+      if (result.classes) {
+        await this.ContentLabelGroupRepository.save(contentLabelGroup)
+        let contentLabels = this.flatten(result.classes.class, null)
+        this.res = []
+        contentLabels.map(async item => {
+          let contentLabel = new ContentLabel()
+          contentLabel.mainId = item.mainId
+          contentLabel.name = item.name
+          contentLabel.parentId = item.parentId
+          contentLabel.contentLabelGroup = contentLabelGroup
+          await this.ContentLabelRepository.save(contentLabel)
+          contentLabelGroup.contentLabels.push(contentLabel)
+        })
+        await this.ContentLabelGroupRepository.save(contentLabelGroup)
+      }
       return {
         code: 0,
         msg: '创建成功!',
         data: contentLabelGroup        
       }
-    } else {
+    } catch (err) {
+      console.log(err)
       return {
         code: 10001,
-        msg: '分类体系树格式错误!',
+        msg: '创建失败!',
         data: null        
       }
     }

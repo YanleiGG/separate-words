@@ -20,13 +20,13 @@ class MarkPro extends React.Component {
         <HeaderNav/>
         <Content style={{ padding: '15px', fontSize: '20px' }}>
           {showPro.slice(500*(mainMarkPage-1), 500*mainMarkPage).map((item, index) => {
-            return  <div key={index+'content'} style={{
+            return  <div key={index+item.content+'content'} style={{
                 display: 'inline-block',
                 textAlign: 'center'                      
               }}>
                 <span>{ item.content }</span>
                 <br/>
-                <Tag key={index+'tag'} onClick={() => openModal(index)} style={{marginBottom:'10px'}} color={item.label != '无' ? "#108ee9" : "grey"}>{item.label || '无'}</Tag>
+                <Tag key={index+item.content+'tag'} onClick={() => openModal(index)} style={{marginBottom:'10px'}} color={item.label != '无' ? "#108ee9" : "grey"}>{item.label || '无'}</Tag>
               </div>
           })}
         </Content>

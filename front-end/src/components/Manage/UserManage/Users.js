@@ -18,7 +18,7 @@ class TasksShow extends React.Component {
       <div style={{textAlign: 'left'}}>
         <Row type='flex' justify='space-around' style={{ marginBottom: '15px', textAlign: 'left' }}>
           <Col span={20}>
-            <Table dataSource={data}>
+            <Table dataSource={data} bordered>
               <Column title="用户名" key="name" dataIndex="name"/>
               <Column title="用户权限" key="id" dataIndex="roleName"/>
               <Column 
@@ -26,9 +26,11 @@ class TasksShow extends React.Component {
                 key="action" 
                 dataIndex="action"
                 render={(text, record) => (
-                  <Popconfirm title="确认删除吗?" onConfirm={() => deleteUser(record.id)} okText="确认" cancelText="取消">
-                    <a href="#">删除</a>
-                  </Popconfirm>
+                  record.name != 'admin' ? 
+                    <Popconfirm title="确认删除吗?" onConfirm={() => deleteUser(record.id)} okText="确认" cancelText="取消">
+                      <a href="#">删除</a>
+                    </Popconfirm> 
+                  : null 
                 )}
               />
             </Table>

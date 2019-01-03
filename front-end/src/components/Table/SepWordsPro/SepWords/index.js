@@ -15,9 +15,9 @@ class SepWords extends React.Component {
       <Layout style={{marginLeft: '200px'}}>
         <HeaderNav/>
         <Content onMouseUp={pickWords} style={{ padding: '15px', fontSize: '20px' }} id="content">
-            {showContent.map((i, index) => {
-              return <span key={index} id={index}>{i.content}</span>
-            })}
+          {showContent.map((i, index) => {
+            return <span key={index+'showContent'} id={index}>{i.content}</span>
+          })}
         </Content>
         <Footer>
           <FooterBtn/>

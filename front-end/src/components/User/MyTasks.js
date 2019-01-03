@@ -13,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh, startTask, user } = this.props
+    let { taskTypeChange, data, tasksRefresh, startTask, user, type } = this.props
     if (!user.name) return null
     return (
       <div style={{textAlign: 'left'}}>
@@ -23,7 +23,7 @@ class TasksShow extends React.Component {
               style={{ width: '20%', marginBottom: '15px' }} 
               onChange={taskTypeChange} 
               placeholder="标签类型" 
-              defaultValue='all'
+              defaultValue={type}
             >
               <Option value="all">全部</Option>
               <Option value="separateWordsProperty">分词及词性标注</Option>
@@ -34,20 +34,20 @@ class TasksShow extends React.Component {
             <Button style={{float: 'right'}} onClick={tasksRefresh}>刷新</Button>
           </Col>
           <Col span={22}>
-            <Table dataSource={data} locale={{ emptyText: '暂无任务' }}>
-              <Column title="任务名称" key="name" dataIndex="name"/>
-              <Column title="任务说明" key="instruction" dataIndex="instruction"/>
-              <Column title="任务类别" key="type" dataIndex="type"/>
-              <Column title="任务状态" key="state" dataIndex="state"/>
-              <Column title="标签集合" key="labels" dataIndex="labels"/>
-              <Column title="标注人员" key="users" dataIndex="users"/>
+            <Table dataSource={data} locale={{ emptyText: '暂无任务' }} bordered>
+              <Column title="任务名称" key="nameMyTask" dataIndex="name"/>
+              <Column title="任务说明" key="instructionMyTask" dataIndex="instruction"/>
+              <Column title="任务类别" key="typeMyTask" dataIndex="type"/>
+              <Column title="任务状态" key="stateMyTask" dataIndex="state"/>
+              <Column title="标签集合" key="labelsMyTask" dataIndex="labels"/>
+              <Column title="标注人员" key="usersMyTask" dataIndex="users"/>
               <Column 
-                title="操作" 
-                key="action" 
+                title="操作"
+                key="actionMyTask" 
                 dataIndex="action"
                 render={(text, record) => (
                   <span>
-                    <a onClick={() => startTask(record.id, record.types[0].symbol, this.props.history)}>开始任务</a>
+                    {record.state === '进行中' ? <a onClick={() => startTask(record.id, record.types[0].symbol, this.props.history)}>开始任务</a> : null}
                   </span>
                 )}
               />
@@ -105,7 +105,6 @@ let mapDispatchToProps = dispatch => {
           default: break;
         }
       }, 20);
-
     }
   }
 }
@@ -167,6 +166,14 @@ function format (res) {
         }
         case "markEntity": {
           labels += index === item.types.length-1 ? item.entitiesGroup.name : item.entitiesGroup.name + '、'
+          break;
+        }
+        case "emotion": {
+          labels += index === item.types.length-1 ? item.emotionTypeGroup.name : item.emotionTypeGroup.name + '、'
+          break;
+        }
+        case "contentType": {
+          labels += index === item.types.length-1 ? item.contentLabelGroup.name : item.contentLabelGroup.name + '、'
           break;
         }
         default: break;

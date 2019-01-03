@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     credentials: true, 
-    origin: ['http://localhost:3001', 'http://localhost:3005', 'http://10.61.3.65:3005']
+    origin: true
   });
   app.use(session({
     secret: 'keyboard separate words',

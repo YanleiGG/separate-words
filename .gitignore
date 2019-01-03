@@ -3,7 +3,8 @@
 # dependencies
 /front-end/node_modules
 /back-end/node_modules
-/back-end/src/static/docs
+/back-end/src/static
+/front-end的副本
 
 # testing
 /coverage
