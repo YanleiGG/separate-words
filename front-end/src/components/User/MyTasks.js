@@ -1,6 +1,6 @@
 import React from 'react'
 import { path } from '../../config'
-import { Row, Col, Select, message, Table, Button } from 'antd'
+import { Row, Col, Select, message, Table, Button, Popconfirm } from 'antd'
 import { connect } from "react-redux"
 import store from '../../state/store'
 import axios from 'axios'
@@ -13,7 +13,7 @@ class TasksShow extends React.Component {
     this.props.created()
   }
   render() {
-    let { taskTypeChange, data, tasksRefresh, startTask, user, type } = this.props
+    let { taskTypeChange, data, tasksRefresh, startTask, user, type, deleteTask } = this.props
     if (!user.name) return null
     return (
       <div style={{textAlign: 'left'}}>
@@ -48,6 +48,14 @@ class TasksShow extends React.Component {
                 render={(text, record) => (
                   <span>
                     {record.state === '进行中' ? <a onClick={() => startTask(record.id, record.types[0].symbol, this.props.history)}>开始任务</a> : null}
+                    <Popconfirm 
+                      title="确认删除吗?" 
+                      onConfirm={() => deleteTask(record.id)} 
+                      okText="确认" 
+                      cancelText="取消"
+                    >
+                      <a href="#" style={{marginLeft: '10px'}}>删除</a>
+                    </Popconfirm> 
                   </span>
                 )}
               />
@@ -105,6 +113,23 @@ let mapDispatchToProps = dispatch => {
           default: break;
         }
       }, 20);
+    },
+    async deleteTask (taskId) {
+      const res = await axios({
+        url: `${path}/api/task`,
+        method: 'put',
+        data: {
+          id: taskId,
+          deleted: 1
+        }
+      })
+      if (res.data.code === 0) {
+        message.success('删除成功！', 1.5)
+        refresh('all')
+      } else {
+        message.error('删除失败！', 1.5)
+        refresh('all')
+      }
     }
   }
 }
@@ -144,7 +169,6 @@ async function refresh(value) {
           type: value
         }
       })
-      message.success('数据获取成功！', 1.5)
     } else {
       message.error('获取任务信息失败！', 1.5)
     }

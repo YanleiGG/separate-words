@@ -88,7 +88,7 @@ let refresh = async () => {
     }
   })
   let selectedKeys = articles.length > 0 ? [articles[0].id.toString()] : []
-  emotionTypes = emotionTypeGroup.emotionTypes
+  // emotionTypes = emotionTypeGroup.emotionTypes
   store.dispatch({ type: "SET_EMOTION", emotion: {
     ...state.emotion,
     articles,
@@ -96,7 +96,7 @@ let refresh = async () => {
     totalCount,
     showIndex: 0,
     selectedKeys,
-    emotionTypes,
+    // emotionTypes,
     spinning: false
   }})
 }
@@ -115,6 +115,11 @@ let mapDispatchToSiderNav = dispatch => {
     handleClick: id => {
       let state = store.getState()
       let {articles} = state.emotion
+      console.log(articles)
+
+      // if (article.text.length <= 900) {  // 文本长度需小于900
+      //   this.getEmotionAnalyze(article.text)
+      // }
       let showIndex = articles.findIndex(item => {
         return item.id === id
       })

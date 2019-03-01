@@ -19,7 +19,7 @@ class CreateTask extends React.Component {
               <Option value="separateWordsProperty">分词及词性标注</Option>
               {/* <Option value="contentType">文本内容分类</Option> */}
               <Option value="markEntity">实体标注</Option>
-              <Option value="emotion">情感标注</Option>
+              {/* <Option value="emotion">情感标注</Option> */}
             </Select>
           </Col>
         </Row>

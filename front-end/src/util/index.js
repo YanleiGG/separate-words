@@ -63,9 +63,14 @@ export function unformatWithProperty (formatedStr, propertys) {
     if (!data[1] || data[1] === 'default') {
       label = '无'
     } else {
-      label = propertys.find(item => {
+      let property = propertys.find(item => {
         return item.symbol === data[1]
-      }).name
+      })
+      if (property) {
+        label = property.name
+      } else {
+        label = '无'
+      }
     }
     return {
       id: index,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Select, Row, Col, Button, message } from 'antd';
+import { Card, Select, Row, Col, Button, message, Input } from 'antd';
 import { connect } from "react-redux";
 import store from '../../../../state/store'
 import axios from 'axios'
@@ -35,7 +35,10 @@ class FooterTable_UI extends React.Component {
                 onChange={attitudeChange}
                 value = { attitude }
               >
-                {emotionTypes.map(item => <Option value={item.symbol} key={item.symbol}>{item.name}</Option>)}
+                {/* {emotionTypes.map(item => <Option value={item.symbol} key={item.symbol}>{item.name}</Option>)} */}
+                <Option value="pos" key="pos">正面</Option>
+                <Option value="neg" key="neg">负面</Option>
+                <Option value="neutral" key="neutral">中性</Option>
               </Select>            
             </Col>
             <Col span={6}>
@@ -56,18 +59,12 @@ class FooterTable_UI extends React.Component {
             </Col>
             <Col span={6}>
               <span>情感强度：</span>
-              <Select 
+              <Input 
                 style={{ width: "50%", marginBottom: '20px', display: 'inline-block' }} 
                 onChange={degreeChange}
                 value = { degree }
               >
-                <Option value="1">1</Option>
-                <Option value="2">2</Option>
-                <Option value="3">3</Option>
-                <Option value="4">4</Option>
-                <Option value="5">5</Option>
-                <Option value="disabled">无法判断</Option>
-              </Select>       
+              </Input>       
             </Col>
         </Row>
         <Row style={{textAlign: 'center'}}>
@@ -107,10 +104,10 @@ let mapDispatchToProps = dispatch => {
         focusChangeValue: !focusChangeValue
       }})
     },
-    degreeChange: value => {
+    degreeChange: e => {
       let state = store.getState()
       let {showIndex, articles, focusChangeValue} = state.emotion
-      articles[showIndex].emotion.degree = value
+      articles[showIndex].emotion.degree = e.target.value
       dispatch({ type: "SET_EMOTION", emotion: {
         ...state.emotion,
         articles,
