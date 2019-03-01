@@ -16,7 +16,7 @@ export class Task {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({unique: true})
+    @Column()
     name: string;
 
     @Column()
@@ -24,6 +24,9 @@ export class Task {
 
     @Column()
     state: string;
+
+    @Column()
+    deleted: number; // 0: 未删除， 1: 已删除
 
     @CreateDateColumn()
     createdAt: Date

@@ -8,7 +8,13 @@ import { WordsPropertyGroup } from '../../../database/words_property_group/words
 import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity'
 import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity'
 import { ContentLabelGroup } from '../../../database/contentLabelGroup/contentLabelGroup.entity'
-import { readAndParseXML } from 'tools';
+import { readAndParseXML, sleep } from 'tools';
+import { Emotion } from 'database/emotion/emotion.entity';
+import { SepWordsProperty } from 'database/sep_words_property/sep_words_property.entity';
+import { MarkEntity } from 'database/mark_entity/mark_entity.entity';
+const urlencode = require('urlencode')
+const encoding = require('encoding');
+const http = require('http')
 
 interface ArticleOptions{
   task: number,
@@ -31,6 +37,8 @@ export class TaskService {
     private readonly TypeRepository: Repository<Type>,
     @Inject('UserRepositoryToken')
     private readonly UserRepository: Repository<User>,
+    @Inject('EmotionRepositoryToken')
+    private readonly EmotionRepository: Repository<Emotion>,
     @Inject('WordsPropertyGroupRepositoryToken')
     private readonly WordsPropertyGroupRepository: Repository<WordsPropertyGroup>,
     @Inject('EntitiesGroupRepositoryToken')
@@ -39,14 +47,28 @@ export class TaskService {
     private readonly EmotionTypeGroupRepository: Repository<EmotionTypeGroup>,
     @Inject('ContentLabelGroupRepositoryToken')
     private readonly ContentLabelGroup: Repository<ContentLabelGroup>,
+    @Inject('SepWordsPropertyRepositoryToken')
+    private readonly SepWordsPropertyRepository: Repository<SepWordsProperty>,
+    @Inject('MarkEntityRepositoryToken')
+    private readonly MarkEntityRepository: Repository<MarkEntity>,
   ) {}
 
   async find(offset: number, pageSize: number) {
     let tasks =  await this.TaskRepository.find({ 
+      where: {
+        deleted: 0
+      },
       order: {
         createdAt: 'DESC'
       },
-      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup', 'emotionTypeGroup', 'contentLabelGroup'] 
+      relations: [
+        'users', 
+        'types', 
+        'wordsPropertyGroup', 
+        'entitiesGroup', 
+        'emotionTypeGroup', 
+        'contentLabelGroup'
+      ] 
     });
     let totalCount = tasks.length
     return {
@@ -59,10 +81,20 @@ export class TaskService {
 
   async findByType(type) {
     let tasks =  await this.TaskRepository.find({
+      where: {
+        deleted: 0
+      },
       order: {
         createdAt: 'DESC'
       },
-      relations: ['users', 'types', 'wordsPropertyGroup', 'entitiesGroup', 'emotionTypeGroup', 'contentLabelGroup'] 
+      relations: [
+        'users', 
+        'types', 
+        'wordsPropertyGroup', 
+        'entitiesGroup', 
+        'emotionTypeGroup', 
+        'contentLabelGroup'
+      ] 
     });
     let totalCount = tasks.length
     tasks = tasks.filter(item => {
@@ -78,8 +110,19 @@ export class TaskService {
 
   async findByUserId(userId) {
     let user = await this.UserRepository.findOne({ 
-      where: {id: userId}, 
-      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup', 'tasks.emotionTypeGroup', 'tasks.contentLabelGroup'] 
+      where: {
+        id: userId,
+        deleted: 0
+      }, 
+      relations: [
+        'tasks', 
+        'tasks.users', 
+        'tasks.types', 
+        'tasks.wordsPropertyGroup', 
+        'tasks.entitiesGroup', 
+        'tasks.emotionTypeGroup', 
+        'tasks.contentLabelGroup'
+      ] 
     });
     let tasks = user.tasks.reverse()
     let totalCount = tasks.length
@@ -93,8 +136,19 @@ export class TaskService {
 
   async findByUserIdAndType(type, userId) {
     let user = await this.UserRepository.findOne({ 
-      where: {id: userId}, 
-      relations: ['tasks', 'tasks.users', 'tasks.types', 'tasks.wordsPropertyGroup', 'tasks.entitiesGroup', 'tasks.emotionTypeGroup', 'tasks.contentLabelGroup'] 
+      where: {
+        id: userId,
+        deleted: 0
+      }, 
+      relations: [
+        'tasks', 
+        'tasks.users', 
+        'tasks.types', 
+        'tasks.wordsPropertyGroup', 
+        'tasks.entitiesGroup', 
+        'tasks.emotionTypeGroup', 
+        'tasks.contentLabelGroup'
+      ] 
     });
     let tasks = user.tasks.reverse()
     let totalCount = tasks.length
@@ -131,7 +185,10 @@ export class TaskService {
       default: {}
     }
     let task =  await this.TaskRepository.findOne({ 
-      where: { id: taskId },
+      where: { 
+        id: taskId,
+        deleted: 0
+      },
       relations: taskRelations
     })
     let articleOptions: ArticleOptions = { task: taskId }
@@ -147,6 +204,94 @@ export class TaskService {
       take: pageSize,
       relations: articleRelations
     })
+    // 调用服务
+    switch(type){
+      case "separateWordsProperty":
+        await new Promise((resolve, reject) => {
+          articles.forEach(async article => {
+            if (article.text.length <= 900) {  // 文本长度需小于900
+              try {
+                if (!article.sep_words_property) {
+                  const res: any = await this.getSepaWordsAnalyze(article.text)
+                  if (res.length > 0) {
+                    res.pop()   // 去除头部的不正确项
+                    res.shift() // 去除尾部的不正确项
+                    let sep_words_property = new SepWordsProperty()
+                    sep_words_property.separateWordsProperty = res.join('/ ')
+                    sep_words_property.separateWords = this.getSepWords(res)
+                    article.sep_words_property = sep_words_property
+                    await this.SepWordsPropertyRepository.save(sep_words_property)
+                    await this.ArticleRepository.save(article)
+                  }
+                }
+                resolve({})
+              } catch (e) {
+                reject(e)
+                console.log(e)
+              }
+            }
+          })
+        })
+        break;
+      case 'markEntity':
+        await new Promise((resolve, reject) => {
+          articles.forEach(async article => {
+            if (article.text.length <= 900) {  // 文本长度需小于900
+              try {
+                if (!article.mark_entity) {
+                  const res: any = await this.getSepaWordsAnalyze(article.text)
+                  if (res.length > 0) {
+                    const res: any = await this.getMarkEntityAnalyze(article.text)
+                    let mark_entity = this.getMarkEntity(article.text, res)
+                    let markEntity = new MarkEntity()
+                    markEntity.markEntity = mark_entity
+                    article.mark_entity = markEntity
+                    await this.MarkEntityRepository.save(markEntity)
+                    await this.ArticleRepository.save(article)
+                  }
+                }
+                resolve({})
+              } catch (e) {
+                reject(e)
+                console.log(e)
+              }
+            }
+          })
+        })
+        break;
+      case 'emotion': 
+        await new Promise((resolve, reject) => {
+          articles.forEach(async article => {
+            if (article.text.length <= 900) {  // 文本长度需小于900
+              try {
+                if (!article.emotion) {
+                  const res: any = await this.getEmotionAnalyze(article.text)
+                  if (res.senti_label) {
+                    let emotion = new Emotion()
+                    emotion.degree = Math.ceil(Math.abs(res.score - 50)/10).toString()
+                    emotion.degree = res.score
+                    if (+res.score >= 50 && +res.score <= 55) {
+                      emotion.attitude = 'neutral'
+                    } else {
+                      emotion.attitude = res.senti_label
+                    }
+                    await this.EmotionRepository.save(emotion)
+                    article.emotion = emotion
+                    await this.ArticleRepository.save(article)
+                  }
+                }
+                resolve({})
+              } catch (e) {
+                reject(e)
+                console.log(e)
+              }
+            }
+          })
+        })
+        break;
+      default: {}
+    }
+    // await sleep(500)
     const totalCount = await this.ArticleRepository.count({ 
       where: countOptions
     })
@@ -172,7 +317,10 @@ export class TaskService {
 
   async create (args) {
     let {name, docs, selectedUsers, type, selectedLabelsId} = args
-    let sameName = await this.TaskRepository.find({ name })
+    let sameName = await this.TaskRepository.find({ 
+      name,
+      deleted: 0
+    })
     if (sameName.length > 0) {
       return {
         code: 10001,
@@ -220,6 +368,7 @@ export class TaskService {
     }
     task.name = args.name
     task.instruction = args.instruction
+    task.deleted = 0
     task.types = [type_1]
     task.state = '进行中'
     // 过滤掉admin账号，将文章进行均分至选择的标注人员上
@@ -269,7 +418,8 @@ export class TaskService {
 
   async update (args) {
     let task = await this.TaskRepository.findOne({ id: args.id })
-    task.state = args.state
+    if (args.state) task.state = args.state
+    if (args.deleted) task.deleted = args.deleted
     await this.TaskRepository.save(task)
     return {
       code: 0,
@@ -286,5 +436,153 @@ export class TaskService {
       msg: 'delete successed!',
       task
     }
+  }
+
+  getEmotionAnalyze(text) {
+    // 请求情感分析服务
+    return new Promise((resolve, reject) => {
+      const data = 'q=%7B%22doc%22%3A+%5B%22%' + urlencode(encoding.convert(text)) + '%5Cn%22%5D%7D'
+      const req = http.get('http://172.22.0.30:8081/senti?'+data, res => {
+        try {
+          res.setEncoding('utf8');
+          res.on('data', (chunk) => {
+            const emotionParse1 = JSON.parse(chunk)
+            if (emotionParse1.err_code === 0) {
+              resolve(JSON.parse(JSON.parse(chunk).result))
+            } else {
+              resolve({
+                senti_label: '',
+                score: ''
+              }) 
+            }
+          });
+        } catch (e) {
+          console.log(e)
+        }
+      })
+      req.on('error', (e) => {
+        console.error(`请求遇到问题: ${e.message}`);
+        reject(e.message)
+      });
+    })
+  }
+
+  getSepaWordsAnalyze(text) {
+    // 请求分词服务
+    return new Promise((resolve, reject) => {
+      const data = 'q=%7B%22doc%22%3A+%5B%22%' + urlencode(encoding.convert(text)) + '%5Cn%22%5D%7D'
+      const req = http.get('http://172.22.0.30:9051/senti?'+data, res => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          try {
+            const emotionParse1 = JSON.parse(chunk)
+            if (emotionParse1.err_code === 0) {
+              resolve(JSON.parse(JSON.parse(chunk).result))
+            } else {
+              resolve([])
+            }
+          } catch (e) {
+            console.log(e)
+          }
+        });
+      })
+      req.on('error', (e) => {
+        console.error(`请求遇到问题: ${e.message}`);
+        reject(e.message)
+      });
+    })
+  }
+
+  getMarkEntityAnalyze(text) {
+    // 请求实体标注服务
+    return new Promise((resolve, reject) => {
+      const data = 'q=%7B%22doc%22%3A+%5B%22%' + urlencode(encoding.convert(text)) + '%5Cn%22%5D%7D'
+      const req = http.get('http://172.22.0.30:8083/ner?'+data, res => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          try {
+            const emotionParse1 = JSON.parse(chunk)
+            if (emotionParse1.err_code === 0) {
+              resolve(JSON.parse(JSON.parse(chunk).result))
+            } else {
+              resolve(
+                {
+                  vpers: [],
+                  vrgn: [],
+                  vorg: [],
+                }
+              )
+            }
+          } catch (e) {
+            console.log(e)
+          }
+        });
+      })
+      req.on('error', (e) => {
+        console.error(`请求遇到问题: ${e.message}`);
+        reject(e.message)
+      });
+    })
+  }
+
+  getSepWords(wordsArr) {
+    let res = ''
+    wordsArr.map(item => {
+      if (item.length > 1) {
+        for (let i = 0;i < item.length;i++) {
+          if (i === 0) {
+            res += item[i] + 'B'
+          } else if (i === item.length - 1 ) {
+            res += item[i] + 'E'
+          } else {
+            res += item[i] + 'I'
+          }
+        }
+      } else {
+        res += item + 'S'
+      }
+    })
+    return res
+  }
+
+  findAllItem(item, str) {
+    let res = []
+    let index = 0
+    index = str.indexOf(item, index)
+    if (index != -1) res.push(index)
+    while(index != -1) {
+      index = str.indexOf(item, index + 1)
+      if (index != -1) res.push(index)
+    }
+    return res
+  }
+  
+  getMarkEntity(text, entity) {
+    let wordsArr = text.split('').map(item => item += '/')
+    entity.vpers.map(item => {
+      let persIndexArr = this.findAllItem(item.v, text)
+      persIndexArr.map(index => {
+        for (let i = index;i < index + item.v.length;i++) {
+          if (wordsArr[i].indexOf('pers') === -1 && wordsArr[i].indexOf('rgn') === -1 && wordsArr[i].indexOf('org') === -1) wordsArr[i] =  wordsArr[i] + 'pers'
+        }
+      })
+    })
+    entity.vrgn.map(item => {
+      let rgnIndexArr = this.findAllItem(item.v, text)
+      rgnIndexArr.map(index => {
+        for (let i = index;i < index + item.v.length;i++) {
+          if (wordsArr[i].indexOf('pers') === -1 && wordsArr[i].indexOf('rgn') === -1 && wordsArr[i].indexOf('org') === -1) wordsArr[i] =  wordsArr[i] + 'rgn'
+        }
+      })
+    })
+    entity.vorg.map(item => {
+      let orgIndexArr = this.findAllItem(item.v, text)
+      orgIndexArr.map(index => {
+        for (let i = index;i < index + item.v.length;i++) {
+          if (wordsArr[i].indexOf('pers') === -1 && wordsArr[i].indexOf('rgn') === -1 && wordsArr[i].indexOf('org') === -1)wordsArr[i] =  wordsArr[i] + 'org'
+        }
+      })
+    })
+    return wordsArr.join(' ')
   }
 }

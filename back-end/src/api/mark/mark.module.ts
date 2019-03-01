@@ -65,6 +65,9 @@ import { DocsService } from './docs/docs.service';
 import { DocsController } from './docs/docs.controller';
 import { Repository } from 'typeorm';
 import { Type } from 'database/type/type.entity';
+import { EmotionTypeGroup } from 'database/emotionTypeGroup/emotionTypeGroup.entity';
+import { WordsProperty } from 'database/words_property/words_property.entity';
+import { Entities } from 'database/entities/entities.entity';
 
 @Module({
   imports: [DatabaseModule],
@@ -122,7 +125,13 @@ import { Type } from 'database/type/type.entity';
 export class MarkModule {
   constructor(
     @Inject('TypeRepositoryToken')
-    private readonly TypeRepository: Repository<Type>
+    private readonly TypeRepository: Repository<Type>,
+    @Inject('EmotionTypeGroupRepositoryToken')
+    private readonly EmotionTypeGroupRepository: Repository<EmotionTypeGroup>,
+    @Inject('WordsPropertyRepositoryToken')
+    private readonly WordsPropertyRepository: Repository<WordsProperty>,
+    @Inject('EntitiesRepositoryToken')
+    private readonly EntitiesRepository: Repository<Entities>,
   ) {
     this.TypeRepository.find().then(async types => {
       if (types.length === 0) {
@@ -141,5 +150,86 @@ export class MarkModule {
         await this.TypeRepository.save([separateWordsProperty, contentType, emotion, markEntity])
       }
     })
+    this.EmotionTypeGroupRepository.find().then(async emotionTypeGroups => {
+      if (emotionTypeGroups.length === 0) {
+        let emotionTypeGroup = new EmotionTypeGroup()
+        emotionTypeGroup.name = '默认'
+        await this.EmotionTypeGroupRepository.save(emotionTypeGroup)
+      }
+    })
+    this.WordsPropertyRepository.find().then(async WordsPropertys => {
+      if (WordsPropertys.length === 0) {
+        words_propertys.map(async item => {
+          let wordsProperty = new WordsProperty()
+          wordsProperty.name = item.name
+          wordsProperty.symbol = item.symbol
+          await this.WordsPropertyRepository.save(wordsProperty)
+        })
+      }
+    })
+    this.EntitiesRepository.find().then(async entitys => {
+      if (entitys.length === 0) {
+        entities.map(async item => {
+          let entity = new Entities()
+          entity.name = item.name
+          entity.symbol = item.symbol
+          await this.EntitiesRepository.save(entity)
+        })
+      }
+    })
   }
 }
+
+const entities = [
+  { name: '人名', symbol: 'pers' },
+  { name: '地名', symbol: 'rgn' },
+  { name: '组织机构名', symbol: 'org' },
+]
+
+const words_propertys = [
+  { name: '形容词', symbol: 'a' },
+  { name: '副形词', symbol: 'ad' },
+  { name: '形语素', symbol: 'ag' },
+  { name: '名形词', symbol: 'an' },
+  { name: '区别词', symbol: 'b' },
+  { name: '连词', symbol: 'c' },
+  { name: '副词', symbol: 'd' },
+  { name: '副语素', symbol: 'dg' },
+  { name: '叹词', symbol: 'e' },
+  { name: '方位词', symbol: 'f' },
+  { name: '语素', symbol: 'g' },
+  { name: '前接成分', symbol: 'h' },
+  { name: '成语', symbol: 'i' },
+  { name: '简称略语', symbol: 'j' },
+  { name: '后接成分', symbol: 'k' },
+  { name: '习用语', symbol: 'l' },
+  { name: '名词', symbol: 'n' },
+  { name: '名语素', symbol: 'ng' },
+  { name: '人名', symbol: 'nr' },
+  { name: '地名', symbol: 'ns' },
+  { name: '机构团体', symbol: 'nt' },
+  { name: '字母专名', symbol: 'nx' },
+  { name: '其它专名', symbol: 'nz' },
+  { name: '拟声词', symbol: 'o' },
+  { name: '介词', symbol: 'p' },
+  { name: '量词', symbol: 'q' },
+  { name: '代词', symbol: 'r' },
+  { name: '处所词', symbol: 's' },
+  { name: '时间词', symbol: 't' },
+  { name: '时语素', symbol: 'tg' },
+  { name: '助词', symbol: 'u' },
+  { name: '结构助词', symbol: 'ud' },
+  { name: '时态助词', symbol: 'ug' },
+  { name: '结构助词的', symbol: 'uj' },
+  { name: '时态助词了', symbol: 'ul' },
+  { name: '结构助词地', symbol: 'uv' },
+  { name: '时态助词着', symbol: 'uz' },
+  { name: '动词', symbol: 'v' },
+  { name: '副动词', symbol: 'vd' },
+  { name: '动语素', symbol: 'vg' },
+  { name: '名动词', symbol: 'vn' },
+  { name: '标点符号', symbol: 'w' },
+  { name: '非语素词', symbol: 'x' },
+  { name: '语气词', symbol: 'y' },
+  { name: '状态词', symbol: 'z' }
+]

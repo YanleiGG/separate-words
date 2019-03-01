@@ -31,5 +31,12 @@ export async function readAndParseXML(path) {
   }catch(err) {
     console.log(err)
   } 
+}
 
+export function sleep(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({})
+    }, ms)
+  })
 }

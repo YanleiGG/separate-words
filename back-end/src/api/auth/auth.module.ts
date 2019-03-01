@@ -14,6 +14,7 @@ import { LoginController } from './login/login.controller'
 import { Role } from 'database/role/role.entity';
 import { User } from 'database/user/user.entity';
 import { Repository } from 'typeorm';
+import { insert } from '../../tools/sql'
 
 @Module({
   imports: [DatabaseModule],
@@ -38,7 +39,7 @@ export class AuthModule {
     @Inject('RoleRepositoryToken')
     private readonly RoleRepository: Repository<Role>
   ) {
-    // 初始化数据
+    // 初始化数据(sql 8.0.11) 
     this.RoleRepository.findOne({ name: '用户管理' }).then(role => {
       if (!role) {
         let userManageRole = new Role()
@@ -65,5 +66,33 @@ export class AuthModule {
         await this.UserRepository.save(user)
       }
     })
+
+    // 初始化数据(sql 5.7.14) 
+    // this.RoleRepository.findOne({ name: '用户管理' }).then(role => {
+    //   if (!role) {
+    //     const data = [
+    //       [{ key: 'name', value: '用户管理' }],
+    //       [{ key: 'name', value: '任务及标签管理' }],
+    //       [{ key: 'name', value: '数据管理' }],
+    //       [{ key: 'name', value: '任务标注' }],
+    //     ]
+    //     data.map(item => insert('role', item))
+    //   }
+    // })
+    // this.UserRepository.findOne({name: 'admin'}).then(async user => {
+    //   if (!user) {
+    //     await insert('user', [
+    //       { key: 'name', value: 'admin' },
+    //       { key: 'password', value: '123' },
+    //     ])
+    //     const userAdmin = await this.UserRepository.findOne({ name: 'admin' })
+    //     userAdmin.roles = []
+    //     userAdmin.roles = await this.RoleRepository.find()
+    //     while(userAdmin.roles.length === 0) {
+    //       userAdmin.roles = await this.RoleRepository.find()
+    //     }
+    //     await this.UserRepository.save(userAdmin)
+    //   }
+    // })
   }
 }
