@@ -129,7 +129,7 @@ export function showContentToShowPro (showContent, showPro) {
   return res
 }
 
-export function getContentLabelsTree (data, parentId = null) {
+export function getContentLabelsTree (data, parentId = '') {
   let res = []
   for (let i = 0;i < data.length;i++) {
     let child = data[i]
