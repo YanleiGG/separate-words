@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { EmotionTypeGroup } from '../../../database/emotionTypeGroup/emotionTypeGroup.entity';
 import { EmotionType } from '../../../database/emotionType/emotionType.entity'
 import { Type } from '../../../database/type/type.entity'
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class EmotionTypeGroupService {
@@ -39,16 +40,15 @@ export class EmotionTypeGroupService {
       }
     }
 
-    let wordsPropertyGroup = new EmotionTypeGroup(), 
-        {labels} = args
-    let type = await this.TypeRepository.findOne({ symbol: 'separateWordsProperty' })
-    wordsPropertyGroup.name = name
-    wordsPropertyGroup.emotionTypes = []
-    let res = await this.EmotionTypeGroupRepository.save(wordsPropertyGroup)
+    let {labels} = args
+    const insertRes = await insert('emotion_type_group', [{ key: 'name', value: name }])
+    let emotionTypeGroup = await this.EmotionTypeGroupRepository.findOne({ id: insertRes.insertId })
+    emotionTypeGroup.emotionTypes = []
+    let res = await this.EmotionTypeGroupRepository.save(emotionTypeGroup)
     for (let i = 0; i < labels.length; i++) {
-      wordsPropertyGroup.emotionTypes.push(await this.EmotionTypeRepository.findOne({ name: labels[i] }))
+      emotionTypeGroup.emotionTypes.push(await this.EmotionTypeRepository.findOne({ name: labels[i] }))
     }
-    await this.EmotionTypeGroupRepository.save(wordsPropertyGroup)
+    await this.EmotionTypeGroupRepository.save(emotionTypeGroup)
     return {
       code: 0,
       msg: 'successed!',

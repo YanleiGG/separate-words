@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SepWordsProperty } from '../../../database/sep_words_property/sep_words_property.entity';
 import { Article } from '../../../database/article/article.entity'
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class SepWordsPropertyService {
@@ -34,14 +35,18 @@ export class SepWordsPropertyService {
   }
 
   async create (args) {
-    let sep_words_property = new SepWordsProperty()
     let article = await this.ArticleRepository.findOne({ 
       where: {id: args.articleId},
       relations: ['sep_words_property']
     })
     if(article.sep_words_property) return this.update({...args, id: article.sep_words_property.id})
-    sep_words_property.separateWords = args.separateWords || null
-    sep_words_property.separateWordsProperty = args.separateWordsProperty || null
+    
+    const insertRes = await insert('sep_words_property', [
+      { key: 'separateWords', value: args.separateWords || '' },
+      { key: 'separateWordsProperty', value: args.separateWords || '' },
+    ])
+    
+    let sep_words_property = await this.SepWordsPropertyRepository.findOne({ id: insertRes.insertId })
     sep_words_property.article = article
     await this.ArticleRepository.save(article)
     await this.SepWordsPropertyRepository.save(sep_words_property)

@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Emotion } from '../../../database/emotion/emotion.entity';
 import { Article } from 'database/Article/article.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class EmotionService {
@@ -42,8 +43,14 @@ export class EmotionService {
       relations: ['emotion']
     })
     if(article.emotion) return this.update({...args, id: article.emotion.id})
-    let emotion = new Emotion()
-    emotion = args.emotion
+
+    let data = []
+    for (let key in args.emotion) {
+      data.push({ key, value: args.emotion[key] })
+    }
+    const insertRes = await insert('emotion', data)
+
+    let emotion = await this.EmotionRepository.findOne({ id: insertRes.insertId })
     emotion.article = article
     await this.ArticleRepository.save(article)  
     await this.EmotionRepository.save(emotion)  // 关系拥有者后创建

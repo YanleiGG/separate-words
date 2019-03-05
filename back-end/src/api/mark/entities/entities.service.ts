@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Entities } from '../../../database/entities/entities.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class EntitiesService {
@@ -51,10 +52,10 @@ export class EntitiesService {
       let sameName = await this.EntitiesRepository.find({ name: names[i] })
       let sameSymbol = await this.EntitiesRepository.find({ symbol: symbols[i] })
       if (sameName.length == 0 || sameSymbol.length == 0) {
-        let item = new Entities()
-        item.name = names[i]
-        item.symbol = symbols[i]
-        await this.EntitiesRepository.save(item) 
+        await insert('entities', [
+          { key: 'name', value: names[i] },
+          { key: 'symbols', value: symbols[i] },
+        ])
       }
     }
     return {

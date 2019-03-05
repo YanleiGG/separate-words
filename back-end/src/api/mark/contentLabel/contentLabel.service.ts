@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ContentLabel } from '../../../database/ContentLabel/ContentLabel.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class ContentLabelService {
@@ -39,14 +40,15 @@ export class ContentLabelService {
       }
     }
 
-    let item = new ContentLabel()
-    item.name = name
-    item.mainId = mainId
-    let wordsProperty = await this.ContentLabelRepository.save(item)
+    const insertRes = await insert('contentLabel', [
+      { key: 'name', value: name },
+      { key: 'mainId', value: mainId }
+    ])
+    const contentLabel = await this.ContentLabelRepository.findOne({ id: insertRes.insertId })
     return {
       code: 0,
       msg: 'successed!',
-      data: wordsProperty
+      data: contentLabel
     }
   }
 

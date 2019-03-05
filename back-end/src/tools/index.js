@@ -2,7 +2,7 @@ var fs = require('fs')
 var xml2js = require('xml2js')
 var parser = new xml2js.Parser()
 
-export function getContentLabelsTree (data, parentId = null) {
+export function getContentLabelsTree (data, parentId = '') {
   let res = []
   for (let i = 0;i < data.length;i++) {
     let child = data[i]

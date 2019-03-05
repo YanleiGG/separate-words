@@ -12,6 +12,7 @@ import { readAndParseXML, sleep } from 'tools';
 import { Emotion } from 'database/emotion/emotion.entity';
 import { SepWordsProperty } from 'database/sep_words_property/sep_words_property.entity';
 import { MarkEntity } from 'database/mark_entity/mark_entity.entity';
+import { insert } from 'tools/sql';
 const urlencode = require('urlencode')
 const encoding = require('encoding');
 const http = require('http')
@@ -216,9 +217,12 @@ export class TaskService {
                   if (res.length > 0) {
                     res.pop()   // 去除头部的不正确项
                     res.shift() // 去除尾部的不正确项
-                    let sep_words_property = new SepWordsProperty()
-                    sep_words_property.separateWordsProperty = res.join('/ ')
-                    sep_words_property.separateWords = this.getSepWords(res)
+                    const insertRes = await insert('sep_words_property', [
+                      { key: 'separateWordsProperty', value: res.join('/ ') },
+                      { key: 'separateWords', value: this.getSepWords(res) },
+                    ])
+                    let sep_words_property = await this.SepWordsPropertyRepository.findOne({ id: insertRes.insertId })
+
                     article.sep_words_property = sep_words_property
                     await this.SepWordsPropertyRepository.save(sep_words_property)
                     await this.ArticleRepository.save(article)
@@ -243,8 +247,10 @@ export class TaskService {
                   if (res.length > 0) {
                     const res: any = await this.getMarkEntityAnalyze(article.text)
                     let mark_entity = this.getMarkEntity(article.text, res)
-                    let markEntity = new MarkEntity()
-                    markEntity.markEntity = mark_entity
+                    const insertRes = await insert('mark_entity', [
+                      { key: 'markEntity', value: mark_entity },
+                    ])
+                    let markEntity = await this.MarkEntityRepository.findOne({ id: insertRes.insertId })
                     article.mark_entity = markEntity
                     await this.MarkEntityRepository.save(markEntity)
                     await this.ArticleRepository.save(article)
@@ -267,15 +273,15 @@ export class TaskService {
                 if (!article.emotion) {
                   const res: any = await this.getEmotionAnalyze(article.text)
                   if (res.senti_label) {
-                    let emotion = new Emotion()
-                    emotion.degree = Math.ceil(Math.abs(res.score - 50)/10).toString()
-                    emotion.degree = res.score
+                    const insertData = []
+                    insertData.push({ key: 'degree', value: res.score })
                     if (+res.score >= 50 && +res.score <= 55) {
-                      emotion.attitude = 'neutral'
+                      insertData.push({ key: 'attitude', value: 'neutral' })
                     } else {
-                      emotion.attitude = res.senti_label
+                      insertData.push({ key: 'attitude', value: res.senti_label })
                     }
-                    await this.EmotionRepository.save(emotion)
+                    const insertRes = await insert('emotion', insertData)
+                    let emotion = await this.EmotionRepository.findOne({ id: insertRes.insertId })
                     article.emotion = emotion
                     await this.ArticleRepository.save(article)
                   }
@@ -291,7 +297,7 @@ export class TaskService {
         break;
       default: {}
     }
-    // await sleep(500)
+    await sleep(300)
     const totalCount = await this.ArticleRepository.count({ 
       where: countOptions
     })
@@ -329,7 +335,8 @@ export class TaskService {
       }
     }
 
-    let task = new Task()
+    const insertRes = await insert('task')
+    let task = await this.TaskRepository.findOne({ id: insertRes.insertId })
     let taskUsers = []
     let type_1 = await this.TypeRepository.findOne({ symbol: type })
     if (selectedUsers[0]==='all') {
@@ -383,7 +390,8 @@ export class TaskService {
       let per = docs.length/articleUsers.length
       let articles = []
       docs.map(async (item, index) => {
-        let article = new Article()
+        const insertRes = await insert('article')
+        let article = await this.ArticleRepository.findOne({ id: insertRes.insertId })
         if (index > per*(articleUsersIndex+1)) articleUsersIndex++
         article.user = articleUsers[articleUsersIndex]
         article.title = item.title ? item.title[0] : ''
@@ -396,9 +404,9 @@ export class TaskService {
         article.state = 'marking'
         article.task = task
         articles.push(article)
+        await this.ArticleRepository.save(article)
       })
       try{
-        await this.ArticleRepository.save(articles)
       } catch(err) {
         console.log(err)
       }

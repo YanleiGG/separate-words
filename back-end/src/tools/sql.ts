@@ -1,6 +1,6 @@
 import {getConnectionManager} from "typeorm";
 
-export function insert(entity, data) {
+export function insert(entity, data = []) {
   const connection = getConnectionManager().get('mysql90Connection')
   let keyQuery = ''
   let valueQuery = ''

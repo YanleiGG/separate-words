@@ -68,6 +68,7 @@ import { Type } from 'database/type/type.entity';
 import { EmotionTypeGroup } from 'database/emotionTypeGroup/emotionTypeGroup.entity';
 import { WordsProperty } from 'database/words_property/words_property.entity';
 import { Entities } from 'database/entities/entities.entity';
+import { insert } from 'tools/sql';
 
 @Module({
   imports: [DatabaseModule],
@@ -135,19 +136,25 @@ export class MarkModule {
   ) {
     this.TypeRepository.find().then(async types => {
       if (types.length === 0) {
-        let separateWordsProperty = new Type()
-        let contentType = new Type()
-        let emotion = new Type()
-        let markEntity = new Type()
-        separateWordsProperty.symbol = 'separateWordsProperty'
-        separateWordsProperty.name = '分词与词性标注'
-        contentType.symbol = 'contentType'
-        contentType.name = '文本内容分类标注'
-        emotion.symbol = 'emotion'
-        emotion.name = '情感标注'
-        markEntity.symbol = 'markEntity'
-        markEntity.name = '实体标注'
-        await this.TypeRepository.save([separateWordsProperty, contentType, emotion, markEntity])
+        let data = [
+          [
+            { key: 'name', value: '分词与词性标注' },
+            { key: 'symbol', value: 'separateWordsProperty' }
+          ],
+          [
+            { key: 'name', value: '文本内容分类标注' },
+            { key: 'symbol', value: 'contentType' }
+          ],
+          [
+            { key: 'name', value: '情感标注' },
+            { key: 'symbol', value: 'emotion' }
+          ],
+          [
+            { key: 'name', value: '实体标注' },
+            { key: 'symbol', value: 'markEntity' }
+          ]
+        ]
+        data.map(async item => await insert('type', item))
       }
     })
     this.EmotionTypeGroupRepository.find().then(async emotionTypeGroups => {
@@ -160,20 +167,22 @@ export class MarkModule {
     this.WordsPropertyRepository.find().then(async WordsPropertys => {
       if (WordsPropertys.length === 0) {
         words_propertys.map(async item => {
-          let wordsProperty = new WordsProperty()
-          wordsProperty.name = item.name
-          wordsProperty.symbol = item.symbol
-          await this.WordsPropertyRepository.save(wordsProperty)
+          const data = []
+          for (let key in item) {
+            data.push({ key, value: item[key] })
+          }
+          await insert('words_property', data)
         })
       }
     })
     this.EntitiesRepository.find().then(async entitys => {
       if (entitys.length === 0) {
         entities.map(async item => {
-          let entity = new Entities()
-          entity.name = item.name
-          entity.symbol = item.symbol
-          await this.EntitiesRepository.save(entity)
+          const data = []
+          for (let key in item) {
+            data.push({ key, value: item[key] })
+          }
+          await insert('entities', data)
         })
       }
     })

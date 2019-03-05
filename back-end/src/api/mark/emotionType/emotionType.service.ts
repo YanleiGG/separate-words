@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { EmotionType } from '../../../database/emotionType/emotionType.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class EmotionTypeService {
@@ -46,10 +47,10 @@ export class EmotionTypeService {
       let sameName = await this.EmotionTypeRepository.find({ name: names[i] })
       let sameSymbol = await this.EmotionTypeRepository.find({ symbol: symbols[i] })
       if (sameName.length == 0 || sameSymbol.length == 0) {
-        let item = new EmotionType()
-        item.name = names[i]
-        item.symbol = symbols[i]
-        await this.EmotionTypeRepository.save(item) 
+        await insert('emotion_type', [
+          { key: 'name', value: names[i] },
+          { key: 'symbol', value: symbols[i] }
+        ])
       }
     }
     return {

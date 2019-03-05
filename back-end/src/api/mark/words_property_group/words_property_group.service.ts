@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { WordsPropertyGroup } from '../../../database/words_property_group/words_property_group.entity';
 import { WordsProperty } from '../../../database/words_property/words_property.entity'
 import { Type } from '../../../database/type/type.entity'
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class WordsPropertyGroupService {
@@ -42,8 +43,10 @@ export class WordsPropertyGroupService {
       }
     }
 
-    let wordsPropertyGroup = new WordsPropertyGroup(), 
-        {labels} = args
+
+    const insertRes = await insert('words_property_group')
+    let wordsPropertyGroup = await this.WordsPropertyGroupRepository.findOne({ id: insertRes.insertId })
+    let {labels} = args
     let type = await this.TypeRepository.findOne({ symbol: 'separateWordsProperty' })
     wordsPropertyGroup.name = name
     wordsPropertyGroup.words_propertys = []

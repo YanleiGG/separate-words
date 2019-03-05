@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { WordsProperty } from '../../../database/words_property/words_property.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class WordsPropertyService {
@@ -43,7 +44,8 @@ export class WordsPropertyService {
       let sameName = await this.WordsPropertyRepository.find({ name: names[i] })
       let sameSymbol = await this.WordsPropertyRepository.find({ symbol: symbols[i] })
       if (sameName.length == 0 || sameSymbol.length == 0) {
-        let item = new WordsProperty()
+        const insertRes = await insert('words_property')
+        let item = await this.WordsPropertyRepository.findOne({ id: insertRes.insertId })
         item.name = names[i]
         item.symbol = symbols[i]
         await this.WordsPropertyRepository.save(item) 

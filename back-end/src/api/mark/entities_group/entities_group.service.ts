@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { EntitiesGroup } from '../../../database/entities_group/entities_group.entity';
 import { Entities } from '../../../database/entities/entities.entity'
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class EntitiesGroupService {
@@ -45,9 +46,11 @@ export class EntitiesGroupService {
       }
     }
 
-    let entitiesGroup = new EntitiesGroup(), 
-        {labels} = args
-    entitiesGroup.name = name
+    let {labels} = args
+    const insertRes = await insert('entities_group', [
+      { key: 'name', value: name }
+    ])
+    let entitiesGroup = await this.EntitiesGroupRepository.findOne({ id: insertRes.insertId })
     entitiesGroup.entities = []
     for (let i = 0; i < labels.length; i++) {
       entitiesGroup.entities.push(await this.EntitiesRepository.findOne({ name: labels[i] }))

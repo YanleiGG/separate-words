@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../../../database/user/user.entity';
 import { Role } from '../../../database/role/role.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class UserService {
@@ -56,7 +57,8 @@ export class UserService {
       }
     }
 
-    let user = new User()
+    const insertRes = await insert('user')
+    let user = await this.UserRepository.findOne({ id: insertRes.insertId })
     user.name = args.username
     user.password = args.password
     let rolePromises = args.selectAuthIds.map(async item => {

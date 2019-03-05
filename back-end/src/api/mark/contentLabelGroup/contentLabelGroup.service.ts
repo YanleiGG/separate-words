@@ -4,6 +4,7 @@ import { ContentLabelGroup } from '../../../database/contentLabelGroup/contentLa
 import { ContentLabel } from '../../../database/contentLabel/contentLabel.entity'
 import { Type } from '../../../database/type/type.entity'
 import { readAndParseXML, getContentLabelsTree } from 'tools';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class ContentLabelGroupService {
@@ -57,24 +58,26 @@ export class ContentLabelGroupService {
       }
     }
 
-    let contentLabelGroup = new ContentLabelGroup(), 
-        {labels} = args
-    contentLabelGroup.name = name
+    let {labels} = args
+    const insertRes1 = await insert('content_label_group', [
+      { key: 'name', value: name },
+    ])
+    let contentLabelGroup = await this.ContentLabelGroupRepository.findOne({ id: insertRes1.insertId })
     contentLabelGroup.contentLabels = []
     try{
       let path = __dirname.replace(/\/api\/mark\/contentLabelGroup/, `/static/labels/${labels[0]}`)
       let result = await readAndParseXML(path)
       if (result.classes) {
-        await this.ContentLabelGroupRepository.save(contentLabelGroup)
         let contentLabels = this.flatten(result.classes.class, null)
         this.res = []
         contentLabels.map(async item => {
-          let contentLabel = new ContentLabel()
-          contentLabel.mainId = item.mainId
-          contentLabel.name = item.name
-          contentLabel.parentId = item.parentId
-          contentLabel.contentLabelGroup = contentLabelGroup
-          await this.ContentLabelRepository.save(contentLabel)
+          const insertRes2 = await insert('content_label', [
+            { key: 'mainId', value: item.mainId || '' },
+            { key: 'name', value: item.name || '' },
+            { key: 'parentId', value: item.parentId || '' },
+            { key: 'contentLabelGroupId', value: contentLabelGroup.id },
+          ])
+          let contentLabel = await this.ContentLabelRepository.findOne({ id: insertRes2.insertId })
           contentLabelGroup.contentLabels.push(contentLabel)
         })
         await this.ContentLabelGroupRepository.save(contentLabelGroup)

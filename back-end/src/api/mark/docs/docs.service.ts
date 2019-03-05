@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Docs } from 'database/docs/docs.entity'
 import { Type } from 'database/type/type.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class DocsService {
@@ -43,9 +44,11 @@ export class DocsService {
   }
 
   async create (args) {
-    let docs = new Docs()
-    docs.name = args.name
-    docs.pathName = args.pathName
+    const insertRes = await insert('docs', [
+      { key: 'name', value: args.name },
+      { key: 'pathName', value: args.pathName },
+    ])
+    let docs = await this.DocsRepository.findOne({ id: insertRes.insertId })
     let type = await this.TypeRepository.findOne({symbol: args.type})
     docs.type = type
     await this.DocsRepository.save(docs)

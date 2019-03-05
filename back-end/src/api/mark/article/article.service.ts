@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Article } from '../../../database/article/article.entity';
+import { insert } from 'tools/sql';
 
 @Injectable()
 export class ArticleService {
@@ -50,15 +51,14 @@ export class ArticleService {
   }
 
   async create (args) {
-    let article = new Article()
-    article.title = args.title
-    article.text = args.text
-    article.state = args.state
-    await this.ArticleRepository.save(article)
+    await insert('user', [
+      { key: 'title', value: args.title },
+      { key: 'text', value: args.text },
+      { key: 'state', value: args.state },
+    ])
     return {
       code: 0,
       msg: 'create successed!',
-      article
     }
   }
 
